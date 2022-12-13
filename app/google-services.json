@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "204986068426",
+    "project_id": "vipiki-3b82a",
+    "storage_bucket": "vipiki-3b82a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204986068426:android:541ffdc212b93c1463f333",
+        "android_client_info": {
+          "package_name": "com.example.vipiki"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204986068426-iitn2lh7dh14q1cil1admttibnoujsf9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.vipiki",
+            "certificate_hash": "d9d3434d842686562c2b52f0d29be67304472894"
+          }
+        },
+        {
+          "client_id": "204986068426-6u5pcctt6bouarr4eg4rb4lbccm5uler.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-ZcD5PdoeOWlAlo7Vo2s1utBlE7IcvOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204986068426-6u5pcctt6bouarr4eg4rb4lbccm5uler.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    tools:context=".StatisticActivity"
+    android:id="@+id/rootRelativeLayout">
+
+    <TextView
+        android:id="@+id/nameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/name" />
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/nameTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/name" />
+
+    <TextView
+        android:id="@+id/postTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/nameTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/post" />
+    <TextView
+        android:id="@+id/userPostTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/userNameTextView"
+        android:layout_alignBottom="@+id/postTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/post" />
+    <TextView
+        android:id="@+id/scheduleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/postTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/scheduleOfWork" />
+    <TextView
+        android:id="@+id/userScheduleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/userPostTextView"
+        android:layout_alignBottom="@+id/scheduleTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/scheduleOfWork" />
+    <TextView
+        android:id="@+id/sectorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/scheduleTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/sector" />
+    <TextView
+        android:id="@+id/userSectorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/userScheduleTextView"
+        android:layout_alignBottom="@+id/sectorTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/sector" />
+
+    <TextView
+        android:id="@+id/taxesTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:layout_below="@id/sectorTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="26sp"
+        android:text="@string/tax" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/taxesRelativeLayout"
+        android:layout_below="@id/taxesTitleTextView"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/selectionOsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginEnd="80dp"
+            android:textSize="20sp"
+            android:text="@string/selection_os" />
+        <TextView
+            android:id="@+id/taxSelectionOsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/selectionOsTextView"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:text="@string/default_pay" />
+        <TextView
+            android:id="@+id/allocationOsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/selectionOsTextView"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginEnd="80dp"
+            android:textSize="20sp"
+            android:text="@string/allocation_os" />
+        <TextView
+            android:id="@+id/taxAllocationOsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/allocationOsTextView"
+            android:layout_below="@id/taxSelectionOsTextView"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:text="@string/default_pay" />
+        <TextView
+            android:id="@+id/selectionMezTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/allocationOsTextView"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginEnd="80dp"
+            android:textSize="20sp"
+            android:text="@string/selection_mez" />
+        <TextView
+            android:id="@+id/taxSelectionMezTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/selectionMezTextView"
+            android:layout_below="@id/taxAllocationOsTextView"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:text="@string/default_pay" />
+        <TextView
+            android:id="@+id/allocationMezTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/selectionMezTextView"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginEnd="80dp"
+            android:textSize="20sp"
+            android:text="@string/allocation_mez" />
+        <TextView
+            android:id="@+id/taxAllocationMezTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBottom="@+id/allocationMezTextView"
+            android:layout_below="@id/taxSelectionMezTextView"
+            android:fontFamily="@font/archivo_black"
+            android:textSize="20sp"
+            android:text="@string/default_pay" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/salaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="130dp"
+        android:layout_below="@id/taxesRelativeLayout"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/salary" />
+
+    <TextView
+        android:id="@+id/userSalaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/taxesRelativeLayout"
+        android:layout_alignBottom="@+id/salaryTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/default_pay" />
+
+</RelativeLayout>

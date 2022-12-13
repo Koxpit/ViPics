@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Add_Picks_Activity"
+    android:id="@+id/rootRelativeLayout">
+
+    <TableLayout
+        android:id="@+id/table_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center">
+        <TableRow
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/selectionOS_textView"
+                android:fontFamily="@font/archivo_black"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selection_os" />
+
+            <EditText
+                android:id="@+id/selectionOS_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="9"
+                android:layout_marginStart="10dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/default_number_picks" />
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/allocationOS_textView"
+                android:fontFamily="@font/archivo_black"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/allocation_os" />
+
+            <EditText
+                android:id="@+id/allocationOS_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/default_number_picks" />
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/selectionMez_textView"
+                android:fontFamily="@font/archivo_black"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/selection_mez" />
+            <EditText
+                android:id="@+id/selectionMez_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/default_number_picks" />
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp">
+            <TextView
+                android:id="@+id/allocationMez_textView"
+                android:fontFamily="@font/archivo_black"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/allocation_mez" />
+            <EditText
+                android:id="@+id/allocationMez_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:inputType="numberDecimal"
+                android:hint="@string/default_number_picks" />
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp">
+            <CheckBox
+                android:id="@+id/isExtraShift_checkBox"
+                android:fontFamily="@font/archivo_black"
+                android:textSize="17sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/extraShift" />
+            <EditText
+                android:id="@+id/extraShiftPay_editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:inputType="numberDecimal"
+                android:enabled="false"
+                android:hint="@string/default_pay" />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/table_content"
+        android:textSize="20sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/archivo_black"
+        android:text="@string/title_add_picks" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/table_content"
+        android:layout_alignBottom="@+id/save_button"
+        android:layout_alignParentEnd="true"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/archivo_black"
+        android:text="@string/back" />
+
+</RelativeLayout>

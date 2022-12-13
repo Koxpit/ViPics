@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/textViewUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:fontFamily="@font/archivo_black"
+            android:text="@string/email" />
+
+        <EditText
+            android:id="@+id/editTextUserEmail"
+            android:layout_below="@id/textViewUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/archivo_black"
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/textViewUserPassword"
+            android:layout_below="@+id/editTextUserEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:fontFamily="@font/archivo_black"
+            android:text="@string/password" />
+
+        <EditText
+            android:id="@+id/editTextUserPassword"
+            android:layout_below="@id/textViewUserPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:textSize="20sp"
+            android:hint="@string/hint_not_see_password"
+            android:fontFamily="@font/archivo_black"
+            android:inputType="textPassword" />
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
