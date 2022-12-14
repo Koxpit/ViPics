@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -41,10 +42,12 @@ public class Add_Picks_Activity extends AppCompatActivity {
     EditText extraShiftPay_editText;
     CheckBox isExtraShift_checkBox;
 
+    int day, month, year;
     private double tax_selection_os = 0, tax_allocation_os = 0;
     private double tax_selection_mez = 0, tax_allocation_mez = 0;
 
-    private int selectionOs, allocationOs, selectionMez, allocationMez;
+    private int selectionOs = 0, allocationOs = 0;
+    private int selectionMez = 0, allocationMez = 0;
     private int isExtraDay = 0;
     private double pay = 0;
 
@@ -54,9 +57,15 @@ public class Add_Picks_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_add_picks);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        int day = bundle.getInt("day");
-        int month = bundle.getInt("month");
-        int year = bundle.getInt("year");
+        day = bundle.getInt("day");
+        month = bundle.getInt("month");
+        year = bundle.getInt("year");
+        selectionOs = bundle.getInt("selectionOs");
+        allocationOs = bundle.getInt("allocationOs");
+        selectionMez = bundle.getInt("selectionMez");
+        allocationMez = bundle.getInt("allocationMez");
+        isExtraDay = bundle.getInt("isExtraDay");
+        pay = bundle.getDouble("pay");
         Log.d("WORK_DATE", String.format("%d.%d.%d", year, month, day));
 
         rootRelativeLayout = findViewById(R.id.rootRelativeLayout);
@@ -68,6 +77,20 @@ public class Add_Picks_Activity extends AppCompatActivity {
         allocation_mez_editText = findViewById(R.id.allocationMez_editText);
         extraShiftPay_editText = findViewById(R.id.extraShiftPay_editText);
         isExtraShift_checkBox = findViewById(R.id.isExtraShift_checkBox);
+
+        selection_os_editText.setText(String.valueOf(selectionOs));
+        allocation_os_editText.setText(String.valueOf(allocationOs));
+        selection_mez_editText.setText(String.valueOf(selectionMez));
+        allocation_mez_editText.setText(String.valueOf(allocationMez));
+        if (isExtraDay == 1) {
+            isExtraShift_checkBox.setChecked(true);
+            extraShiftPay_editText.setEnabled(true);
+        }
+        else {
+            isExtraShift_checkBox.setChecked(false);
+            extraShiftPay_editText.setEnabled(false);
+        }
+        extraShiftPay_editText.setText(String.valueOf(pay));
 
         add_button.setOnClickListener(view -> {
             correctEntry();
@@ -90,6 +113,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
 
             if (isExtraShift_checkBox.isChecked()) {
                 isExtraDay = 1;
+                pay = Double.parseDouble(extraShiftPay_editText.getText().toString());
             }
             else {
                 isExtraDay = 0;
@@ -106,6 +130,17 @@ public class Add_Picks_Activity extends AppCompatActivity {
 
             Intent intentMain = new Intent(this, MainActivity.class);
             startActivity(intentMain);
+        });
+
+        isExtraShift_checkBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (isExtraDay == 0) {
+                isExtraDay = 1;
+                extraShiftPay_editText.setEnabled(true);
+            }
+            else if (isExtraDay == 1) {
+                isExtraDay = 0;
+                extraShiftPay_editText.setEnabled(false);
+            }
         });
     }
 
@@ -167,19 +202,20 @@ public class Add_Picks_Activity extends AppCompatActivity {
             allocationMez = Integer.parseInt(allocation_mez_editText.getText().toString());
         }
 
-        if (TextUtils.isEmpty(extraShiftPay_editText.getText().toString())) {
-            pay = 0;
-        }
-        else {
-            pay = Double.parseDouble(extraShiftPay_editText.getText().toString());
+        if (isExtraShift_checkBox.isChecked()) {
+            if (TextUtils.isEmpty(extraShiftPay_editText.getText().toString())) {
+                pay = 0;
+            } else {
+                pay = Double.parseDouble(extraShiftPay_editText.getText().toString());
+            }
         }
     }
 
     private void addWorkDay(WorkDay workDay) {
         dbHelper = new DbHelper(this);
         db = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
 
+        ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.KEY_DAY, workDay.getDay());
         contentValues.put(DbHelper.KEY_MONTH, workDay.getMonth());
         contentValues.put(DbHelper.KEY_YEAR, workDay.getYear());
@@ -190,7 +226,20 @@ public class Add_Picks_Activity extends AppCompatActivity {
         contentValues.put(DbHelper.KEY_IS_EXTRA_PAY, workDay.getExtraDay());
         contentValues.put(DbHelper.KEY_PAY, workDay.getPay());
 
-        db.insert(DbHelper.TABLE_WORKDAYS, null, contentValues);
+        String[] columnsWorkDays = {DbHelper.KEY_ID};
+        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day)};
+        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ?", selectionSectorsArgs, null, null, null);
+
+        if (cursor.moveToNext()) {
+            int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
+            int id = cursor.getInt(idIndex);
+            db.update(DbHelper.TABLE_WORKDAYS, contentValues, DbHelper.KEY_ID + " = ?", new String[] {String.valueOf(id)});
+        }
+        else {
+            db.insert(DbHelper.TABLE_WORKDAYS, null, contentValues);
+        }
+
+        cursor.close();
         dbHelper.close();
         db.close();
     }

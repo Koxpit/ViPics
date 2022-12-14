@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.example.vipiki.database.DbHelper;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Calendar;
+
 public class StatisticActivity extends AppCompatActivity {
     TextView userNameTextView;
     TextView userPostTextView;
@@ -112,7 +114,9 @@ public class StatisticActivity extends AppCompatActivity {
 
     private void setSalary() {
         try {
-            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_PAY}, null, null, null, null, null);
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH);
+            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_PAY}, DbHelper.KEY_MONTH + "=?", new String[] {String.valueOf(month)}, null, null, null);
 
             if (cursor.moveToNext()) {
                 do {
