@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/userName" />
+
+        <EditText
+            android:id="@+id/editTextUserName"
+            android:layout_below="@id/nameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginBottom="20dp"
+            android:inputType="textPersonName"
+            android:hint="@string/hint_name" />
+
+        <TextView
+            android:id="@+id/positionTextView"
+            android:layout_below="@id/editTextUserName"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/post" />
+
+        <Spinner
+            android:id="@+id/spinnerPosts"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_below="@id/positionTextView"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/sectorTextView"
+            android:layout_below="@id/spinnerPosts"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/sector" />
+
+        <Spinner
+            android:id="@+id/spinnerSectors"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_below="@id/sectorTextView"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/scheduleTextView"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerSectors"
+            android:text="@string/scheduleOfWork" />
+
+        <Spinner
+            android:id="@+id/spinnerSchedules"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="25dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_below="@id/scheduleTextView"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

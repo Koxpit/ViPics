@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.MainActivity;
+import com.example.vipiki.SettingsActivity;
 import com.example.vipiki.StatisticActivity;
 import com.example.vipiki.WelcomeActivity;
 import com.example.vipiki.databinding.FragmentMenuBinding;
@@ -38,7 +39,8 @@ public class MenuFragment extends Fragment {
 
 
         settingsButton.setOnClickListener(v -> {
-
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            startActivity(intent);
         });
 
         statisticButton.setOnClickListener(view -> {

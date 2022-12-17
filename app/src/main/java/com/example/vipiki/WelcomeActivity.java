@@ -69,7 +69,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        users = db.getReference("Users");
+        users = db.getReference("users");
         welcome_relativeLayout = findViewById(R.id.welcome_relativeLayout);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -222,6 +222,7 @@ public class WelcomeActivity extends AppCompatActivity {
         initPostsSpinner(register_view, db);
         initSectorsSpinner(register_view, db);
         initSchedulesSpinner(register_view, db);
+        db.close();
     }
 
     private void initPostsSpinner(View register_view, SQLiteDatabase db) {

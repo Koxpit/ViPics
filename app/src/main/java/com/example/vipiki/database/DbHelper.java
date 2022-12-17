@@ -6,9 +6,19 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
+
+import com.example.vipiki.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -389,20 +399,20 @@ public class DbHelper extends SQLiteOpenHelper {
     private void initDayShiftG(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 4);
         cv.put(KEY_SCHEDULE_ID, 1);
-        cv.put(KEY_SELECTION_OS_TAX, 7.69);
-        cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
-        cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_SELECTION_OS_TAX, 17.65);
+        cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
+        cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
     private void initDayShiftD(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 5);
         cv.put(KEY_SCHEDULE_ID, 1);
-        cv.put(KEY_SELECTION_OS_TAX, 17.65);
-        cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
-        cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
+        cv.put(KEY_SELECTION_OS_TAX, 7.69);
+        cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
+        cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -460,6 +470,76 @@ public class DbHelper extends SQLiteOpenHelper {
         }
 
         return schedule_id;
+    }
+
+    public String getUserName(SharedPreferences settings) {
+        return settings.getString("name", null);
+    }
+
+    public Spinner getFilledPostsSpinner(Spinner spinnerPosts, Context context) {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> posts = new ArrayList<>();
+
+        Cursor cursor = db.query(DbHelper.TABLE_POSTS, new String[] {DbHelper.KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(DbHelper.KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                posts.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapterPosts = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, posts);
+        adapterPosts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPosts.setAdapter(adapterPosts);
+
+        db.close();
+        return spinnerPosts;
+    }
+
+    public Spinner getFilledSchedulesSpinner(Spinner spinnerSchedules, Context context) {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> schedules = new ArrayList<>();
+
+        Cursor cursor = db.query(DbHelper.TABLE_SCHEDULES, new String[] {DbHelper.KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(DbHelper.KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                schedules.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, schedules);
+        adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSchedules.setAdapter(adapterSchedules);
+
+        db.close();
+        return spinnerSchedules;
+    }
+
+    public Spinner getFilledSectorsSpinner(Spinner spinnerSectors, Context context) {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> sectors = new ArrayList<>();
+
+        Cursor cursor = db.query(DbHelper.TABLE_SECTORS, new String[] {DbHelper.KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(DbHelper.KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                sectors.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+
+        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sectors);
+        adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSectors.setAdapter(adapterSchedules);
+
+        db.close();
+        return spinnerSectors;
     }
 
     private Cursor getSectorsCursor(SQLiteDatabase db) {
