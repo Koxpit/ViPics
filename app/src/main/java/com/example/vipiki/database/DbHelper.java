@@ -959,11 +959,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return spinnerSectors;
     }
 
-    private Cursor getSectorsCursor(SQLiteDatabase db) {
+    public Cursor getSectorsCursor(SQLiteDatabase db) {
         return db.query(TABLE_SECTORS, null, null, null, null, null, null);
     }
 
-    private String getSectorsString(SQLiteDatabase db) {
+    public String getSectorsString(SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_SECTORS, null, null, null, null, null, null);
         StringBuilder text = new StringBuilder();
 
@@ -983,11 +983,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return text.toString();
     }
 
-    private Cursor getTaxesCursor(SQLiteDatabase db) {
+    public Cursor getTaxesCursor(SQLiteDatabase db) {
         return db.query(TABLE_TAXES, null, null, null, null, null, null);
     }
 
-    private String getTaxesString(SQLiteDatabase db) {
+    public String getTaxesString(SQLiteDatabase db) {
         Cursor cursor = db.query(TABLE_TAXES, null, null, null, null, null, null);
         StringBuilder text = new StringBuilder();
 

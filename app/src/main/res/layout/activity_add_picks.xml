@@ -89,7 +89,7 @@
             <CheckBox
                 android:id="@+id/isExtraShift_checkBox"
                 android:fontFamily="@font/archivo_black"
-                android:textSize="17sp"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/extraShift" />
@@ -106,25 +106,25 @@
 
     <Button
         android:id="@+id/save_button"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/table_content"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"
+        android:textSize="18sp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/archivo_black"
         android:text="@string/title_add_picks" />
 
     <Button
         android:id="@+id/back_button"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/table_content"
         android:layout_alignBottom="@+id/save_button"
         android:layout_alignParentEnd="true"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="30dp"
         android:fontFamily="@font/archivo_black"
         android:text="@string/back" />
 

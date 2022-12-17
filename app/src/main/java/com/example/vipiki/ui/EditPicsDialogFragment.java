@@ -42,7 +42,7 @@ public class EditPicsDialogFragment extends DialogFragment {
         String message = "";
         if (isExtraDay == 0) {
             message = "Отбор основа: " + selectionOs + ";\n" + "Размещение основа: " + allocationOs + ";\n"
-                    + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Оплата: " + pay;
+                    + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Минимальная оплата: " + pay;
         }
         else {
             message = "Это доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);

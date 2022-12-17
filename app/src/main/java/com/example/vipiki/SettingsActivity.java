@@ -3,10 +3,14 @@ package com.example.vipiki;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,9 +19,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.vipiki.database.DbHelper;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -56,7 +63,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.setView(edit_profile_view);
 
-        dialog.setNegativeButton("Выйти", (dialogInterface, i) -> {
+        dialog.setNegativeButton("Назад", (dialogInterface, i) -> {
             dbHelper.close();
             dialogInterface.dismiss();
         });
@@ -138,6 +145,83 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void showEditTaxesWindow() {
+        double selectionOsTax = 0, allocationOsTax = 0;
+        double selectionMezTax = 0, allocationMezTax = 0;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Изменение ставки");
 
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View edit_taxes_view = inflater.inflate(R.layout.activity_edit_taxes, null);
+
+        SharedPreferences settings = getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+        DbHelper dbHelper = new DbHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        EditText selectionOsTaxEditText = edit_taxes_view.findViewById(R.id.editTextSelectionOsTax);
+        EditText allocationOsTaxEditText = edit_taxes_view.findViewById(R.id.editTextAllocationOsTax);
+        EditText selectionMezTaxEditText = edit_taxes_view.findViewById(R.id.editTextSelectionMezTax);
+        EditText allocationMezTaxEditText = edit_taxes_view.findViewById(R.id.editTextAllocationMezTax);
+
+        int sector_id = dbHelper.getSectorId(settings, db);
+        int schedule_id = dbHelper.getScheduleId(settings, db);
+
+        String[] selectionArgs = {String.valueOf(sector_id), String.valueOf(schedule_id)};
+        String[] columnsTaxes = {DbHelper.KEY_ID, DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX};
+
+        Cursor cursor = db.query(DbHelper.TABLE_TAXES, columnsTaxes, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
+        while (cursor.moveToNext()) {
+            int selectionOsTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS_TAX);
+            int allocationOsTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS_TAX);
+            int selectionMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ_TAX);
+            int allocationMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ_TAX);
+
+            selectionOsTax = cursor.getDouble(selectionOsTaxIndex);
+            allocationOsTax = cursor.getDouble(allocationOsTaxIndex);
+            selectionMezTax = cursor.getDouble(selectionMezTaxIndex);
+            allocationMezTax = cursor.getDouble(allocationMezTaxIndex);
+        }
+        cursor.close();
+
+        selectionOsTaxEditText.setText(String.format(Locale.ENGLISH, "%(.2f", selectionOsTax));
+        allocationOsTaxEditText.setText(String.format(Locale.ENGLISH, "%(.2f", allocationOsTax));
+        selectionMezTaxEditText.setText(String.format(Locale.ENGLISH, "%(.2f", selectionMezTax));
+        allocationMezTaxEditText.setText(String.format(Locale.ENGLISH, "%(.2f", allocationMezTax));
+
+        dialog.setView(edit_taxes_view);
+
+        dialog.setNegativeButton("Назад", (dialogInterface, i) -> {
+            dbHelper.close();
+            db.close();
+            dialogInterface.dismiss();
+        });
+
+        dialog.setPositiveButton("Изменить", (dialogInterface, i) -> {
+            double selection_os_tax = Double.parseDouble(selectionOsTaxEditText.getText().toString());
+            double allocation_os_tax = Double.parseDouble(allocationOsTaxEditText.getText().toString());
+            double selection_mez_tax = Double.parseDouble(selectionMezTaxEditText.getText().toString());
+            double allocation_mez_tax = Double.parseDouble(allocationMezTaxEditText.getText().toString());
+            Cursor cur = db.query(DbHelper.TABLE_TAXES, columnsTaxes, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DbHelper.KEY_SELECTION_OS_TAX, selection_os_tax);
+            contentValues.put(DbHelper.KEY_ALLOCATION_OS_TAX, allocation_os_tax);
+            contentValues.put(DbHelper.KEY_SELECTION_MEZ_TAX, selection_mez_tax);
+            contentValues.put(DbHelper.KEY_ALLOCATION_MEZ_TAX, allocation_mez_tax);
+
+            if (cur.moveToNext()) {
+                int idIndex = cur.getColumnIndex(DbHelper.KEY_ID);
+                int id = cur.getInt(idIndex);
+                String taxes = dbHelper.getTaxesString(db);
+                db.update(DbHelper.TABLE_TAXES, contentValues, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
+            }
+
+            cur.close();
+            dbHelper.close();
+            db.close();
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
+
+        dialog.show();
     }
 }

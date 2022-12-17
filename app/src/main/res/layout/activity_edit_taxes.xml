@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:cardElevation="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
+
+        <TextView
+            android:id="@+id/selectionOsTaxTextView"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/selection_os" />
+
+        <EditText
+            android:id="@+id/editTextSelectionOsTax"
+            android:layout_below="@id/selectionOsTaxTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginBottom="20dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/default_pay" />
+
+        <TextView
+            android:id="@+id/allocationOsTaxTextView"
+            android:layout_below="@id/editTextSelectionOsTax"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/allocation_os" />
+
+        <EditText
+            android:id="@+id/editTextAllocationOsTax"
+            android:layout_below="@id/allocationOsTaxTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginBottom="20dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/default_pay" />
+
+        <TextView
+            android:id="@+id/selectionMezTaxTextView"
+            android:layout_below="@id/editTextAllocationOsTax"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/selection_mez" />
+
+        <EditText
+            android:id="@+id/editTextSelectionMezTax"
+            android:layout_below="@id/selectionMezTaxTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginBottom="20dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/default_pay" />
+
+        <TextView
+            android:id="@+id/allocationMezTaxTextView"
+            android:layout_below="@+id/editTextSelectionMezTax"
+            android:layout_width="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:layout_height="wrap_content"
+            android:text="@string/allocation_mez" />
+
+        <EditText
+            android:id="@+id/editTextAllocationMezTax"
+            android:layout_below="@id/allocationMezTaxTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:fontFamily="@font/archivo_black"
+            android:layout_marginBottom="20dp"
+            android:inputType="numberDecimal"
+            android:hint="@string/default_pay" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
