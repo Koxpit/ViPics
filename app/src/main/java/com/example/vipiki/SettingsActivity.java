@@ -211,15 +211,13 @@ public class SettingsActivity extends AppCompatActivity {
             if (cur.moveToNext()) {
                 int idIndex = cur.getColumnIndex(DbHelper.KEY_ID);
                 int id = cur.getInt(idIndex);
-                String taxes = dbHelper.getTaxesString(db);
                 db.update(DbHelper.TABLE_TAXES, contentValues, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
             }
 
             cur.close();
             dbHelper.close();
             db.close();
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            dialogInterface.dismiss();
         });
 
         dialog.show();

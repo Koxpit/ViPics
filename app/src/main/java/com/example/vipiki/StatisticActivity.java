@@ -60,7 +60,7 @@ public class StatisticActivity extends AppCompatActivity {
         int schedule_id = dbHelper.getScheduleId(settings, db);
 
         setProfileData(settings);
-        setTaxes(sector_id, schedule_id);
+        setTaxes(1, 2);
         radioGroupBonuses.setOnCheckedChangeListener(radioGroupOnCheckedChangeListener);
         setSalary();
 
@@ -126,7 +126,7 @@ public class StatisticActivity extends AppCompatActivity {
             if (sector_id == -1 || schedule_id == -1)
                 return;
 
-            String[] selectionArgs = {String.valueOf(sector_id), String.valueOf(schedule_id)};
+            String[] selectionArgs = {String.valueOf(1), String.valueOf(2)};
             String[] columnsTaxes = {DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX,
             DbHelper.KEY_BONUS_SELECTION_MEZ_80, DbHelper.KEY_BONUS_SELECTION_MEZ_90, DbHelper.KEY_BONUS_SELECTION_MEZ_100, DbHelper.KEY_BONUS_SELECTION_MEZ_120,
                     DbHelper.KEY_BONUS_SELECTION_OS_80, DbHelper.KEY_BONUS_SELECTION_OS_90, DbHelper.KEY_BONUS_SELECTION_OS_100, DbHelper.KEY_BONUS_SELECTION_OS_120,
@@ -229,7 +229,7 @@ public class StatisticActivity extends AppCompatActivity {
     private void setSalary() {
         try {
             Calendar calendar = Calendar.getInstance();
-            int month = calendar.get(Calendar.MONTH);
+            int month = calendar.get(Calendar.MONTH)+1;
             dbHelper = new DbHelper(this);
             db = dbHelper.getReadableDatabase();
             Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=?", new String[] {String.valueOf(month)}, null, null, null);
@@ -265,8 +265,7 @@ public class StatisticActivity extends AppCompatActivity {
             }
 
             salary = 0;
-            if (cursor.moveToNext()) {
-                do {
+            while (cursor.moveToNext()) {
                     selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
                     selectionMezIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ);
                     allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
@@ -277,20 +276,18 @@ public class StatisticActivity extends AppCompatActivity {
                     allocationOs = cursor.getInt(allocationOsIndex);
                     allocationMez = cursor.getInt(allocationMezIndex);
 
-                    selectionOsPay += (tax_selection_os + bonusSelectionOs) * selectionOs;
-                    selectionMezPay += (tax_selection_mez + bonusSelectionMez) * selectionMez;
-                    allocationOsPay += (tax_allocation_os + bonusAllocationOs) * allocationOs;
-                    allocationMezPay += (tax_allocation_mez + bonusAllocationMez) * allocationMez;
+                    selectionOsPay = (tax_selection_os + bonusSelectionOs) * selectionOs;
+                    selectionMezPay = (tax_selection_mez + bonusSelectionMez) * selectionMez;
+                    allocationOsPay = (tax_allocation_os + bonusAllocationOs) * allocationOs;
+                    allocationMezPay = (tax_allocation_mez + bonusAllocationMez) * allocationMez;
 
                     salary += selectionOsPay + selectionMezPay + allocationOsPay + allocationMezPay;
-                } while (cursor.moveToNext());
-            }
-
+                }
             taxSelectionOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_selection_os + bonusSelectionOs));
             taxAllocationOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_allocation_os + bonusAllocationOs));
             taxSelectionMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_selection_mez + bonusSelectionMez));
             taxAllocationMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_allocation_mez + bonusAllocationMez));
-            userSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", salary));
+            userSalaryTextView.setText(String.valueOf(salary));
 
             cursor.close();
         } catch (Exception e) {
