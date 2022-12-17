@@ -48,6 +48,22 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_ALLOCATION_OS = "allocationOs";
     public static final String KEY_SELECTION_MEZ = "selectionMez";
     public static final String KEY_ALLOCATION_MEZ = "allocationMez";
+    public static final String KEY_BONUS_SELECTION_MEZ_80 = "bonus_selection_mez_80";
+    public static final String KEY_BONUS_SELECTION_MEZ_90 = "bonus_selection_mez_90";
+    public static final String KEY_BONUS_SELECTION_MEZ_100 = "bonus_selection_mez_100";
+    public static final String KEY_BONUS_SELECTION_MEZ_120 = "bonus_selection_mez_120";
+    public static final String KEY_BONUS_ALLOCATION_MEZ_80 = "bonus_allocation_mez_80";
+    public static final String KEY_BONUS_ALLOCATION_MEZ_90 = "bonus_allocation_mez_90";
+    public static final String KEY_BONUS_ALLOCATION_MEZ_100 = "bonus_allocation_mez_100";
+    public static final String KEY_BONUS_ALLOCATION_MEZ_120 = "bonus_allocation_mez_120";
+    public static final String KEY_BONUS_SELECTION_OS_80 = "bonus_selection_os_80";
+    public static final String KEY_BONUS_SELECTION_OS_90 = "bonus_selection_os_90";
+    public static final String KEY_BONUS_SELECTION_OS_100 = "bonus_selection_os_100";
+    public static final String KEY_BONUS_SELECTION_OS_120 = "bonus_selection_os_120";
+    public static final String KEY_BONUS_ALLOCATION_OS_80 = "bonus_allocation_os_80";
+    public static final String KEY_BONUS_ALLOCATION_OS_90 = "bonus_allocation_os_90";
+    public static final String KEY_BONUS_ALLOCATION_OS_100 = "bonus_allocation_os_100";
+    public static final String KEY_BONUS_ALLOCATION_OS_120 = "bonus_allocation_os_120";
     public static final String KEY_IS_EXTRA_PAY = "isExtraPay";
     public static final String KEY_PAY = "pay";
 
@@ -59,7 +75,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TABLE_WORKDAYS + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKDAYS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_DAY + " INTEGER NOT NULL, "
                 + KEY_MONTH + " INTEGER NOT NULL, "
@@ -71,19 +87,19 @@ public class DbHelper extends SQLiteOpenHelper {
                 + KEY_IS_EXTRA_PAY  + " BOOLEAN NOT NULL CHECK (" + KEY_IS_EXTRA_PAY + " IN (0, 1)), "
                 + KEY_PAY + " INTEGER NOT NULL" + ")");
 
-        db.execSQL("CREATE TABLE " + TABLE_POSTS + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_POSTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT NOT NULL UNIQUE" + ")");
 
-        db.execSQL("CREATE TABLE " + TABLE_SECTORS + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SECTORS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT NOT NULL UNIQUE" + ")");
 
-        db.execSQL("CREATE TABLE " + TABLE_SCHEDULES + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SCHEDULES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_NAME + " TEXT NOT NULL UNIQUE" + ")");
 
-        db.execSQL("CREATE TABLE " + TABLE_TAXES + "("
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_TAXES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_SCHEDULE_ID + " INTEGER NOT NULL, "
                 + KEY_SECTOR_ID + " INTEGER NOT NULL, "
@@ -91,6 +107,22 @@ public class DbHelper extends SQLiteOpenHelper {
                 + KEY_ALLOCATION_OS_TAX + " REAL NOT NULL, "
                 + KEY_SELECTION_MEZ_TAX + " REAL NOT NULL, "
                 + KEY_ALLOCATION_MEZ_TAX + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_MEZ_80 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_MEZ_90 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_MEZ_100 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_MEZ_120 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_OS_80 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_OS_90 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_OS_100 + " REAL NOT NULL, "
+                + KEY_BONUS_SELECTION_OS_120 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_MEZ_80 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_MEZ_90 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_MEZ_100 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_MEZ_120 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_OS_80 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_OS_90 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_OS_100 + " REAL NOT NULL, "
+                + KEY_BONUS_ALLOCATION_OS_120 + " REAL NOT NULL, "
                 + "FOREIGN KEY (" + KEY_SCHEDULE_ID + ") REFERENCES " + TABLE_SCHEDULES + "(" + KEY_ID + "), "
                 + "FOREIGN KEY (" + KEY_SECTOR_ID + ") REFERENCES " + TABLE_SECTORS + "(" + KEY_ID + ") " + ")");
 
@@ -166,6 +198,23 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.24);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.22);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.94);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.66);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.49);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.49);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.98);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.72);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 4.46);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.12);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.25);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.31);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.43);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.86);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.29);
+
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -176,6 +225,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.24);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.22);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.94);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.66);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.49);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.49);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.98);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.72);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 4.46);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.12);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.25);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.31);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.43);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.86);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.29);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -186,6 +251,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.41);
         cv.put(KEY_SELECTION_MEZ_TAX, 9.52);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 1.25);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 1.27);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 2.54);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 3.17);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 3.81);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 2.54);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 5.08);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 6.34);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 7.01);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.17);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.33);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.42);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.50);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.45);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.91);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.14);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.26);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -196,6 +277,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 19.03);
         cv.put(KEY_SELECTION_MEZ_TAX, 8.52);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 4.98);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 1.14);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 2.27);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.84);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 3.41);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 3.05);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 6.16);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 7.70);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 9.24);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.66);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 1.33);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 1.66);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 1.95);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 2.54);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 5.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 6.34);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 7.61);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -206,16 +303,48 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.24);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.22);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.94);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.66);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.49);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.49);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.98);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.72);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 4.46);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.12);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.25);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.31);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.43);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.86);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.29);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
     private void initNightShiftE(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 6);
         cv.put(KEY_SCHEDULE_ID, 2);
-        cv.put(KEY_SELECTION_OS_TAX, 23.11);
-        cv.put(KEY_ALLOCATION_OS_TAX, 19.03);
-        cv.put(KEY_SELECTION_MEZ_TAX, 8.52);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 4.98);
+        cv.put(KEY_SELECTION_OS_TAX, 11.16);
+        cv.put(KEY_ALLOCATION_OS_TAX, 3.24);
+        cv.put(KEY_SELECTION_MEZ_TAX, 6.22);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.94);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.66);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.49);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.49);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.98);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.72);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 4.46);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.12);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.25);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.31);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.43);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.86);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.29);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -235,6 +364,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.03);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.35);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.96);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.69);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.12);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.54);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.22);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.45);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.06);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.67);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.13);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.20);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.40);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.81);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.01);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.21);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -245,6 +390,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.03);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.35);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.96);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.69);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.12);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.54);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.22);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.45);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.06);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.67);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.13);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.20);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.40);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.81);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.01);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.21);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -255,6 +416,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.06);
         cv.put(KEY_SELECTION_MEZ_TAX, 7.18);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 1.59);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.96);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.92);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.39);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.87);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 2.00);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 4.00);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 5.01);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 6.01);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.21);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.42);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.53);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.64);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.41);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.82);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.02);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.22);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -265,6 +442,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 8.47);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.88);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 2.71);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.92);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.84);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.29);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.75);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 2.75);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 5.51);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 6.88);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 8.26);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.36);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.72);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.90);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 1.08);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 1.13);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 2.26);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 2.82);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 3.29);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -275,16 +468,48 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 3.03);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.35);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.96);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.69);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.12);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.54);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.22);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.45);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.06);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.67);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.13);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.20);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.40);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.81);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.01);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.21);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
     private void initDayE(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 6);
         cv.put(KEY_SCHEDULE_ID, 3);
-        cv.put(KEY_SELECTION_OS_TAX, 20.65);
-        cv.put(KEY_ALLOCATION_OS_TAX, 8.47);
-        cv.put(KEY_SELECTION_MEZ_TAX, 6.88);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 2.71);
+        cv.put(KEY_SELECTION_OS_TAX, 9.18);
+        cv.put(KEY_ALLOCATION_OS_TAX, 3.03);
+        cv.put(KEY_SELECTION_MEZ_TAX, 6.35);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.96);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.69);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.12);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.54);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.22);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.45);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 3.06);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.67);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.13);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.20);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.40);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.81);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 1.01);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.21);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -304,6 +529,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.08);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -314,6 +555,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.08);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -324,6 +581,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.78);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.25);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 1.44);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.67);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.08);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.50);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.67);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 3.33);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 4.17);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 5.00);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.19);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.48);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.58);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.74);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.93);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.11);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -334,6 +607,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.80);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.60);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.00);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.40);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 2.35);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 4.71);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 5.88);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 7.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.28);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.55);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.69);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.83);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.98);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 1.95);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 2.44);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 2.93);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -344,16 +633,48 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.08);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
     private void initGBRShiftE(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 6);
         cv.put(KEY_SCHEDULE_ID, 4);
-        cv.put(KEY_SELECTION_OS_TAX, 17.65);
-        cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
-        cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
+        cv.put(KEY_SELECTION_OS_TAX, 7.69);
+        cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
+        cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.08);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -373,6 +694,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -383,6 +720,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -393,6 +746,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.78);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.25);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 1.44);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.83);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.67);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.08);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.50);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.67);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 3.33);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 4.17);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 5.00);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.19);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.38);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.48);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.58);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.74);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.93);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.11);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -403,6 +772,22 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
         cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.80);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.60);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 2.00);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.40);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 2.35);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 4.71);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 5.88);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 7.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.28);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.55);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.69);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.83);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.98);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 1.95);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 2.44);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 2.93);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
@@ -413,16 +798,48 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
         cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
         cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 
     private void initDayShiftE(SQLiteDatabase db, ContentValues cv) {
         cv.put(KEY_SECTOR_ID, 6);
         cv.put(KEY_SCHEDULE_ID, 1);
-        cv.put(KEY_SELECTION_OS_TAX, 17.65);
-        cv.put(KEY_ALLOCATION_OS_TAX, 7.32);
-        cv.put(KEY_SELECTION_MEZ_TAX, 6.00);
-        cv.put(KEY_ALLOCATION_MEZ_TAX, 2.07);
+        cv.put(KEY_SELECTION_OS_TAX, 7.69);
+        cv.put(KEY_ALLOCATION_OS_TAX, 2.75);
+        cv.put(KEY_SELECTION_MEZ_TAX, 5.56);
+        cv.put(KEY_ALLOCATION_MEZ_TAX, 0.81);
+        cv.put(KEY_BONUS_SELECTION_MEZ_80, 0.74);
+        cv.put(KEY_BONUS_SELECTION_MEZ_90, 1.48);
+        cv.put(KEY_BONUS_SELECTION_MEZ_100, 1.85);
+        cv.put(KEY_BONUS_SELECTION_MEZ_120, 2.22);
+        cv.put(KEY_BONUS_SELECTION_OS_80, 1.03);
+        cv.put(KEY_BONUS_SELECTION_OS_90, 2.05);
+        cv.put(KEY_BONUS_SELECTION_OS_100, 2.56);
+        cv.put(KEY_BONUS_SELECTION_OS_120, 3.06);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_80, 0.11);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_90, 0.22);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_100, 0.27);
+        cv.put(KEY_BONUS_ALLOCATION_MEZ_120, 0.32);
+        cv.put(KEY_BONUS_ALLOCATION_OS_80, 0.37);
+        cv.put(KEY_BONUS_ALLOCATION_OS_90, 0.73);
+        cv.put(KEY_BONUS_ALLOCATION_OS_100, 0.92);
+        cv.put(KEY_BONUS_ALLOCATION_OS_120, 1.10);
         db.insert(DbHelper.TABLE_TAXES, null, cv);
     }
 

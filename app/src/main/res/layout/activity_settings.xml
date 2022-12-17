@@ -14,12 +14,12 @@
         android:textSize="20sp"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp"
-        android:text="Редактировать профиль" />
+        android:text="@string/editProfile" />
     <TextView
         android:id="@+id/editTaxesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/editProfileTextView"
         android:textSize="20sp"
-        android:text="Изменить ставку" />
+        android:text="@string/editTaxes" />
 </RelativeLayout>

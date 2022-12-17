@@ -8,12 +8,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.vipiki.database.DbHelper;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class StatisticActivity extends AppCompatActivity {
     TextView userNameTextView;
@@ -25,13 +28,22 @@ public class StatisticActivity extends AppCompatActivity {
     TextView taxAllocationMezTextView;
     TextView taxSelectionMezTextView;
     TextView userSalaryTextView;
+    RadioGroup radioGroupBonuses;
 
     DbHelper dbHelper;
     SQLiteDatabase db;
+
+    public static final String APP_PREFERENCES = "app_settings";
+    final String KEY_RADIOBUTTON_INDEX = "SAVED_RADIO_BUTTON_BONUS_INDEX";
     double tax_selection_os = 0, tax_allocation_os = 0;
     double tax_selection_mez = 0, tax_allocation_mez = 0;
+    double bonus_selection_mez_80 = 0, bonus_selection_mez_90 = 0, bonus_selection_mez_100 = 0, bonus_selection_mez_120 = 0;
+    double bonus_selection_os_80 = 0, bonus_selection_os_90 = 0, bonus_selection_os_100 = 0, bonus_selection_os_120 = 0;
+    double bonus_allocation_mez_80 = 0, bonus_allocation_mez_90 = 0, bonus_allocation_mez_100 = 0, bonus_allocation_mez_120 = 0;
+    double bonus_allocation_os_80 = 0, bonus_allocation_os_90 = 0, bonus_allocation_os_100 = 0, bonus_allocation_os_120 = 0;
     double salary = 0;
     String schedule, sector, post, name;
+    int checkedIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,15 +52,16 @@ public class StatisticActivity extends AppCompatActivity {
         initComponents();
 
         dbHelper = new DbHelper(this);
-        db = dbHelper.getWritableDatabase();
+        db = dbHelper.getReadableDatabase();
 
-        SharedPreferences settings = getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
         int sector_id = dbHelper.getSectorId(settings, db);
         int schedule_id = dbHelper.getScheduleId(settings, db);
 
         setProfileData(settings);
         setTaxes(sector_id, schedule_id);
+        radioGroupBonuses.setOnCheckedChangeListener(radioGroupOnCheckedChangeListener);
         setSalary();
 
         dbHelper.close();
@@ -65,6 +78,30 @@ public class StatisticActivity extends AppCompatActivity {
         taxAllocationMezTextView = findViewById(R.id.taxAllocationMezTextView);
         taxSelectionMezTextView = findViewById(R.id.taxSelectionMezTextView);
         userSalaryTextView = findViewById(R.id.userSalaryTextView);
+        radioGroupBonuses = findViewById(R.id.bonusRadioGroup);
+    }
+
+    RadioGroup.OnCheckedChangeListener radioGroupOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+            RadioButton checkedRadioButton = (RadioButton) radioGroupBonuses
+                    .findViewById(checkedId);
+            checkedIndex = radioGroupBonuses.indexOfChild(checkedRadioButton);
+
+            setSalary();
+
+            SavePreferences(KEY_RADIOBUTTON_INDEX, checkedIndex);
+        }
+    };
+
+    private void SavePreferences(String key, int value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                APP_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(key, value);
+        editor.apply();
     }
 
     private void setProfileData(SharedPreferences settings) {
@@ -72,11 +109,16 @@ public class StatisticActivity extends AppCompatActivity {
         sector = settings.getString("sector", null);
         post = settings.getString("post", null);
         name = settings.getString("name", null);
+        checkedIndex = settings.getInt(KEY_RADIOBUTTON_INDEX, 0);
 
         userNameTextView.setText(name);
         userPostTextView.setText(post);
         userScheduleTextView.setText(schedule);
         userSectorTextView.setText(sector);
+
+        RadioButton savedCheckedRadioButton = (RadioButton) radioGroupBonuses
+                .getChildAt(checkedIndex);
+        savedCheckedRadioButton.setChecked(true);
     }
 
     private void setTaxes(int sector_id, int schedule_id) {
@@ -85,7 +127,11 @@ public class StatisticActivity extends AppCompatActivity {
                 return;
 
             String[] selectionArgs = {String.valueOf(sector_id), String.valueOf(schedule_id)};
-            String[] columnsTaxes = {DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX};
+            String[] columnsTaxes = {DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX,
+            DbHelper.KEY_BONUS_SELECTION_MEZ_80, DbHelper.KEY_BONUS_SELECTION_MEZ_90, DbHelper.KEY_BONUS_SELECTION_MEZ_100, DbHelper.KEY_BONUS_SELECTION_MEZ_120,
+                    DbHelper.KEY_BONUS_SELECTION_OS_80, DbHelper.KEY_BONUS_SELECTION_OS_90, DbHelper.KEY_BONUS_SELECTION_OS_100, DbHelper.KEY_BONUS_SELECTION_OS_120,
+                    DbHelper.KEY_BONUS_ALLOCATION_MEZ_80, DbHelper.KEY_BONUS_ALLOCATION_MEZ_90, DbHelper.KEY_BONUS_ALLOCATION_MEZ_100, DbHelper.KEY_BONUS_ALLOCATION_MEZ_120,
+                    DbHelper.KEY_BONUS_ALLOCATION_OS_80, DbHelper.KEY_BONUS_ALLOCATION_OS_90, DbHelper.KEY_BONUS_ALLOCATION_OS_100, DbHelper.KEY_BONUS_ALLOCATION_OS_120};
             Cursor cursor = db.query(DbHelper.TABLE_TAXES, columnsTaxes, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
 
             while (cursor.moveToNext()) {
@@ -94,16 +140,84 @@ public class StatisticActivity extends AppCompatActivity {
                 int selectionMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ_TAX);
                 int allocationMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ_TAX);
 
+                int bonusSelectionMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_80);
+                int bonusSelectionMez90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_90);
+                int bonusSelectionMez100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_100);
+                int bonusSelectionMez120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_120);
+                int bonusAllocationMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_80);
+                int bonusAllocationMez90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_90);
+                int bonusAllocationMez100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_100);
+                int bonusAllocationMez120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_120);
+
+                int bonusSelectionOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_80);
+                int bonusSelectionOs90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_90);
+                int bonusSelectionOs100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_100);
+                int bonusSelectionOs120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_120);
+                int bonusAllocationOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_80);
+                int bonusAllocationOs90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_90);
+                int bonusAllocationOs100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_100);
+                int bonusAllocationOs120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_120);
+
                 tax_selection_os = cursor.getDouble(selectionOsTaxIndex);
                 tax_allocation_os = cursor.getDouble(allocationOsTaxIndex);
                 tax_selection_mez = cursor.getDouble(selectionMezTaxIndex);
                 tax_allocation_mez = cursor.getDouble(allocationMezTaxIndex);
+
+                bonus_selection_mez_80 = cursor.getDouble(bonusSelectionMez80Index);
+                bonus_selection_mez_90 = cursor.getDouble(bonusSelectionMez90Index);
+                bonus_selection_mez_100 = cursor.getDouble(bonusSelectionMez100Index);
+                bonus_selection_mez_120 = cursor.getDouble(bonusSelectionMez120Index);
+                bonus_allocation_mez_80 = cursor.getDouble(bonusAllocationMez80Index);
+                bonus_allocation_mez_90 = cursor.getDouble(bonusAllocationMez90Index);
+                bonus_allocation_mez_100 = cursor.getDouble(bonusAllocationMez100Index);
+                bonus_allocation_mez_120 = cursor.getDouble(bonusAllocationMez120Index);
+
+                bonus_selection_os_80 = cursor.getDouble(bonusSelectionOs80Index);
+                bonus_selection_os_90 = cursor.getDouble(bonusSelectionOs90Index);
+                bonus_selection_os_100 = cursor.getDouble(bonusSelectionOs100Index);
+                bonus_selection_os_120 = cursor.getDouble(bonusSelectionOs120Index);
+                bonus_allocation_os_80 = cursor.getDouble(bonusAllocationOs80Index);
+                bonus_allocation_os_90 = cursor.getDouble(bonusAllocationOs90Index);
+                bonus_allocation_os_100 = cursor.getDouble(bonusAllocationOs100Index);
+                bonus_allocation_os_120 = cursor.getDouble(bonusAllocationOs120Index);
             }
 
-            taxSelectionOsTextView.setText(String.valueOf(tax_selection_os));
-            taxAllocationOsTextView.setText(String.valueOf(tax_allocation_os));
-            taxSelectionMezTextView.setText(String.valueOf(tax_selection_mez));
-            taxAllocationMezTextView.setText(String.valueOf(tax_allocation_mez));
+            double taxSelectionOs = 0, taxAllocationOs = 0, taxSelectionMez = 0, taxAllocationMez = 0;
+            if (checkedIndex == 0) {
+                taxSelectionOs = tax_selection_os + bonus_selection_os_120;
+                taxAllocationOs = tax_allocation_os + bonus_allocation_os_120;
+                taxSelectionMez = tax_selection_mez + bonus_selection_mez_120;
+                taxAllocationMez = tax_allocation_mez + bonus_allocation_mez_120;
+            }
+            else if (checkedIndex == 1) {
+                taxSelectionOs = tax_selection_os + bonus_selection_os_100;
+                taxAllocationOs = tax_allocation_os + bonus_allocation_os_100;
+                taxSelectionMez = tax_selection_mez + bonus_selection_mez_100;
+                taxAllocationMez = tax_allocation_mez + bonus_allocation_mez_100;
+            }
+            else if (checkedIndex == 2) {
+                taxSelectionOs = tax_selection_os + bonus_selection_os_90;
+                taxAllocationOs = tax_allocation_os + bonus_allocation_os_90;
+                taxSelectionMez = tax_selection_mez + bonus_selection_mez_90;
+                taxAllocationMez = tax_allocation_mez + bonus_allocation_mez_90;
+            }
+            else if (checkedIndex == 3) {
+                taxSelectionOs = tax_selection_os + bonus_selection_os_80;
+                taxAllocationOs = tax_allocation_os + bonus_allocation_os_80;
+                taxSelectionMez = tax_selection_mez + bonus_selection_mez_80;
+                taxAllocationMez = tax_allocation_mez + bonus_allocation_mez_80;
+            }
+            else {
+                taxSelectionOs = tax_selection_os;
+                taxAllocationOs = tax_allocation_os;
+                taxSelectionMez = tax_selection_mez;
+                taxAllocationMez = tax_allocation_mez;
+            }
+
+            taxSelectionOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", taxSelectionOs));
+            taxAllocationOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", taxAllocationOs));
+            taxSelectionMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", taxSelectionMez));
+            taxAllocationMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", taxAllocationMez));
 
             cursor.close();
         }
@@ -116,16 +230,67 @@ public class StatisticActivity extends AppCompatActivity {
         try {
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH);
-            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_PAY}, DbHelper.KEY_MONTH + "=?", new String[] {String.valueOf(month)}, null, null, null);
+            dbHelper = new DbHelper(this);
+            db = dbHelper.getReadableDatabase();
+            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=?", new String[] {String.valueOf(month)}, null, null, null);
 
+            int selectionOsIndex, selectionMezIndex, allocationOsIndex, allocationMezIndex;
+            int selectionOs, selectionMez, allocationOs, allocationMez;
+            double selectionOsPay = 0, selectionMezPay = 0, allocationOsPay = 0, allocationMezPay = 0;
+            double bonusSelectionMez = 0, bonusSelectionOs = 0, bonusAllocationMez = 0, bonusAllocationOs = 0;
+
+            if (checkedIndex == 0) {
+                bonusSelectionMez = bonus_selection_mez_120;
+                bonusSelectionOs = bonus_selection_os_120;
+                bonusAllocationMez = bonus_allocation_mez_120;
+                bonusAllocationOs = bonus_allocation_os_120;
+            }
+            else if (checkedIndex == 1) {
+                bonusSelectionMez = bonus_selection_mez_100;
+                bonusSelectionOs = bonus_selection_os_100;
+                bonusAllocationMez = bonus_allocation_mez_100;
+                bonusAllocationOs = bonus_allocation_os_100;
+            }
+            else if (checkedIndex == 2) {
+                bonusSelectionMez = bonus_selection_mez_90;
+                bonusSelectionOs = bonus_selection_os_90;
+                bonusAllocationMez = bonus_allocation_mez_90;
+                bonusAllocationOs = bonus_allocation_os_90;
+            }
+            else if (checkedIndex == 3) {
+                bonusSelectionMez = bonus_selection_mez_80;
+                bonusSelectionOs = bonus_selection_os_80;
+                bonusAllocationMez = bonus_allocation_mez_80;
+                bonusAllocationOs = bonus_allocation_os_80;
+            }
+
+            salary = 0;
             if (cursor.moveToNext()) {
                 do {
-                    int payIndex = cursor.getColumnIndex(DbHelper.KEY_PAY);
-                    salary += cursor.getDouble(payIndex);
+                    selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
+                    selectionMezIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ);
+                    allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
+                    allocationMezIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ);
+
+                    selectionOs = cursor.getInt(selectionOsIndex);
+                    selectionMez = cursor.getInt(selectionMezIndex);
+                    allocationOs = cursor.getInt(allocationOsIndex);
+                    allocationMez = cursor.getInt(allocationMezIndex);
+
+                    selectionOsPay += (tax_selection_os + bonusSelectionOs) * selectionOs;
+                    selectionMezPay += (tax_selection_mez + bonusSelectionMez) * selectionMez;
+                    allocationOsPay += (tax_allocation_os + bonusAllocationOs) * allocationOs;
+                    allocationMezPay += (tax_allocation_mez + bonusAllocationMez) * allocationMez;
+
+                    salary += selectionOsPay + selectionMezPay + allocationOsPay + allocationMezPay;
                 } while (cursor.moveToNext());
             }
 
-            userSalaryTextView.setText(String.valueOf(salary));
+            taxSelectionOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_selection_os + bonusSelectionOs));
+            taxAllocationOsTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_allocation_os + bonusAllocationOs));
+            taxSelectionMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_selection_mez + bonusSelectionMez));
+            taxAllocationMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax_allocation_mez + bonusAllocationMez));
+            userSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", salary));
 
             cursor.close();
         } catch (Exception e) {

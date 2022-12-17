@@ -11,6 +11,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.vipiki.Add_Picks_Activity;
 
+import java.util.Locale;
+
 public class EditPicsDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class EditPicsDialogFragment extends DialogFragment {
                     + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Оплата: " + pay;
         }
         else {
-            message = "Это доп смена.\nОплата: " + pay;
+            message = "Это доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);
         }
         String buttonEditText = "Изменить";
         String buttonBackText = "Назад";

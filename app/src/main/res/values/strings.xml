@@ -50,4 +50,11 @@
     <string name="confirm_register">Зарегистрироваться</string>
     <string name="auth">Вход</string>
     <string name="confirm_auth">Авторизоваться</string>
+    <string name="editProfile">Редактировать профиль</string>
+    <string name="editTaxes">Изменить ставку</string>
+    <string name="bonus">Премия</string>
+    <string name="bonus80">80%</string>
+    <string name="bonus90">90%</string>
+    <string name="bonus100">100%</string>
+    <string name="bonus120">120%</string>
 </resources>

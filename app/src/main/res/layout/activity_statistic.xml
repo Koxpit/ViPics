@@ -184,12 +184,54 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/bonusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/taxesRelativeLayout"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/bonus"/>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bonusTextView"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/bonusRadioGroup">
+        <RadioButton
+            android:id="@+id/bonus120_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/bonus120"/>
+        <RadioButton
+            android:id="@+id/bonus100_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/bonus100"/>
+        <RadioButton
+            android:id="@+id/bonus90_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/bonus90"/>
+        <RadioButton
+            android:id="@+id/bonus80_radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bonus80"/>
+    </RadioGroup>
+
+    <TextView
         android:id="@+id/salaryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="130dp"
-        android:layout_below="@id/taxesRelativeLayout"
+        android:layout_below="@id/bonusRadioGroup"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
         android:text="@string/salary" />
@@ -199,7 +241,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_below="@id/taxesRelativeLayout"
+        android:layout_below="@id/bonusRadioGroup"
         android:layout_alignBottom="@+id/salaryTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"

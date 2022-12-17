@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 public class Add_Picks_Activity extends AppCompatActivity {
     DbHelper dbHelper;
@@ -48,6 +49,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
 
     private int selectionOs = 0, allocationOs = 0;
     private int selectionMez = 0, allocationMez = 0;
+    double bonus_selection_mez_80 = 0, bonus_selection_os_80 = 0, bonus_allocation_mez_80 = 0, bonus_allocation_os_80 = 0;
     private int isExtraDay = 0;
     private double pay = 0;
 
@@ -90,7 +92,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
             isExtraShift_checkBox.setChecked(false);
             extraShiftPay_editText.setEnabled(false);
         }
-        extraShiftPay_editText.setText(String.valueOf(pay));
+        extraShiftPay_editText.setText(String.format(Locale.ENGLISH, "%(.2f", pay));
 
         add_button.setOnClickListener(view -> {
             correctEntry();
@@ -117,10 +119,10 @@ public class Add_Picks_Activity extends AppCompatActivity {
             }
             else {
                 isExtraDay = 0;
-                double selection_os_pay = tax_selection_os * selectionOs;
-                double allocation_os_pay = tax_allocation_os * allocationOs;
-                double selection_mez_pay = tax_selection_mez * selectionMez;
-                double allocation_mez_pay = tax_allocation_mez * allocationMez;
+                double selection_os_pay = (tax_selection_os + bonus_selection_os_80) * selectionOs;
+                double allocation_os_pay = (tax_allocation_os + bonus_allocation_os_80) * allocationOs;
+                double selection_mez_pay = (tax_selection_mez + bonus_selection_mez_80) * selectionMez;
+                double allocation_mez_pay = (tax_allocation_mez + bonus_allocation_mez_80) * allocationMez;
 
                 pay = selection_os_pay + allocation_os_pay + selection_mez_pay + allocation_mez_pay;
             }
@@ -147,7 +149,8 @@ public class Add_Picks_Activity extends AppCompatActivity {
     private void setTax(SQLiteDatabase db, String sector_id, String schedule_id) {
         String[] selectionArgs = { sector_id, schedule_id };
 
-        String[] columnsTaxes = { DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX };
+        String[] columnsTaxes = {DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX,
+                DbHelper.KEY_BONUS_SELECTION_MEZ_80, DbHelper.KEY_BONUS_SELECTION_OS_80, DbHelper.KEY_BONUS_ALLOCATION_MEZ_80, DbHelper.KEY_BONUS_ALLOCATION_OS_80};
         Cursor cursor = db.query(DbHelper.TABLE_TAXES, columnsTaxes, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?" , selectionArgs, null, null, null);
         if (cursor.moveToNext()) {
             int selectionOsTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS_TAX);
@@ -155,10 +158,22 @@ public class Add_Picks_Activity extends AppCompatActivity {
             int selectionMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ_TAX);
             int allocationMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ_TAX);
 
+            int bonusSelectionMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_80);
+            int bonusAllocationMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_80);
+
+            int bonusSelectionOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_80);
+            int bonusAllocationOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_80);
+
             tax_selection_os = cursor.getDouble(selectionOsTaxIndex);
             tax_allocation_os = cursor.getDouble(allocationOsTaxIndex);
             tax_selection_mez = cursor.getDouble(selectionMezTaxIndex);
             tax_allocation_mez = cursor.getDouble(allocationMezTaxIndex);
+
+            bonus_selection_mez_80 = cursor.getDouble(bonusSelectionMez80Index);
+            bonus_allocation_mez_80 = cursor.getDouble(bonusAllocationMez80Index);
+
+            bonus_selection_os_80 = cursor.getDouble(bonusSelectionOs80Index);
+            bonus_allocation_os_80 = cursor.getDouble(bonusAllocationOs80Index);
         }
         cursor.close();
     }
