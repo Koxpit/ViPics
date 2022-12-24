@@ -40,9 +40,9 @@
     <string name="phone">Телефон</string>
     <string name="hint_phone">8 999 236 55 36</string>
     <string name="email">Почта</string>
-    <string name="hint_email">user@gmail.com</string>
+    <string name="hint_email">Введите почту</string>
     <string name="password">Пароль</string>
-    <string name="hint_password">qwerty</string>
+    <string name="hint_password">Введите пароль</string>
     <string name="hint_not_see_password">********</string>
     <string name="sector">Сектор</string>
     <string name="salary">Зарплата</string>
@@ -57,5 +57,9 @@
     <string name="bonus90">90%</string>
     <string name="bonus100">100%</string>
     <string name="bonus120">120%</string>
-    <string name="salaryByCurrentMonth">Зарплата за месяц</string>
+    <string name="salaryByCurrentMonth">ЗП за текущий месяц</string>
+    <string name="averageMonthSalary">Средняя зп за месяц</string>
+    <string name="yearSalary">Зарплата за год</string>
+    <string name="update">Обновить</string>
+    <string name="userProfile">Профиль</string>
 </resources>

@@ -32,6 +32,8 @@ public class SettingsActivity extends AppCompatActivity {
     TextView editProfileTextView;
     TextView editTaxesTextView;
 
+    private Spinner spinnerPosts, spinnerSchedules, spinnerSectors;
+
     private String post, schedule, sector, name;
 
     @Override
@@ -75,8 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             dbHelper.close();
 
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+            dialogInterface.dismiss();
         });
 
         dialog.show();
@@ -97,11 +98,17 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putString("post", post);
         editor.putString("schedule", schedule);
         editor.putString("sector", sector);
+        editor.putInt("postIndex", spinnerPosts.getSelectedItemPosition());
+        editor.putInt("scheduleIndex", spinnerSchedules.getSelectedItemPosition());
+        editor.putInt("sectorIndex", spinnerSectors.getSelectedItemPosition());
         editor.apply();
     }
 
     private void initSpinners(View edit_profile_view) {
-        Spinner spinnerPosts = dbHelper.getFilledPostsSpinner(edit_profile_view.findViewById(R.id.spinnerPosts), getBaseContext());
+        SharedPreferences settings = getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+
+        spinnerPosts = dbHelper.getFilledPostsSpinner(edit_profile_view.findViewById(R.id.spinnerPosts), getBaseContext());
+        spinnerPosts.setSelection(settings.getInt("postIndex", 0));
         AdapterView.OnItemSelectedListener itemSelectedPostListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -115,7 +122,8 @@ public class SettingsActivity extends AppCompatActivity {
         };
         spinnerPosts.setOnItemSelectedListener(itemSelectedPostListener);
 
-        Spinner spinnerSchedules = dbHelper.getFilledSchedulesSpinner(edit_profile_view.findViewById(R.id.spinnerSchedules), getBaseContext());
+        spinnerSchedules = dbHelper.getFilledSchedulesSpinner(edit_profile_view.findViewById(R.id.spinnerSchedules), getBaseContext());
+        spinnerSchedules.setSelection(settings.getInt("scheduleIndex", 0));
         AdapterView.OnItemSelectedListener itemSelectedScheduleListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -129,7 +137,8 @@ public class SettingsActivity extends AppCompatActivity {
         };
         spinnerSchedules.setOnItemSelectedListener(itemSelectedScheduleListener);
 
-        Spinner spinnerSectors = dbHelper.getFilledSectorsSpinner(edit_profile_view.findViewById(R.id.spinnerSectors), getBaseContext());
+        spinnerSectors = dbHelper.getFilledSectorsSpinner(edit_profile_view.findViewById(R.id.spinnerSectors), getBaseContext());
+        spinnerSectors.setSelection(settings.getInt("sectorIndex", 0));
         AdapterView.OnItemSelectedListener itemSelectedSectorListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {

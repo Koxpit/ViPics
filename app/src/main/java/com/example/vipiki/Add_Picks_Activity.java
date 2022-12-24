@@ -109,7 +109,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
                 sendScheduleNotFoundError();
             }
 
-            setTax(db, String.valueOf(1), String.valueOf(2));
+            setTax(db, String.valueOf(sector_id), String.valueOf(schedule_id));
             dbHelper.close();
             db.close();
 

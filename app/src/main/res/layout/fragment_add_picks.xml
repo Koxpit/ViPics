@@ -11,9 +11,9 @@
         android:id="@+id/text_add_picks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="20dp"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +23,29 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spinnerWorkDays"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/updateSpinnerButton"
+        android:layout_below="@id/calendarView"/>
+
+    <Button
+        android:id="@+id/updateSpinnerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/calendarView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="18sp"
+        android:text="@string/update" />
 </RelativeLayout>

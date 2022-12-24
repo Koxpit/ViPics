@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vipiki.database.DbHelper;
@@ -36,6 +37,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthEmailException;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,22 +50,28 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class WelcomeActivity extends AppCompatActivity {
 
     Button register_button, auth_button;
+    TextView welcomeMessage, agreementMessage;
     private FirebaseAuth auth;
     private FirebaseDatabase db;
     private DatabaseReference users;
     private RelativeLayout welcome_relativeLayout;
     private SharedPreferences settings;
     private String post, schedule, sector;
+    private String[] postulatesTitles = new String[] {"Команда", "Клиент", "Эффективность"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        welcomeMessage = findViewById(R.id.welcomeMessage);
+        agreementMessage = findViewById(R.id.agreementMessage);
         settings = getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+        setWelcomeMessage();
 
         register_button = findViewById(R.id.register_button);
         auth_button = findViewById(R.id.auth_button);
@@ -86,8 +95,29 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
 
-        register_button.setOnClickListener(view -> showRegisterWindow());
-        auth_button.setOnClickListener(view -> showAuthWindow());
+        try {
+            register_button.setOnClickListener(view -> showRegisterWindow());
+            auth_button.setOnClickListener(view -> showAuthWindow());
+        } catch (Exception e) {
+            Snackbar.make(welcome_relativeLayout, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setWelcomeMessage() {
+        int postulateId = (int)Math.floor(Math.random() * postulatesTitles.length);
+
+        if (Objects.equals(postulatesTitles[postulateId], "Команда")) {
+            welcomeMessage.setText(postulatesTitles[postulateId]);
+            agreementMessage.setText("Быть дружной и амбициозной командой, любящей свое дело!");
+        }
+        else if (Objects.equals(postulatesTitles[postulateId], "Клиент")) {
+            welcomeMessage.setText(postulatesTitles[postulateId]);
+            agreementMessage.setText("Наша цель - восхищать клиента искренним сервисом!");
+        }
+        else if (Objects.equals(postulatesTitles[postulateId], "Эффективность")) {
+            welcomeMessage.setText(postulatesTitles[postulateId]);
+            agreementMessage.setText("Быть самой прибыльной и быстрорастущей компанией!");
+        }
     }
 
     private void showAuthWindow() {
@@ -109,17 +139,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
             auth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                     .addOnSuccessListener(authResult -> {
-                        if (userIsEmpty())
-                            return;
+                        try {
+                            if (userIsEmpty())
+                                return;
 
-                        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                        SharedPreferences.Editor editor = settings.edit();
-                        editor.putBoolean(UID, true);
-                        editor.apply();
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putBoolean(UID, true);
+                            editor.apply();
 
-                        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                        finish();
+                            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+                            finish();
+                        } catch (Exception e) {
+                            Snackbar.make(welcome_relativeLayout, e.getMessage(), Snackbar.LENGTH_SHORT).show();
+                        }
                     }).addOnFailureListener(e -> {
                         sendAuthError(welcome_relativeLayout, e);
                     });
@@ -159,7 +193,6 @@ public class WelcomeActivity extends AppCompatActivity {
                         newUser.setSector(sector);
                         newUser.setSchedule(schedule);
                         newUser.setEmail(email.getText().toString());
-                        newUser.setPassword(password.getText().toString());
 
                         users.child(UID).setValue(newUser)
                                 .addOnSuccessListener(unused -> {
@@ -202,7 +235,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void sendAuthError(ViewGroup layout, Exception e) {
-        Snackbar.make(layout, "Ошибка авторизации. Повторите попытку позже.", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(layout, "Ошибка авторизации." + e.getMessage(), Snackbar.LENGTH_SHORT).show();
         Log.d("AUTH_FAIL", e.getMessage());
     }
 
@@ -212,7 +245,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void sendRegError(ViewGroup layout, Exception e) {
-        Snackbar.make(layout, "Пользователь не добавлен" + e.getMessage(), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(layout, "Ошибка. Пользователь не добавлен. " + e.getMessage(), Snackbar.LENGTH_SHORT).show();
         Log.d("SET_USER_VALUE_FAIL", e.getMessage());
     }
 

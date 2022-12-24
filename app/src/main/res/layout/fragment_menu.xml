@@ -30,24 +30,40 @@
                 <ImageView
                     android:id="@+id/avatar_imageView"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="15dp"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    tools:src="@drawable/avatar" />
+                    tools:src="@mipmap/ic_empty_user" />
 
                 <TextView
                     android:id="@+id/average_income_textView"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@id/avatar_imageView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/archivo_black"
+                    android:textSize="15sp"
+                    android:text="@string/average_income" />
+
+                <TextView
+                    android:id="@+id/averageMonthSalaryTextView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/average_income_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="30dp"
-                    android:text="@string/average_income" />
+                    android:fontFamily="@font/archivo_black"
+                    android:textSize="15sp"
+                    android:text="@string/default_pay" />
 
                 <Button
                     android:id="@+id/statistic_button"
                     android:layout_alignParentEnd="true"
-                    android:layout_below="@id/average_income_textView"
+                    android:layout_below="@id/averageMonthSalaryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"

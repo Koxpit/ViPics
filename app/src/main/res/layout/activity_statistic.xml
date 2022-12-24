@@ -9,10 +9,22 @@
     android:id="@+id/rootRelativeLayout">
 
     <TextView
+        android:id="@+id/userDataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="26sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/userProfile" />
+
+    <TextView
         android:id="@+id/nameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_below="@id/userDataTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
         android:text="@string/name" />
@@ -90,7 +102,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_margin="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:layout_below="@id/sectorTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="26sp"
@@ -101,7 +114,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/taxesRelativeLayout"
         android:layout_below="@id/taxesTitleTextView"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/selectionOsTextView"
@@ -190,7 +203,7 @@
         android:layout_below="@id/taxesRelativeLayout"
         android:layout_centerHorizontal="true"
         android:fontFamily="@font/archivo_black"
-        android:textSize="20sp"
+        android:textSize="26sp"
         android:text="@string/bonus"/>
 
     <RadioGroup
@@ -243,6 +256,30 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@id/bonusRadioGroup"
         android:layout_alignBottom="@+id/salaryTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/default_pay" />
+
+    <TextView
+        android:id="@+id/yearSalaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="150dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/salaryTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/yearSalary" />
+
+    <TextView
+        android:id="@+id/userYearSalaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/userSalaryTextView"
+        android:layout_alignBottom="@+id/yearSalaryTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
         android:text="@string/default_pay" />

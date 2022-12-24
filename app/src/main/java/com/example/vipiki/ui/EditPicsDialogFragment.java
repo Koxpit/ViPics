@@ -3,20 +3,24 @@ package com.example.vipiki.ui;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.vipiki.Add_Picks_Activity;
+import com.example.vipiki.database.DbHelper;
 
 import java.util.Locale;
 
 public class EditPicsDialogFragment extends DialogFragment {
+    private int year = 0, month = 0, day = 0;
+
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        int year = 0, month = 0, day = 0;
         int selectionOs = 0;
         int allocationOs = 0;
         int selectionMez = 0;
@@ -38,16 +42,18 @@ public class EditPicsDialogFragment extends DialogFragment {
         }
 
         @SuppressLint("DefaultLocale") String date = String.format("%d.%d.%d", year, month, day);
-        String title = "Смена в дату " + date + " уже добавлена.";
+        String title = "Результат смены " + date;
         String message = "";
         if (isExtraDay == 0) {
             message = "Отбор основа: " + selectionOs + ";\n" + "Размещение основа: " + allocationOs + ";\n"
-                    + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Минимальная оплата: " + pay;
+                    + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Минимальная оплата: "
+                    + String.format(Locale.ENGLISH, "%(.2f", pay) + "руб.";
         }
         else {
             message = "Это доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);
         }
         String buttonEditText = "Изменить";
+        String buttonDeleteText = "Удалить";
         String buttonBackText = "Назад";
 
         android.app.AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -60,7 +66,16 @@ public class EditPicsDialogFragment extends DialogFragment {
             startActivity(intent);
         });
 
-        builder.setNegativeButton(buttonBackText, (dialog, id) -> dialog.cancel());
+        builder.setNeutralButton(buttonBackText, (dialog, i) -> dialog.cancel());
+
+        builder.setNegativeButton(buttonDeleteText, (dialog, id) -> {
+            DbHelper dbHelper = new DbHelper(getActivity());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            dbHelper.deleteWOrkDay(db, year, month, day);
+            dbHelper.close();
+            db.close();
+            dialog.dismiss();
+        });
         builder.setCancelable(true);
 
         return builder.create();
