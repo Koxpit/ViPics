@@ -2,6 +2,7 @@ package com.example.vipiki;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -19,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.viewModels.SettingsViewModel;
+import com.example.vipiki.viewModels.StatisticViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
+    private SettingsViewModel settingsViewModel;
 
     DbHelper dbHelper;
     TextView editProfileTextView;
@@ -40,6 +44,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        Log.d("CLEAR_VM", "Activity Settings created");
+        settingsViewModel = new ViewModelProvider(this).get(SettingsViewModel.class);
 
         dbHelper = new DbHelper(this);
 

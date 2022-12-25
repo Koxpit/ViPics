@@ -6,26 +6,15 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.preference.PreferenceManager;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.vipiki.R;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -2056,7 +2045,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public double getAverageMonthSalary(SQLiteDatabase db) {
         int workMonths = 0;
-        double totalSalary = 0;
+        double totalSalary = 0, averageSalary = 0;
 
         Cursor cursor;
         for (int i = 1; i <= 12; i++) {
@@ -2071,7 +2060,12 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
 
-        return totalSalary/workMonths;
+        if (totalSalary == 0)
+            averageSalary = 0;
+        else
+            averageSalary = totalSalary/workMonths;
+
+        return averageSalary;
     }
 
     public void deleteWOrkDay(SQLiteDatabase db, int year, int month, int day) {
@@ -2101,6 +2095,24 @@ public class DbHelper extends SQLiteOpenHelper {
         return spinnerPosts;
     }
 
+    public List<String> getPosts() {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> posts = new ArrayList<>();
+
+        Cursor cursor = db.query(TABLE_POSTS, new String[] {KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                posts.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return posts;
+    }
+
     public Spinner getFilledSchedulesSpinner(Spinner spinnerSchedules, Context context) {
         SQLiteDatabase db = getWritableDatabase();
         List<String> schedules = new ArrayList<>();
@@ -2123,6 +2135,24 @@ public class DbHelper extends SQLiteOpenHelper {
         return spinnerSchedules;
     }
 
+    public List<String> getSchedules() {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> schedules = new ArrayList<>();
+
+        Cursor cursor = db.query(TABLE_SCHEDULES, new String[] {KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                schedules.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return schedules;
+    }
+
     public Spinner getFilledSectorsSpinner(Spinner spinnerSectors, Context context) {
         SQLiteDatabase db = getWritableDatabase();
         List<String> sectors = new ArrayList<>();
@@ -2143,6 +2173,24 @@ public class DbHelper extends SQLiteOpenHelper {
 
         db.close();
         return spinnerSectors;
+    }
+
+    public List<String> getSectors() {
+        SQLiteDatabase db = getWritableDatabase();
+        List<String> sectors = new ArrayList<>();
+
+        Cursor cursor = db.query(TABLE_SECTORS, new String[] {KEY_NAME}, null, null, null, null, null);
+        if (cursor.moveToNext()) {
+            do {
+                int columnIndex = cursor.getColumnIndex(KEY_NAME);
+                String value = cursor.getString(columnIndex);
+                sectors.add(value);
+            } while(cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+
+        return sectors;
     }
 
     public Cursor getSectorsCursor(SQLiteDatabase db) {

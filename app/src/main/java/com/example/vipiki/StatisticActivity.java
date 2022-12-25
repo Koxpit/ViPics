@@ -1,6 +1,8 @@
 package com.example.vipiki;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.viewModels.StatisticViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
@@ -21,6 +24,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class StatisticActivity extends AppCompatActivity {
+    private StatisticViewModel statisticViewModel;
     TextView userNameTextView;
     TextView userPostTextView;
     TextView userScheduleTextView;
@@ -55,6 +59,8 @@ public class StatisticActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
         initComponents();
+        Log.d("CLEAR_VM", "Activity Statistic created");
+        statisticViewModel = new ViewModelProvider(this).get(StatisticViewModel.class);
 
         dbHelper = new DbHelper(this);
         db = dbHelper.getReadableDatabase();

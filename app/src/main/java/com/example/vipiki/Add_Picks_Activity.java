@@ -18,10 +18,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.models.WorkDay;
 import com.example.vipiki.ui.addPicks.AddPicksFragment;
+import com.example.vipiki.viewModels.AddPicksViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +34,8 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 public class Add_Picks_Activity extends AppCompatActivity {
+    private AddPicksViewModel addPicksViewModel;
+
     DbHelper dbHelper;
     SQLiteDatabase db;
     RelativeLayout rootRelativeLayout;
@@ -57,6 +61,10 @@ public class Add_Picks_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_picks);
+
+        Log.d("CLEAR_VM", "Activity AddPicks created");
+        addPicksViewModel = new ViewModelProvider(this).get(AddPicksViewModel.class);
+
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         day = bundle.getInt("day");
