@@ -56,6 +56,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
     double bonus_selection_mez_80 = 0, bonus_selection_os_80 = 0, bonus_allocation_mez_80 = 0, bonus_allocation_os_80 = 0;
     private int isExtraDay = 0;
     private double pay = 0;
+    private String UID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
         allocationMez = bundle.getInt("allocationMez");
         isExtraDay = bundle.getInt("isExtraDay");
         pay = bundle.getDouble("pay");
+        UID = bundle.getString("UID");
         Log.d("WORK_DATE", String.format("%d.%d.%d", year, month, day));
 
         rootRelativeLayout = findViewById(R.id.rootRelativeLayout);
@@ -134,8 +136,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
 
                 pay = selection_os_pay + allocation_os_pay + selection_mez_pay + allocation_mez_pay;
             }
-
-            WorkDay workDay = new WorkDay(day, month, year, isExtraDay, selectionOs, allocationOs, selectionMez, allocationMez, pay);
+            WorkDay workDay = new WorkDay(day, month, year, isExtraDay, selectionOs, allocationOs, selectionMez, allocationMez, pay, UID);
             addWorkDay(workDay);
 
             Intent intentMain = new Intent(this, MainActivity.class);
@@ -248,10 +249,11 @@ public class Add_Picks_Activity extends AppCompatActivity {
         contentValues.put(DbHelper.KEY_ALLOCATION_MEZ, workDay.getAllocationMez());
         contentValues.put(DbHelper.KEY_IS_EXTRA_PAY, workDay.getExtraDay());
         contentValues.put(DbHelper.KEY_PAY, workDay.getPay());
+        contentValues.put(DbHelper.KEY_USER_UID, workDay.getUserUID());
 
         String[] columnsWorkDays = {DbHelper.KEY_ID};
-        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day)};
-        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ?", selectionSectorsArgs, null, null, null);
+        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day), workDay.getUserUID()};
+        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
 
         if (cursor.moveToNext()) {
             int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);

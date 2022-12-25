@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +34,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TABLE_PRODUCTIVITY = "productivity";
 
     public static final String KEY_ID = "_id";
+    public static final String KEY_USER_UID = "user_uid";
     public static final String KEY_POST_ID = "post_id";
     public static final String KEY_SECTOR_ID = "sector_id";
     public static final String KEY_SCHEDULE_ID = "schedule_id";
@@ -87,7 +90,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 + KEY_SELECTION_MEZ + " INTEGER NOT NULL, "
                 + KEY_ALLOCATION_MEZ + " INTEGER NOT NULL, "
                 + KEY_IS_EXTRA_PAY  + " BOOLEAN NOT NULL CHECK (" + KEY_IS_EXTRA_PAY + " IN (0, 1)), "
-                + KEY_PAY + " INTEGER NOT NULL" + ")");
+                + KEY_PAY + " INTEGER NOT NULL, "
+                + KEY_USER_UID + " TEXT NOT NULL )");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_POSTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
@@ -1984,8 +1988,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public Spinner getFilledWorkDaysSpinner(Spinner spinnerWorkDays, FragmentActivity context) {
         SQLiteDatabase db = getWritableDatabase();
         List<String> workDays = new ArrayList<>();
-
-        Cursor cursor = db.query(TABLE_WORKDAYS, new String[] {KEY_YEAR, KEY_MONTH, KEY_DAY}, null, null, null, null, KEY_YEAR + " DESC, " + KEY_MONTH + " DESC, " + KEY_DAY + " DESC");
+        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Cursor cursor = db.query(TABLE_WORKDAYS, new String[] {KEY_YEAR, KEY_MONTH, KEY_DAY}, KEY_USER_UID + " = ?", new String[] {UID}, null, null, KEY_YEAR + " DESC, " + KEY_MONTH + " DESC, " + KEY_DAY + " DESC");
         if (cursor.moveToNext()) {
             do {
                 int yearColumnIndex = cursor.getColumnIndex(KEY_YEAR);

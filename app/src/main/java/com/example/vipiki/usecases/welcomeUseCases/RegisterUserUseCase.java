@@ -41,7 +41,7 @@ public class RegisterUserUseCase {
 
                     users.child(UID).setValue(newUser)
                             .addOnSuccessListener(unused -> {
-                                recreateDatabase();
+                                //recreateDatabase();
                                 setUserSettings(UID);
                             })
                             .addOnFailureListener(e -> {
@@ -81,6 +81,7 @@ public class RegisterUserUseCase {
 
     private void setUserSettings(String userUID) {
         SharedPreferences.Editor editor = settings.edit();
+        editor.putString("UID", userUID);
         editor.putBoolean(userUID, true);
         editor.putString("name", name);
         editor.putString("sector", sector);

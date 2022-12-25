@@ -2,8 +2,16 @@ package com.example.vipiki.usecases.welcomeUseCases;
 
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
+import com.example.vipiki.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AuthUserUseCase {
     private final SharedPreferences settings;
@@ -37,8 +45,13 @@ public class AuthUserUseCase {
 
         auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener(authResult -> {
+                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
                     String UID = getUID();
-                    setAuthSettings(editor, UID, !userIsEmpty());
+
+                    users.child(UID).get().addOnSuccessListener(dataSnapshot -> {
+                        User user = dataSnapshot.getValue(User.class);
+                        setAuthSettings(editor, user, UID, !userIsEmpty());
+                    }).addOnFailureListener(e -> setAuthSettings(editor, UID, false));
                 }).addOnFailureListener(e -> {
                     String UID = getUID();
                     setAuthSettings(editor, UID, false);
@@ -47,6 +60,16 @@ public class AuthUserUseCase {
 
     private String getUID() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    private void setAuthSettings(SharedPreferences.Editor editor, User user, String UID, boolean status) {
+        editor.putString("UID", UID);
+        editor.putString("name", user.getName());
+        editor.putString("post", user.getPost());
+        editor.putString("sector", user.getSector());
+        editor.putString("schedule", user.getSchedule());
+        editor.putBoolean(UID, status);
+        editor.apply();
     }
 
     private void setAuthSettings(SharedPreferences.Editor editor, String UID, boolean status) {

@@ -1,5 +1,7 @@
 package com.example.vipiki.ui.addPicks;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import com.example.vipiki.ui.EditPicsDialogFragment;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,7 +75,9 @@ public class AddPicksFragment extends Fragment {
                 Snackbar.make(binding.rootRelativeLayout, "Нельзя выбрать дату больше текущей.", Snackbar.LENGTH_SHORT).show();
             }
             else {
-                editWorkDay(year, month, day);
+                SharedPreferences settings = getActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+                String UID = settings.getString("UID", null);
+                editWorkDay(year, month, day, UID);
             }
         });
 
@@ -101,7 +106,9 @@ public class AddPicksFragment extends Fragment {
                         int day = myCal.get(Calendar.DAY_OF_MONTH);
                         int month = myCal.get(Calendar.MONTH) + 1;
                         int year = myCal.get(Calendar.YEAR);
-                        editWorkDay(year, month, day);
+                        SharedPreferences settings = getActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE);
+                        String UID = settings.getString("UID", null);
+                        editWorkDay(year, month, day, UID);
                     }
                     else {
                         check = true;
@@ -120,12 +127,12 @@ public class AddPicksFragment extends Fragment {
         dbHelper.close();
     }
 
-    private void editWorkDay(int year, int month, int day) {
+    private void editWorkDay(int year, int month, int day, String UID) {
         DbHelper dbHelper = new DbHelper(getActivity());
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columnsWorkDays = {DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ, DbHelper.KEY_IS_EXTRA_PAY, DbHelper.KEY_PAY};
-        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day)};
-        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ?", selectionSectorsArgs, null, null, null);
+        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day), UID};
+        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
         if (cursor.moveToNext()) {
             int selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
             int allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
@@ -151,6 +158,7 @@ public class AddPicksFragment extends Fragment {
             bundle.putInt("allocationMez", allocationMez);
             bundle.putInt("isExtraDay", isExtraPay);
             bundle.putDouble("pay", pay);
+            bundle.putString("UID", UID);
             FragmentManager manager = getParentFragmentManager();
             EditPicsDialogFragment editPicsDialogFragment = new EditPicsDialogFragment();
             editPicsDialogFragment.setArguments(bundle);
@@ -167,6 +175,7 @@ public class AddPicksFragment extends Fragment {
             bundle.putInt("allocationMez", 0);
             bundle.putInt("isExtraDay", 0);
             bundle.putDouble("pay", 0);
+            bundle.putString("UID", UID);
             FragmentManager manager = getParentFragmentManager();
             AddPicksDialogFragment addPicksDialogFragment = new AddPicksDialogFragment();
             addPicksDialogFragment.setArguments(bundle);

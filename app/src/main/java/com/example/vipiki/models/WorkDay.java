@@ -10,10 +10,11 @@ public class WorkDay {
     private int allocationMez;
     private int isExtraDay;
     private double pay;
+    private String userUID;
 
     public WorkDay() {}
 
-    public WorkDay(int day, int month, int year, int isExtraDay, int selectionOs, int allocationOs, int selectionMez, int allocationMez, double pay) {
+    public WorkDay(int day, int month, int year, int isExtraDay, int selectionOs, int allocationOs, int selectionMez, int allocationMez, double pay, String userUID)  {
         this.day = day;
         this.month = month;
         this.year = year;
@@ -23,6 +24,7 @@ public class WorkDay {
         this.selectionMez = selectionMez;
         this.allocationMez = allocationMez;
         this.pay = pay;
+        this.userUID = userUID;
     }
 
     public int getDay() {
@@ -95,5 +97,13 @@ public class WorkDay {
 
     public void setPay(double pay) {
         this.pay = pay;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 }

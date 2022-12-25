@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,8 +112,9 @@ public class HomeFragment extends Fragment {
         DbHelper dbHelper = new DbHelper(getContext());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String[] columns = { DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ };
-        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columns, DbHelper.KEY_MONTH + " = ?", new String[] {String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1)}, null, null, null);
+        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columns, DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", new String[] {String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1), UID}, null, null, null);
         if (cursor.moveToNext()) {
             int selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
             int allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
