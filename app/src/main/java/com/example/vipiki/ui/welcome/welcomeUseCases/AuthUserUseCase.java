@@ -1,15 +1,10 @@
-package com.example.vipiki.usecases.welcomeUseCases;
+package com.example.vipiki.ui.welcome.welcomeUseCases;
 
 import android.content.SharedPreferences;
 
-import androidx.annotation.NonNull;
-
 import com.example.vipiki.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,9 +22,6 @@ public class AuthUserUseCase {
         if (user != null) {
             String UID = user.getUid();
             if (settings.contains(UID)) {
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean(UID, false);
-                editor.apply();
                 if (settings.getBoolean(UID, false)) {
                     isAlreadyAuth = true;
                 }
@@ -51,10 +43,10 @@ public class AuthUserUseCase {
                     users.child(UID).get().addOnSuccessListener(dataSnapshot -> {
                         User user = dataSnapshot.getValue(User.class);
                         setAuthSettings(editor, user, UID, !userIsEmpty());
-                    }).addOnFailureListener(e -> setAuthSettings(editor, UID, false));
+                    }).addOnFailureListener(e -> setLogoutSettings(editor, UID));
                 }).addOnFailureListener(e -> {
                     String UID = getUID();
-                    setAuthSettings(editor, UID, false);
+                    setLogoutSettings(editor, UID);
                 });
     }
 
@@ -72,8 +64,8 @@ public class AuthUserUseCase {
         editor.apply();
     }
 
-    private void setAuthSettings(SharedPreferences.Editor editor, String UID, boolean status) {
-        editor.putBoolean(UID, status);
+    private void setLogoutSettings(SharedPreferences.Editor editor, String UID) {
+        editor.putBoolean(UID, false);
         editor.apply();
     }
 
@@ -91,8 +83,7 @@ public class AuthUserUseCase {
 
     public boolean getAuthStatus() {
         String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        boolean isAuth = settings.getBoolean(UID, false);
 
-        return isAuth;
+        return settings.getBoolean(UID, false);
     }
 }

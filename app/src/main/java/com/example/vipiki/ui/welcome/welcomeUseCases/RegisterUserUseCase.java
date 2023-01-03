@@ -1,4 +1,4 @@
-package com.example.vipiki.usecases.welcomeUseCases;
+package com.example.vipiki.ui.welcome.welcomeUseCases;
 
 import android.content.Context;
 import android.content.SharedPreferences;

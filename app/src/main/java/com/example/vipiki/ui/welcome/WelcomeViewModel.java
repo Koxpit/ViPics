@@ -1,4 +1,4 @@
-package com.example.vipiki.viewModels;
+package com.example.vipiki.ui.welcome;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -6,9 +6,9 @@ import android.util.Log;
 import androidx.lifecycle.ViewModel;
 
 import com.example.vipiki.models.User;
-import com.example.vipiki.usecases.welcomeUseCases.AuthUserUseCase;
-import com.example.vipiki.usecases.welcomeUseCases.InitRegisterSpinnersUseCase;
-import com.example.vipiki.usecases.welcomeUseCases.RegisterUserUseCase;
+import com.example.vipiki.ui.welcome.welcomeUseCases.AuthUserUseCase;
+import com.example.vipiki.ui.welcome.welcomeUseCases.InitRegisterSpinnersUseCase;
+import com.example.vipiki.ui.welcome.welcomeUseCases.RegisterUserUseCase;
 
 import java.util.List;
 

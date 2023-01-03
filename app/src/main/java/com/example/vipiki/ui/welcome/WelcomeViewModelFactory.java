@@ -1,4 +1,4 @@
-package com.example.vipiki.viewModelFactories;
+package com.example.vipiki.ui.welcome;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -7,14 +7,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.vipiki.usecases.welcomeUseCases.AuthUserUseCase;
-import com.example.vipiki.usecases.welcomeUseCases.InitRegisterSpinnersUseCase;
-import com.example.vipiki.usecases.welcomeUseCases.RegisterUserUseCase;
-import com.example.vipiki.viewModels.WelcomeViewModel;
+import com.example.vipiki.ui.welcome.welcomeUseCases.AuthUserUseCase;
+import com.example.vipiki.ui.welcome.welcomeUseCases.InitRegisterSpinnersUseCase;
+import com.example.vipiki.ui.welcome.welcomeUseCases.RegisterUserUseCase;
+import com.example.vipiki.ui.welcome.WelcomeViewModel;
 
 public class WelcomeViewModelFactory implements ViewModelProvider.Factory {
-    private Context context;
-    private SharedPreferences settings;
+    private final Context context;
+    private final SharedPreferences settings;
 
     public WelcomeViewModelFactory(Context context, SharedPreferences settings) {
         this.context = context;

@@ -1,4 +1,4 @@
-package com.example.vipiki;
+package com.example.vipiki.ui.welcome;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.vipiki.ui.main.MainActivity;
+import com.example.vipiki.R;
 import com.example.vipiki.models.User;
-import com.example.vipiki.viewModelFactories.WelcomeViewModelFactory;
-import com.example.vipiki.viewModels.WelcomeViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;

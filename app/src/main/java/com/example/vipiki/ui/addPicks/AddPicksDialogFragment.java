@@ -1,16 +1,13 @@
-package com.example.vipiki.ui;
+package com.example.vipiki.ui.addPicks;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-
-import com.example.vipiki.Add_Picks_Activity;
 
 public class AddPicksDialogFragment extends DialogFragment {
     @NonNull

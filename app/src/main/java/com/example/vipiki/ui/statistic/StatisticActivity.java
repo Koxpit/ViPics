@@ -1,7 +1,6 @@
-package com.example.vipiki;
+package com.example.vipiki.ui.statistic;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -10,13 +9,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.example.vipiki.R;
 import com.example.vipiki.database.DbHelper;
-import com.example.vipiki.viewModels.StatisticViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;

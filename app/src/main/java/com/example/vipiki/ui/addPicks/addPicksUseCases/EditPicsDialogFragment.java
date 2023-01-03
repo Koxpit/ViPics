@@ -1,9 +1,8 @@
-package com.example.vipiki.ui;
+package com.example.vipiki.ui.addPicks.addPicksUseCases;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.vipiki.Add_Picks_Activity;
+import com.example.vipiki.ui.addPicks.Add_Picks_Activity;
 import com.example.vipiki.database.DbHelper;
 
 import java.util.Locale;
@@ -71,7 +70,7 @@ public class EditPicsDialogFragment extends DialogFragment {
         builder.setNegativeButton(buttonDeleteText, (dialog, id) -> {
             DbHelper dbHelper = new DbHelper(getActivity());
             SQLiteDatabase db = dbHelper.getWritableDatabase();
-            dbHelper.deleteWOrkDay(db, year, month, day);
+            dbHelper.deleteWorkDay(db, year, month, day);
             dbHelper.close();
             db.close();
             dialog.dismiss();

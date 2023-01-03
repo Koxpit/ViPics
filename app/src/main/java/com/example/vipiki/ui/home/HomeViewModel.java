@@ -1,21 +1,30 @@
 package com.example.vipiki.ui.home;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.ui.home.homeUseCases.GetCurrentPicsUseCase;
+import com.example.vipiki.ui.home.homeUseCases.GetNeedPicsUseCase;
+import com.example.vipiki.models.Pics;
 
 public class HomeViewModel extends ViewModel {
+    private final GetCurrentPicsUseCase getCurrentPicsUseCase;
+    private final GetNeedPicsUseCase getNeedPicsUseCase;
 
-    private final MutableLiveData<String> mText;
-
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+    public HomeViewModel(GetCurrentPicsUseCase getCurrentPicsUseCase, GetNeedPicsUseCase getNeedPicsUseCase) {
+        this.getCurrentPicsUseCase = getCurrentPicsUseCase;
+        this.getNeedPicsUseCase = getNeedPicsUseCase;
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public Pics getCurrentPics() {
+        return getCurrentPicsUseCase.getPics();
+    }
+
+    public Pics getNeedPics() {
+        return getNeedPicsUseCase.getPics();
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }

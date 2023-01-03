@@ -1,4 +1,4 @@
-package com.example.vipiki;
+package com.example.vipiki.ui.settings;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,10 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.vipiki.R;
 import com.example.vipiki.database.DbHelper;
-import com.example.vipiki.viewModels.SettingsViewModel;
-import com.example.vipiki.viewModels.StatisticViewModel;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.vipiki.ui.settings.SettingsViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

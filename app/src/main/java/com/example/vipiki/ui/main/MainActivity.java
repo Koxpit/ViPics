@@ -1,8 +1,9 @@
-package com.example.vipiki;
+package com.example.vipiki.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.vipiki.R;
 import com.example.vipiki.database.DbHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

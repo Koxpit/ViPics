@@ -1,4 +1,4 @@
-package com.example.vipiki.viewModelFactories;
+package com.example.vipiki.ui.settings;
 
 import androidx.lifecycle.ViewModelProvider;
 

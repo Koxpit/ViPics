@@ -1,19 +1,24 @@
 package com.example.vipiki.ui.menu;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.vipiki.ui.menu.menuUseCases.GetAvgMonthSalaryUseCase;
+import com.example.vipiki.ui.menu.menuUseCases.SignOutUseCase;
+
 public class MenuViewModel extends ViewModel {
+    private final GetAvgMonthSalaryUseCase getAvgMonthSalaryUseCase;
+    private final SignOutUseCase signOutUseCase;
 
-    private final MutableLiveData<String> mText;
-
-    public MenuViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is menu fragment");
+    public MenuViewModel(GetAvgMonthSalaryUseCase getAvgMonthSalaryUseCase, SignOutUseCase signOutUseCase) {
+        this.getAvgMonthSalaryUseCase = getAvgMonthSalaryUseCase;
+        this.signOutUseCase = signOutUseCase;
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public double getAvgMonthSalary() {
+        return getAvgMonthSalaryUseCase.getAvgMonthSalary();
+    }
+
+    public void signOut() {
+        signOutUseCase.signOut();
     }
 }

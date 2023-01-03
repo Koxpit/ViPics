@@ -1,4 +1,4 @@
-package com.example.vipiki.viewModels;
+package com.example.vipiki.ui.statistic;
 
 import android.util.Log;
 

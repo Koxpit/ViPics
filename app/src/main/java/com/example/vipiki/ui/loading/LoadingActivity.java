@@ -1,8 +1,10 @@
-package com.example.vipiki;
+package com.example.vipiki.ui.loading;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.vipiki.R;
 
 public class LoadingActivity extends AppCompatActivity {
 
