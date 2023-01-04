@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.ui.addPicks.AddPicksViewModel;
 import com.example.vipiki.ui.addPicks.addPicksUseCases.AddWorkDayUseCase;
+import com.example.vipiki.ui.addPicks.addPicksUseCases.DeleteWorkDayUseCase;
 
 public class AddPicksViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
@@ -22,6 +23,8 @@ public class AddPicksViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new AddPicksViewModel(new AddWorkDayUseCase(context, settings));
+        return (T) new AddPicksViewModel(
+                new AddWorkDayUseCase(context, settings),
+                new DeleteWorkDayUseCase(context));
     }
 }

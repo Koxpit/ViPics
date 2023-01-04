@@ -64,8 +64,10 @@ public class StatisticActivity extends AppCompatActivity {
         db = dbHelper.getReadableDatabase();
         settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        int sector_id = dbHelper.getSectorId(settings, db);
-        int schedule_id = dbHelper.getScheduleId(settings, db);
+        String sectorName = settings.getString("sector", null);
+        String scheduleName = settings.getString("schedule", null);
+        int sector_id = dbHelper.getSectorId(sectorName, db);
+        int schedule_id = dbHelper.getScheduleId(scheduleName, db);
 
         setProfileData(settings);
         setTaxes(sector_id, schedule_id);

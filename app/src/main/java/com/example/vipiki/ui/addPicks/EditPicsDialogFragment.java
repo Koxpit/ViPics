@@ -1,14 +1,16 @@
-package com.example.vipiki.ui.addPicks.addPicksUseCases;
+package com.example.vipiki.ui.addPicks;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.ui.addPicks.Add_Picks_Activity;
 import com.example.vipiki.database.DbHelper;
@@ -17,9 +19,13 @@ import java.util.Locale;
 
 public class EditPicsDialogFragment extends DialogFragment {
     private int year = 0, month = 0, day = 0;
+    private AddPicksViewModel addPicksViewModel;
 
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        addPicksViewModel = new ViewModelProvider(this, new AddPicksViewModelFactory(getActivity(),
+                getActivity().getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(AddPicksViewModel.class);
+
         int selectionOs = 0;
         int allocationOs = 0;
         int selectionMez = 0;
@@ -49,7 +55,7 @@ public class EditPicsDialogFragment extends DialogFragment {
                     + String.format(Locale.ENGLISH, "%(.2f", pay) + "руб.";
         }
         else {
-            message = "Это доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);
+            message = "Доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);
         }
         String buttonEditText = "Изменить";
         String buttonDeleteText = "Удалить";
@@ -68,11 +74,7 @@ public class EditPicsDialogFragment extends DialogFragment {
         builder.setNeutralButton(buttonBackText, (dialog, i) -> dialog.cancel());
 
         builder.setNegativeButton(buttonDeleteText, (dialog, id) -> {
-            DbHelper dbHelper = new DbHelper(getActivity());
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
-            dbHelper.deleteWorkDay(db, year, month, day);
-            dbHelper.close();
-            db.close();
+            addPicksViewModel.deleteWorkDay(day, month, year);
             dialog.dismiss();
         });
         builder.setCancelable(true);

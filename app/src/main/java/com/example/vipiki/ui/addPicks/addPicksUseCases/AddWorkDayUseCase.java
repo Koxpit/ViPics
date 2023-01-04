@@ -19,7 +19,6 @@ import java.util.List;
 public class AddWorkDayUseCase {
     private final Context context;
     private final SharedPreferences settings;
-    private int sector_id, schedule_id;
 
     public AddWorkDayUseCase(Context context, SharedPreferences settings) {
         this.context = context;
@@ -29,7 +28,7 @@ public class AddWorkDayUseCase {
     public void addWorkDay(int day, int month, int year, Pics pics) {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Tax tax = dbHelper.getTax(db, String.valueOf(sector_id), String.valueOf(schedule_id));
+        Tax tax = dbHelper.getTax(db, settings);
         double pay = calculatePay(pics, tax);
         WorkDay workDay = new WorkDay(day, month, year, 0, pics.getSelectionOs(), pics.getAllocationOs(),
                 pics.getSelectionMez(), pics.getAllocationMez(), pay, getUID());
@@ -68,17 +67,17 @@ public class AddWorkDayUseCase {
     public int findSectorId() {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String sectorName = settings.getString("sector", null);
 
-        sector_id = dbHelper.getSectorId(settings, db);
-        return sector_id;
+        return dbHelper.getSectorId(sectorName, db);
     }
 
     public int findScheduleId() {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String scheduleName = settings.getString("schedule", null);
 
-        schedule_id = dbHelper.getScheduleId(settings, db);
-        return schedule_id;
+        return dbHelper.getScheduleId(scheduleName, db);
     }
 
     public String getUID() {

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
+    android:id="@+id/settingsRootLayout"
     tools:context=".ui.settings.SettingsActivity">
 
     <TextView
@@ -21,5 +22,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/editProfileTextView"
         android:textSize="20sp"
+        android:layout_marginBottom="20dp"
         android:text="@string/editTaxes" />
+    <TextView
+        android:id="@+id/syncDataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTaxesTextView"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/syncData" />
+    <TextView
+        android:id="@+id/recoverDataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/syncDataTextView"
+        android:textSize="20sp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/recoverData" />
+
+    <TextView
+        android:id="@+id/changePasswordTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/recoverDataTextView"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/changePassword" />
+
+    <TextView
+        android:id="@+id/changeEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/changePasswordTextView"
+        android:textSize="20sp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/changeEmail" />
 </RelativeLayout>

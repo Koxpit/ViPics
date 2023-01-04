@@ -63,4 +63,10 @@
     <string name="update">Обновить</string>
     <string name="userProfile">Профиль</string>
     <string name="addPicks">Выберите дату, чтобы добавить смену</string>
+    <string name="syncData">Синхронизовать</string>
+    <string name="recoverData">Восстановить данные</string>
+    <string name="changePassword">Сменить пароль</string>
+    <string name="changeEmail">Сменить почту</string>
+    <string name="enterNewPassword">Введите новый пароль</string>
+    <string name="confitmPassord">Подтвердите пароль</string>
 </resources>

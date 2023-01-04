@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardElevation="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp">
+        <TextView
+            android:id="@+id/textViewUserPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/archivo_black"
+            android:text="@string/enterNewPassword" />
+
+        <EditText
+            android:id="@+id/editTextUserPassword"
+            android:layout_below="@id/textViewUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:hint="@string/hint_not_see_password"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:inputType="textPassword" />
+
+        <TextView
+            android:id="@+id/confirmPasswordTextView"
+            android:layout_below="@id/editTextUserPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/archivo_black"
+            android:text="@string/confitmPassord" />
+
+        <EditText
+            android:id="@+id/confirmPasswordEditText"
+            android:layout_below="@id/confirmPasswordTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:hint="@string/hint_not_see_password"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:inputType="textPassword" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

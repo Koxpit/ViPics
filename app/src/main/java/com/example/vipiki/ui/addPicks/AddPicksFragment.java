@@ -16,7 +16,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.databinding.FragmentAddPicksBinding;
-import com.example.vipiki.ui.addPicks.addPicksUseCases.EditPicsDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;

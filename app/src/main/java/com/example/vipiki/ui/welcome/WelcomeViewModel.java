@@ -2,6 +2,7 @@ package com.example.vipiki.ui.welcome;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 
 import androidx.lifecycle.ViewModel;
 
@@ -30,16 +31,16 @@ public class WelcomeViewModel extends ViewModel {
         return postulatesTitles[postulateId];
     }
 
-    public List<String> getPosts() {
-        return initRegisterSpinnersUseCase.getPosts();
+    public ArrayAdapter<String> getAdapterPosts() {
+        return initRegisterSpinnersUseCase.getAdapterPosts();
     }
 
-    public List<String> getSectors() {
-        return initRegisterSpinnersUseCase.getSectors();
+    public ArrayAdapter<String> getAdapterSectors() {
+        return initRegisterSpinnersUseCase.getAdapterSectors();
     }
 
-    public List<String> getSchedules() {
-        return initRegisterSpinnersUseCase.getSchedules();
+    public ArrayAdapter<String> getAdapterSchedules() {
+        return initRegisterSpinnersUseCase.getAdapterSchedules();
     }
 
     public boolean isAlreadyAuthUser() {

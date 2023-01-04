@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.ui.addPicks.addPicksUseCases.AddWorkDayUseCase;
+import com.example.vipiki.ui.addPicks.addPicksUseCases.DeleteWorkDayUseCase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,9 +17,11 @@ import java.util.Locale;
 
 public class AddPicksViewModel extends ViewModel {
     private final AddWorkDayUseCase addWorkDayUseCase;
+    private final DeleteWorkDayUseCase deleteWorkDayUseCase;
 
-    public AddPicksViewModel(AddWorkDayUseCase addWorkDayUseCase) {
+    public AddPicksViewModel(AddWorkDayUseCase addWorkDayUseCase, DeleteWorkDayUseCase deleteWorkDayUseCase) {
         this.addWorkDayUseCase = addWorkDayUseCase;
+        this.deleteWorkDayUseCase = deleteWorkDayUseCase;
     }
 
     public void addWorkDay(int day, int month, int year, Pics pics) {
@@ -63,5 +66,9 @@ public class AddPicksViewModel extends ViewModel {
 
     public ArrayAdapter<String> getAdapterWorkDays() {
         return addWorkDayUseCase.getAdapterWorkDays();
+    }
+
+    public void deleteWorkDay(int day, int month, int year) {
+        deleteWorkDayUseCase.deleteWorkDay(day, month, year);
     }
 }

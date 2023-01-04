@@ -230,17 +230,13 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void initSpinners(View registerView) {
-        initPostsSpinner(registerView);
-        initSchedulesSpinner(registerView);
-        initSectorsSpinner(registerView);
+        initPostsSpinner(registerView.findViewById(R.id.spinnerPosts));
+        initSchedulesSpinner(registerView.findViewById(R.id.spinnerSchedules));
+        initSectorsSpinner(registerView.findViewById(R.id.spinnerSectors));
     }
 
-    private void initPostsSpinner(View register_view) {
-        Spinner spinnerPosts = register_view.findViewById(R.id.spinnerPosts);
-        List<String> posts = welcomeViewModel.getPosts();
-
-        ArrayAdapter<String> adapterPosts = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, posts);
-        adapterPosts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    private void initPostsSpinner(Spinner spinnerPosts) {
+        ArrayAdapter<String> adapterPosts = welcomeViewModel.getAdapterPosts();
         spinnerPosts.setAdapter(adapterPosts);
 
         AdapterView.OnItemSelectedListener itemSelectedPostListener = new AdapterView.OnItemSelectedListener() {
@@ -257,12 +253,8 @@ public class WelcomeActivity extends AppCompatActivity {
         spinnerPosts.setOnItemSelectedListener(itemSelectedPostListener);
     }
 
-    private void initSectorsSpinner(View registerView) {
-        Spinner spinnerSectors = registerView.findViewById(R.id.spinnerSectors);
-        List<String> sectors = welcomeViewModel.getSectors();
-
-        ArrayAdapter<String> adapterSectors = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sectors);
-        adapterSectors.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    private void initSectorsSpinner(Spinner spinnerSectors) {
+        ArrayAdapter<String> adapterSectors = welcomeViewModel.getAdapterSectors();
         spinnerSectors.setAdapter(adapterSectors);
 
         AdapterView.OnItemSelectedListener itemSelectedSectorListener = new AdapterView.OnItemSelectedListener() {
@@ -279,12 +271,8 @@ public class WelcomeActivity extends AppCompatActivity {
         spinnerSectors.setOnItemSelectedListener(itemSelectedSectorListener);
     }
 
-    private void initSchedulesSpinner(View registerView) {
-        Spinner spinnerSchedules = registerView.findViewById(R.id.spinnerSchedules);
-        List<String> schedules = welcomeViewModel.getSchedules();
-
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, schedules);
-        adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    private void initSchedulesSpinner(Spinner spinnerSchedules) {
+        ArrayAdapter<String> adapterSchedules = welcomeViewModel.getAdapterSchedules();
         spinnerSchedules.setAdapter(adapterSchedules);
 
         AdapterView.OnItemSelectedListener itemSelectedScheduleListener = new AdapterView.OnItemSelectedListener() {
