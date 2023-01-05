@@ -31,45 +31,29 @@ public class AuthUserUseCase {
         return isAlreadyAuth;
     }
 
-    public void authUser(String email, String password) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        SharedPreferences.Editor editor = settings.edit();
-
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener(authResult -> {
-                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-                    String UID = getUID();
-
-                    users.child(UID).get().addOnSuccessListener(dataSnapshot -> {
-                        User user = dataSnapshot.getValue(User.class);
-                        setAuthSettings(editor, user, UID, !userIsEmpty());
-                    }).addOnFailureListener(e -> setLogoutSettings(editor, UID));
-                }).addOnFailureListener(e -> {
-                    String UID = getUID();
-                    setLogoutSettings(editor, UID);
-                });
-    }
-
-    private String getUID() {
+    public String getUID() {
         return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
-    private void setAuthSettings(SharedPreferences.Editor editor, User user, String UID, boolean status) {
+    public void setUserSettings(User user, String UID, boolean status) {
+        SharedPreferences.Editor editor = settings.edit();
         editor.putString("UID", UID);
         editor.putString("name", user.getName());
         editor.putString("post", user.getPost());
         editor.putString("sector", user.getSector());
         editor.putString("schedule", user.getSchedule());
+        editor.putString("email", user.getEmail());
         editor.putBoolean(UID, status);
         editor.apply();
     }
 
-    private void setLogoutSettings(SharedPreferences.Editor editor, String UID) {
+    public void setLogoutSettings(String UID) {
+        SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean(UID, false);
         editor.apply();
     }
 
-    private boolean userIsEmpty() {
+    public boolean userIsEmpty() {
         boolean userIsEmpty = false;
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

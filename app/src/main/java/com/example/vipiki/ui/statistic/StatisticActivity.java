@@ -57,7 +57,7 @@ public class StatisticActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
         initComponents();
-        Log.d("CLEAR_VM", "Activity Statistic created");
+
         statisticViewModel = new ViewModelProvider(this).get(StatisticViewModel.class);
 
         dbHelper = new DbHelper(this);
@@ -274,7 +274,8 @@ public class StatisticActivity extends AppCompatActivity {
             db = dbHelper.getReadableDatabase();
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH)+1;
-            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=?", new String[] {String.valueOf(month)}, null, null, null);
+            String UID = settings.getString("UID", null);
+            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=? AND " + DbHelper.KEY_USER_UID + " = ?", new String[] {String.valueOf(month), UID}, null, null, null);
 
             int selectionOsIndex, selectionMezIndex, allocationOsIndex, allocationMezIndex;
             int selectionOs, selectionMez, allocationOs, allocationMez;

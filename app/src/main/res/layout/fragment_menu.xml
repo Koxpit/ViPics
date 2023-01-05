@@ -27,18 +27,45 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <ImageView
+
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/avatar_imageView"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="15dp"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    tools:src="@mipmap/ic_empty_user" />
+                    android:maxHeight="150dp"
+                    android:maxWidth="150dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="10dp"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/circular"
+                    android:src="@mipmap/ic_empty_user"
+                    />
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_below="@id/avatar_imageView"
+                    android:layout_toStartOf="@+id/userNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/archivo_black"
+                    android:textSize="15sp"
+                    android:text="@string/profileName" />
+
+                <TextView
+                    android:id="@+id/userNameTextView"
+                    android:layout_below="@id/avatar_imageView"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="@font/archivo_black"
+                    android:textSize="15sp"
+                    android:text="@string/exampleName" />
 
                 <TextView
                     android:id="@+id/average_income_textView"
-                    android:layout_below="@id/avatar_imageView"
+                    android:layout_below="@id/userNameTextView"
                     android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

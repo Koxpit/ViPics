@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.vipiki.ui.menu.MenuViewModel;
-import com.example.vipiki.ui.menu.menuUseCases.GetAvgMonthSalaryUseCase;
+import com.example.vipiki.ui.menu.menuUseCases.ChangeAvatarUseCase;
+import com.example.vipiki.ui.menu.menuUseCases.GetMenuDataUseCase;
 import com.example.vipiki.ui.menu.menuUseCases.SignOutUseCase;
 
 public class MenuViewModelFactory implements ViewModelProvider.Factory {
@@ -23,6 +23,9 @@ public class MenuViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new MenuViewModel(new GetAvgMonthSalaryUseCase(context), new SignOutUseCase(context, settings));
+        return (T) new MenuViewModel(
+                new GetMenuDataUseCase(context, settings),
+                new SignOutUseCase(context, settings),
+                new ChangeAvatarUseCase(context, settings));
     }
 }

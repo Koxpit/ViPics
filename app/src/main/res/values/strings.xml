@@ -12,7 +12,6 @@
     <string name="dateOfEmployment">Дата трудоустройства</string>
     <string name="scheduleOfWork">График работы</string>
     <string name="post">Должность</string>
-    <string name="userName">Имя</string>
     <string name="allocation">Размещение</string>
     <string name="selection">Отбор</string>
     <string name="title_activity_main">MainActivity</string>
@@ -36,6 +35,8 @@
     <string name="back">Назад</string>
     <string name="hint_name">Ваше имя</string>
     <string name="name">Имя</string>
+    <string name="profileName">Имя:</string>
+    <string name="exampleName">Александр</string>
     <string name="hint_date">17.04.2001</string>
     <string name="phone">Телефон</string>
     <string name="hint_phone">8 999 236 55 36</string>
@@ -68,5 +69,10 @@
     <string name="changePassword">Сменить пароль</string>
     <string name="changeEmail">Сменить почту</string>
     <string name="enterNewPassword">Введите новый пароль</string>
-    <string name="confitmPassord">Подтвердите пароль</string>
+    <string name="confirmPassord">Подтвердите пароль</string>
+    <string name="enterNewEmail">Введите новую почту</string>
+    <string name="confirmEmail">Подтвердите почту</string>
+    <string name="hint_email_example">address@mail.ru</string>
+    <string name="hint_enter_email_again">Введите почту еще раз</string>
+    <string name="enter_old_password">Введите старый пароль</string>
 </resources>

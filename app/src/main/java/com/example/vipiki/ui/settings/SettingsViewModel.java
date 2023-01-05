@@ -1,5 +1,6 @@
 package com.example.vipiki.ui.settings;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -8,23 +9,32 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.UserSettings;
+import com.example.vipiki.ui.settings.settingsUseCases.ChangeEmailUseCase;
+import com.example.vipiki.ui.settings.settingsUseCases.ChangePasswordUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditProfileUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditTaxUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.RecoverDataUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.SyncDataUseCase;
+
+import java.util.Objects;
 
 public class SettingsViewModel extends ViewModel {
     private final EditProfileUseCase editProfileUseCase;
     private final EditTaxUseCase editTaxUseCase;
     private final RecoverDataUseCase recoverDataUseCase;
     private final SyncDataUseCase syncDataUseCase;
+    private final ChangePasswordUseCase changePasswordUseCase;
+    private final ChangeEmailUseCase changeEmailUseCase;
 
     public SettingsViewModel(EditProfileUseCase editProfileUseCase, EditTaxUseCase editTaxUseCase,
-                             RecoverDataUseCase recoverDataUseCase, SyncDataUseCase syncDataUseCase) {
+                             RecoverDataUseCase recoverDataUseCase, SyncDataUseCase syncDataUseCase,
+                             ChangePasswordUseCase changePasswordUseCase, ChangeEmailUseCase changeEmailUseCase) {
         this.editProfileUseCase = editProfileUseCase;
         this.editTaxUseCase = editTaxUseCase;
         this.recoverDataUseCase = recoverDataUseCase;
         this.syncDataUseCase = syncDataUseCase;
+        this.changePasswordUseCase = changePasswordUseCase;
+        this.changeEmailUseCase = changeEmailUseCase;
     }
 
     public void editProfile(UserSettings userSettings) {
@@ -74,6 +84,35 @@ public class SettingsViewModel extends ViewModel {
     public void syncData() {
         syncDataUseCase.synchronize();
     }
+
+    public void changePassword(String newPassword) {
+        changePasswordUseCase.changePassword(newPassword);
+    }
+
+    public boolean passwordsMatch(String newPassword, String confirmPassword) {
+        return Objects.equals(newPassword, confirmPassword);
+    }
+
+    public String getEmail() {
+        return changePasswordUseCase.getEmail();
+    }
+
+    public boolean inputIncorrect(String oldPassword, String newPassword, String confirmPassword) {
+        return TextUtils.isEmpty(oldPassword) || TextUtils.isEmpty(newPassword) || TextUtils.isEmpty(confirmPassword);
+    }
+
+    public boolean passwordIncorrect(String password) {
+        return password.length() < 6;
+    }
+
+    public void changeEmail(String newEmail) {
+        changeEmailUseCase.changeEmail(newEmail);
+    }
+
+    public boolean emailsMatch(String newEmail, String confirmEmail) {
+        return Objects.equals(newEmail, confirmEmail);
+    }
+
 
     @Override
     protected void onCleared() {

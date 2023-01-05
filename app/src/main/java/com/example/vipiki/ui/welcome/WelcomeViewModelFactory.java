@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.ui.welcome.welcomeUseCases.AuthUserUseCase;
 import com.example.vipiki.ui.welcome.welcomeUseCases.InitRegisterSpinnersUseCase;
-import com.example.vipiki.ui.welcome.welcomeUseCases.RegisterUserUseCase;
-import com.example.vipiki.ui.welcome.WelcomeViewModel;
 
 public class WelcomeViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
@@ -26,7 +24,6 @@ public class WelcomeViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         return (T) new WelcomeViewModel(
                 new AuthUserUseCase(settings),
-                new RegisterUserUseCase(context, settings),
                         new InitRegisterSpinnersUseCase(context));
     }
 }

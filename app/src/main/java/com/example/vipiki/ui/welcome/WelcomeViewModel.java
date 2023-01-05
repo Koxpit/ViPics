@@ -9,20 +9,15 @@ import androidx.lifecycle.ViewModel;
 import com.example.vipiki.models.User;
 import com.example.vipiki.ui.welcome.welcomeUseCases.AuthUserUseCase;
 import com.example.vipiki.ui.welcome.welcomeUseCases.InitRegisterSpinnersUseCase;
-import com.example.vipiki.ui.welcome.welcomeUseCases.RegisterUserUseCase;
-
-import java.util.List;
 
 public class WelcomeViewModel extends ViewModel {
     private final AuthUserUseCase authUserUseCase;
-    private final RegisterUserUseCase registerUserUseCase;
     private final InitRegisterSpinnersUseCase initRegisterSpinnersUseCase;
     private final String[] postulatesTitles = new String[] {"Команда", "Клиент", "Эффективность"};
 
-    public WelcomeViewModel(AuthUserUseCase authUserUseCase, RegisterUserUseCase registerUserUseCase,
+    public WelcomeViewModel(AuthUserUseCase authUserUseCase,
                             InitRegisterSpinnersUseCase initRegisterSpinnersUseCase) {
         this.authUserUseCase = authUserUseCase;
-        this.registerUserUseCase = registerUserUseCase;
         this.initRegisterSpinnersUseCase = initRegisterSpinnersUseCase;
     }
 
@@ -47,12 +42,16 @@ public class WelcomeViewModel extends ViewModel {
         return authUserUseCase.isAlreadyAuthUser();
     }
 
-    public void authUser(String email, String password) {
-        authUserUseCase.authUser(email, password);
+    public void setUserSettings(User user, String UID, boolean userIsEmpty) {
+        authUserUseCase.setUserSettings(user, UID, userIsEmpty);
     }
 
-    public boolean getAuthStatus() {
-        return authUserUseCase.getAuthStatus();
+    public boolean userIsEmpty() {
+        return authUserUseCase.userIsEmpty();
+    }
+
+    public String getUID() {
+        return authUserUseCase.getUID();
     }
 
     public boolean authEntryIsEmpty(String email, String password) {
@@ -63,10 +62,6 @@ public class WelcomeViewModel extends ViewModel {
         return password.length() < 6;
     }
 
-    public void registerUser(User newUser, String password) {
-        registerUserUseCase.registerUser(newUser, password);
-    }
-
     public boolean regEntryIsEmpty(String name, String email, String post, String sector, String schedule, String password) {
         return TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(post)
                 || TextUtils.isEmpty(sector) || TextUtils.isEmpty(schedule);
@@ -74,7 +69,6 @@ public class WelcomeViewModel extends ViewModel {
 
     @Override
     protected void onCleared() {
-        Log.d("CLEAR_VM", "WelcomeViewModel cleared");
         super.onCleared();
     }
 }

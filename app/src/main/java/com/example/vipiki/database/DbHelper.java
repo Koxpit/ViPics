@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -27,10 +29,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +48,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ViPikiDB";
 
+    public static final String TABLE_USERS_AVATARS = "avatars";
     public static final String TABLE_WORKDAYS = "workdays";
     public static final String TABLE_POSTS = "posts";
     public static final String TABLE_SCHEDULES = "schedules";
@@ -56,6 +61,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String KEY_POST_ID = "post_id";
     public static final String KEY_SECTOR_ID = "sector_id";
     public static final String KEY_SCHEDULE_ID = "schedule_id";
+    public static final String KEY_AVATAR = "userImage";
     public static final String KEY_SELECTION_OS_TAX = "selectionOsTax";
     public static final String KEY_SELECTION_MEZ_TAX = "selectionMezTax";
     public static final String KEY_ALLOCATION_OS_TAX = "allocationOsTax";
@@ -98,6 +104,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_USERS_AVATARS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY, "
+                + KEY_USER_UID + " TEXT UNIQUE NOT NULL, "
+                + KEY_AVATAR + " BLOB )");
+
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_WORKDAYS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY, "
                 + KEY_DAY + " INTEGER NOT NULL, "
@@ -580,13 +591,15 @@ public class DbHelper extends SQLiteOpenHelper {
         return new Pics(picsAllocation, picsSelection);
     }
 
-    public double getAverageMonthSalary(SQLiteDatabase db) {
+    public double getAverageMonthSalary(DbHelper dbHelper, SharedPreferences settings) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         int workMonths = 0;
         double totalSalary = 0, averageSalary = 0;
+        String UID = settings.getString("UID", null);
 
         Cursor cursor;
         for (int i = 1; i <= 12; i++) {
-            cursor = db.rawQuery("SELECT SUM(" + KEY_PAY + ") FROM " + TABLE_WORKDAYS + " WHERE " + KEY_MONTH + " = ?;", new String[] {String.valueOf(i)});
+            cursor = db.rawQuery("SELECT SUM(" + KEY_PAY + ") FROM " + TABLE_WORKDAYS + " WHERE " + KEY_MONTH + " = ? AND " + KEY_USER_UID + " = ? ", new String[] {String.valueOf(i), UID});
             if (cursor.moveToNext()) {
                 double monthSalary = cursor.getDouble(0);
                 if (monthSalary != 0) {
@@ -596,6 +609,7 @@ public class DbHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         }
+        db.close();
 
         if (totalSalary == 0)
             averageSalary = 0;
@@ -936,6 +950,65 @@ public class DbHelper extends SQLiteOpenHelper {
                 }
             }
         });
+    }
+
+    public void saveUserImage(String UID, Bitmap userImage) {
+        SQLiteDatabase db = getWritableDatabase();
+        ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream);
+        byte[] imageInBytes = byteOutputStream.toByteArray();
+
+        while (imageInBytes.length > 500000){
+            byteOutputStream.reset();
+            userImage = BitmapFactory.decodeByteArray(imageInBytes, 0, imageInBytes.length);
+            Bitmap resized = Bitmap.createScaledBitmap(userImage, (int)(userImage.getWidth()*0.2), (int)(userImage.getHeight()*0.2), true);
+            resized.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream);
+            imageInBytes = byteOutputStream.toByteArray();
+        }
+
+        ContentValues cv = new ContentValues();
+        cv.put(KEY_USER_UID, UID);
+        cv.put(KEY_AVATAR, imageInBytes);
+
+        Cursor cursor = db.query(DbHelper.TABLE_USERS_AVATARS, new String[] {DbHelper.KEY_ID}, DbHelper.KEY_USER_UID + " = ?", new String[] {UID}, null, null, null);
+        if (cursor.moveToNext())
+            db.update(TABLE_USERS_AVATARS, cv, DbHelper.KEY_USER_UID + " = ?", new String[] {UID});
+        else
+            db.insert(TABLE_USERS_AVATARS, null, cv);
+        db.close();
+    }
+
+    public Bitmap getUserImage(String UID) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(DbHelper.TABLE_USERS_AVATARS, new String[] {DbHelper.KEY_AVATAR}, DbHelper.KEY_USER_UID + " = ?", new String[] {UID}, null, null, null);
+        Bitmap userImage = null;
+        byte[] userImageInBytes = null;
+
+        if (cursor.moveToNext()) {
+            int imageIndex = cursor.getColumnIndex(DbHelper.KEY_AVATAR);
+            userImageInBytes = cursor.getBlob(imageIndex);
+        }
+
+        if (userImageInBytes != null)
+            userImage = BitmapFactory.decodeByteArray(userImageInBytes, 0, userImageInBytes.length);
+
+        db.close();
+
+        return userImage;
+    }
+
+    public void changePassword(DbHelper dbHelper, String newPassword) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.updatePassword(newPassword)
+                .addOnCompleteListener(task -> dbHelper.close());
+    }
+
+    public void changeEmail(DbHelper dbHelper, String newEmail) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        user.updateEmail(newEmail)
+                .addOnCompleteListener(task -> dbHelper.close());
     }
 
     @Override

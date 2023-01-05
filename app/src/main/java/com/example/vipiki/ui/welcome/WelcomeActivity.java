@@ -1,11 +1,13 @@
 package com.example.vipiki.ui.welcome;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -20,11 +22,19 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vipiki.ui.main.MainActivity;
 import com.example.vipiki.R;
 import com.example.vipiki.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +50,6 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        Log.d("CLEAR_VM", "Activity Welcome created");
 
         welcomeViewModel = new ViewModelProvider(this, new WelcomeViewModelFactory(this, getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(WelcomeViewModel.class);
         if (welcomeViewModel.isAlreadyAuthUser()) {
@@ -95,41 +104,41 @@ public class WelcomeActivity extends AppCompatActivity {
         dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Войти", (dialogInterface, i) -> {
-            try {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
 
-                if (welcomeViewModel.authEntryIsEmpty(email, password)) {
-                    sendMessageAuthEntryIsEmpty(welcome_relativeLayout);
-                    return;
-                }
-                if (welcomeViewModel.passwordIsIncorrect(password)) {
-                    sendMessageIncorrectPassword(welcome_relativeLayout);
-                    return;
-                }
-
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                welcomeViewModel.authUser(email, password);
-                CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        progressBar.setVisibility(ProgressBar.VISIBLE);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        if (welcomeViewModel.getAuthStatus()) {
-                            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                            finish();
-                        }
-                        else
-                            sendMessageAuthError(welcome_relativeLayout);
-                    }
-                }.start();
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
-            } catch (Exception e) {
-                sendAuthError(welcome_relativeLayout, e);
+            if (welcomeViewModel.authEntryIsEmpty(email, password)) {
+                sendMessageAuthEntryIsEmpty(welcome_relativeLayout);
+                return;
             }
+            if (welcomeViewModel.passwordIsIncorrect(password)) {
+                sendMessageIncorrectPassword(welcome_relativeLayout);
+                return;
+            }
+
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(authTask -> {
+                if (authTask.isSuccessful()) {
+                    DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
+                    String UID = welcomeViewModel.getUID();
+
+                    users.child(UID).get().addOnCompleteListener(getTask -> {
+                        if (getTask.isSuccessful()) {
+                            User user = getTask.getResult().getValue(User.class);
+                            welcomeViewModel.setUserSettings(user, UID, !welcomeViewModel.userIsEmpty());
+
+                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+                        }
+                    });
+                } else {
+                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    sendMessageAuthError();
+                }
+                dialogInterface.dismiss();
+            });
         });
 
         dialog.show();
@@ -151,60 +160,64 @@ public class WelcomeActivity extends AppCompatActivity {
         dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("ОК", (dialogInterface, i) -> {
-            try {
-                String name = nameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+            String name = nameEditText.getText().toString();
+            String email = emailEditText.getText().toString();
+            String password = passwordEditText.getText().toString();
 
-                if (welcomeViewModel.regEntryIsEmpty(name, email, post, sector, schedule, password)) {
-                    sendMessageRegEntryIsEmpty(welcome_relativeLayout);
-                    return;
-                }
-                if (welcomeViewModel.passwordIsIncorrect(password)) {
-                    sendMessageIncorrectPassword(welcome_relativeLayout);
-                    return;
-                }
-
-                User newUser = new User();
-                newUser.setName(name);
-                newUser.setPost(post);
-                newUser.setSector(sector);
-                newUser.setSchedule(schedule);
-                newUser.setEmail(email);
-
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                welcomeViewModel.registerUser(newUser, password);
-                CountDownTimer countDownTimer = new CountDownTimer(2000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        progressBar.setVisibility(ProgressBar.VISIBLE);
-                    }
-
-                    @Override
-                    public void onFinish() {
-                        if (welcomeViewModel.getAuthStatus()) {
-                            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                            finish();
-                        }
-                        else
-                            sendMessageRegError(welcome_relativeLayout);
-                    }
-                }.start();
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
-            } catch (Exception e) {
-                sendRegError(welcome_relativeLayout, e);
+            if (welcomeViewModel.regEntryIsEmpty(name, email, post, sector, schedule, password)) {
+                sendMessageRegEntryIsEmpty(welcome_relativeLayout);
+                return;
             }
+            if (welcomeViewModel.passwordIsIncorrect(password)) {
+                sendMessageIncorrectPassword(welcome_relativeLayout);
+                return;
+            }
+
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
+            progressBar.setVisibility(ProgressBar.VISIBLE);
+
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(regTask -> {
+                if (regTask.isSuccessful()) {
+                    if (welcomeViewModel.userIsEmpty())
+                        return;
+
+                    String UID  = welcomeViewModel.getUID();
+                    User newUser = new User();
+                    newUser.setName(name);
+                    newUser.setPost(post);
+                    newUser.setSector(sector);
+                    newUser.setSchedule(schedule);
+                    newUser.setEmail(email);
+
+                    users.child(UID).setValue(newUser).addOnCompleteListener(addUserTask -> {
+                        if (addUserTask.isSuccessful()) {
+                            welcomeViewModel.setUserSettings(newUser, UID, !welcomeViewModel.userIsEmpty());
+                            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                        }
+                        else {
+                            progressBar.setVisibility(ProgressBar.INVISIBLE);
+                            sendMessageRegError();
+                        }
+                    });
+                } else {
+                    progressBar.setVisibility(ProgressBar.INVISIBLE);
+                    sendMessageRegError();
+                }
+                dialogInterface.dismiss();
+            });
         });
 
         dialog.show();
     }
 
-    private void sendMessageAuthError(ViewGroup layout) {
-        Snackbar.make(layout, "Ошибка авторизации. Повторите попытку позже.", Snackbar.LENGTH_SHORT).show();
+    private void sendMessageAuthError() {
+        Toast.makeText(WelcomeActivity.this, "Ошибка авторизации", Toast.LENGTH_SHORT).show();
     }
 
-    private void sendMessageRegError(ViewGroup layout) {
-        Snackbar.make(layout, "Ошибка регистрации. Повторите попытку позже.", Snackbar.LENGTH_SHORT).show();
+    private void sendMessageRegError() {
+        Toast.makeText(WelcomeActivity.this, "Ошибка регистрации. Повторите попытку позже.", Toast.LENGTH_SHORT).show();
     }
 
     private void sendMessageRegEntryIsEmpty(ViewGroup layout) {

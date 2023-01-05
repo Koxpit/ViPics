@@ -48,6 +48,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/archivo_black"
-        android:textSize="18sp"
+        android:textSize="17sp"
         android:text="@string/update" />
 </RelativeLayout>

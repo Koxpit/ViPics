@@ -21,7 +21,7 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/archivo_black"
             android:layout_height="wrap_content"
-            android:text="@string/userName" />
+            android:text="@string/name" />
 
         <EditText
             android:id="@+id/editTextUserName"

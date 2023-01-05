@@ -1,5 +1,6 @@
 package com.example.vipiki.ui.settings;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,21 +30,22 @@ import com.example.vipiki.models.UserSettings;
 import com.example.vipiki.ui.menu.MenuViewModel;
 import com.example.vipiki.ui.menu.MenuViewModelFactory;
 import com.example.vipiki.ui.settings.SettingsViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.net.PasswordAuthentication;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
     private SettingsViewModel settingsViewModel;
-
-    private TextView editProfileTextView;
-    private TextView editTaxesTextView;
-    private TextView syncDataTextView;
-    private TextView recoverDataTextView;
-    private TextView changePasswordTextView;
-    private TextView changeEmailTextView;
 
     private String post;
     private String schedule;
@@ -54,15 +56,14 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        Log.d("CLEAR_VM", "Activity Settings created");
         settingsViewModel = new ViewModelProvider(this, new SettingsViewModelFactory(this, getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(SettingsViewModel.class);
 
-        editProfileTextView = findViewById(R.id.editProfileTextView);
-        editTaxesTextView = findViewById(R.id.editTaxesTextView);
-        syncDataTextView = findViewById(R.id.syncDataTextView);
-        recoverDataTextView = findViewById(R.id.recoverDataTextView);
-        changePasswordTextView = findViewById(R.id.changePasswordTextView);
-        changeEmailTextView = findViewById(R.id.changeEmailTextView);
+        TextView editProfileTextView = findViewById(R.id.editProfileTextView);
+        TextView editTaxesTextView = findViewById(R.id.editTaxesTextView);
+        TextView syncDataTextView = findViewById(R.id.syncDataTextView);
+        TextView recoverDataTextView = findViewById(R.id.recoverDataTextView);
+        TextView changePasswordTextView = findViewById(R.id.changePasswordTextView);
+        TextView changeEmailTextView = findViewById(R.id.changeEmailTextView);
 
         editProfileTextView.setOnClickListener(view -> showEditProfileWindow());
         editTaxesTextView.setOnClickListener(view -> showEditTaxesWindow());
@@ -234,10 +235,97 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void showChangePasswordWindow() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Изменение пароля");
 
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View edit_password_view = inflater.inflate(R.layout.activity_change_password, null);
+        EditText oldPasswordEditText = edit_password_view.findViewById(R.id.editTextOldUserPassword);
+        EditText newPasswordEditText = edit_password_view.findViewById(R.id.editTextUserPassword);
+        EditText confirmPasswordEditText = edit_password_view.findViewById(R.id.confirmPasswordEditText);
+
+        dialog.setView(edit_password_view);
+
+        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        });
+
+        dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
+            String oldPassword = oldPasswordEditText.getText().toString();
+            String newPassword = newPasswordEditText.getText().toString();
+            String confirmPassword = confirmPasswordEditText.getText().toString();
+            String email = settingsViewModel.getEmail();
+
+            if (settingsViewModel.inputIncorrect(oldPassword, newPassword, confirmPassword)) {
+                Toast.makeText(SettingsActivity.this, "Заполнены не все поля", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (settingsViewModel.passwordIncorrect(newPassword)) {
+                Toast.makeText(SettingsActivity.this, "Пароль должен содержать не менее 6 символов", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
+
+            if (settingsViewModel.passwordsMatch(newPassword, confirmPassword)) {
+                user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+                    if (reauthTask.isSuccessful()) {
+                        user.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
+                            if (editPasswordTask.isSuccessful())
+                                Toast.makeText(SettingsActivity.this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
+                            else
+                                Toast.makeText(SettingsActivity.this, "Ошибка. Повторите попытку позже", Toast.LENGTH_SHORT).show();
+                        });
+                    } else Toast.makeText(SettingsActivity.this, reauthTask.toString(), Toast.LENGTH_SHORT).show();
+                });
+            }
+            else {
+                Toast.makeText(SettingsActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+            }
+
+            dialogInterface.dismiss();
+        });
+
+        dialog.show();
     }
 
     private void showChangeEmailWindow() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Изменение почты");
 
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View edit_email_view = inflater.inflate(R.layout.activity_change_email, null);
+        EditText newEmailEditText = edit_email_view.findViewById(R.id.editTextUserEmail);
+        EditText confirmEmailEditText = edit_email_view.findViewById(R.id.confirmEmailEditText);
+
+        dialog.setView(edit_email_view);
+
+        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> {
+            dialogInterface.dismiss();
+        });
+
+        dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
+            String newEmail = newEmailEditText.getText().toString();
+            String confirmEmail = confirmEmailEditText.getText().toString();
+
+            if (settingsViewModel.emailsMatch(newEmail, confirmEmail)) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user.updateEmail(newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(SettingsActivity.this, "Почтовый адрес успешно изменен", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(e -> Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+            else {
+                Toast.makeText(this, "Почтовые адреса не совпадают", Toast.LENGTH_SHORT).show();
+            }
+
+            dialogInterface.dismiss();
+        });
+
+        dialog.show();
     }
 }
