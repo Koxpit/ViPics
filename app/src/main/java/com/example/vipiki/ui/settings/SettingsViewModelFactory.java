@@ -7,8 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.vipiki.ui.settings.settingsUseCases.ChangeEmailUseCase;
-import com.example.vipiki.ui.settings.settingsUseCases.ChangePasswordUseCase;
+import com.example.vipiki.ui.settings.settingsUseCases.GetAuthSettingsUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditProfileUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditTaxUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.RecoverDataUseCase;
@@ -31,7 +30,6 @@ public class SettingsViewModelFactory implements ViewModelProvider.Factory {
                 new EditTaxUseCase(context, settings),
                 new RecoverDataUseCase(context, settings),
                 new SyncDataUseCase(context, settings),
-                new ChangePasswordUseCase(context, settings),
-                new ChangeEmailUseCase(context, settings));
+                new GetAuthSettingsUseCase(settings));
     }
 }

@@ -997,20 +997,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return userImage;
     }
 
-    public void changePassword(DbHelper dbHelper, String newPassword) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        user.updatePassword(newPassword)
-                .addOnCompleteListener(task -> dbHelper.close());
-    }
-
-    public void changeEmail(DbHelper dbHelper, String newEmail) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        user.updateEmail(newEmail)
-                .addOnCompleteListener(task -> dbHelper.close());
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKDAYS);

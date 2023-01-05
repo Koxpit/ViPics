@@ -26,6 +26,12 @@ public class EditProfileUseCase {
         updateSettingsUser(userSettings);
     }
 
+    public void editEmail(String newEmail) {
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("email", newEmail);
+        editor.apply();
+    }
+
     public String getUserName() {
         return settings.getString("name", null);
     }

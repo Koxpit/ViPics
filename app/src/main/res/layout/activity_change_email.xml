@@ -12,7 +12,30 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp">
         <TextView
+            android:id="@+id/textViewCurrentPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/archivo_black"
+            android:text="@string/enter_current_password" />
+
+        <EditText
+            android:id="@+id/editTextCurrentUserPassword"
+            android:layout_below="@id/textViewCurrentPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:ems="10"
+            android:hint="@string/hint_not_see_password"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/archivo_black"
+            android:inputType="textPassword" />
+
+        <TextView
             android:id="@+id/textViewUserEmail"
+            android:layout_below="@id/editTextCurrentUserPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -30,30 +53,6 @@
             android:ems="10"
             android:autofillHints="emailAddress"
             android:hint="@string/hint_email_example"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/archivo_black"
-            android:inputType="textEmailAddress" />
-
-        <TextView
-            android:id="@+id/confirmEmailTextView"
-            android:layout_below="@id/editTextUserEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginBottom="5dp"
-            android:fontFamily="@font/archivo_black"
-            android:text="@string/confirmEmail" />
-
-        <EditText
-            android:id="@+id/confirmEmailEditText"
-            android:layout_below="@id/confirmEmailTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:ems="10"
-            android:autofillHints="emailAddress"
-            android:hint="@string/hint_enter_email_again"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/archivo_black"
             android:inputType="textEmailAddress" />

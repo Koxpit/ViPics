@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.R;
 import com.example.vipiki.models.Pics;
+import com.example.vipiki.ui.main.MainActivity;
+import com.example.vipiki.ui.welcome.WelcomeActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
@@ -44,7 +47,6 @@ public class Add_Picks_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_picks);
 
-        Log.d("CLEAR_VM", "Activity AddPicks created");
         addPicksViewModel = new ViewModelProvider(this, new AddPicksViewModelFactory(this,
                 getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(AddPicksViewModel.class);
 
@@ -209,6 +211,11 @@ public class Add_Picks_Activity extends AppCompatActivity {
                 isExtraDay = 0;
                 extraShiftPay_editText.setEnabled(false);
             }
+        });
+
+        back_button.setOnClickListener(v -> {
+            startActivity(new Intent(Add_Picks_Activity.this, MainActivity.class));
+            finish();
         });
     }
 

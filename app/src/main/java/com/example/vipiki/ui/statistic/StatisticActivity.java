@@ -23,16 +23,10 @@ import java.util.Objects;
 
 public class StatisticActivity extends AppCompatActivity {
     private StatisticViewModel statisticViewModel;
-    TextView userNameTextView;
-    TextView userPostTextView;
-    TextView userScheduleTextView;
-    TextView userSectorTextView;
-    TextView userSalaryTextView;
-    TextView userYearSalaryTextView;
-    TextView taxAllocationOsTextView;
-    TextView taxSelectionOsTextView;
-    TextView taxAllocationMezTextView;
-    TextView taxSelectionMezTextView;
+    TextView userNameTextView, userPostTextView, userScheduleTextView, userSectorTextView;
+    TextView userSalaryTextView, userYearSalaryTextView;
+    TextView taxAllocationOsTextView, taxSelectionOsTextView;
+    TextView taxAllocationMezTextView, taxSelectionMezTextView;
     RadioGroup radioGroupBonuses;
 
     DbHelper dbHelper;

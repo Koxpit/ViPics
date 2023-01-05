@@ -46,10 +46,7 @@ import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
     private SettingsViewModel settingsViewModel;
-
-    private String post;
-    private String schedule;
-    private String sector;
+    private String post, schedule, sector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,24 +263,24 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
             }
 
+            if (!settingsViewModel.passwordsMatch(newPassword, confirmPassword)) {
+                Toast.makeText(SettingsActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
 
-            if (settingsViewModel.passwordsMatch(newPassword, confirmPassword)) {
-                user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
-                    if (reauthTask.isSuccessful()) {
-                        user.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
-                            if (editPasswordTask.isSuccessful())
-                                Toast.makeText(SettingsActivity.this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
-                            else
-                                Toast.makeText(SettingsActivity.this, "Ошибка. Повторите попытку позже", Toast.LENGTH_SHORT).show();
-                        });
-                    } else Toast.makeText(SettingsActivity.this, reauthTask.toString(), Toast.LENGTH_SHORT).show();
-                });
-            }
-            else {
-                Toast.makeText(SettingsActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
-            }
+            user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+                if (reauthTask.isSuccessful()) {
+                    user.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
+                        if (editPasswordTask.isSuccessful())
+                            Toast.makeText(SettingsActivity.this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(SettingsActivity.this, "Ошибка. Повторите попытку позже", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
 
             dialogInterface.dismiss();
         });
@@ -297,8 +294,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View edit_email_view = inflater.inflate(R.layout.activity_change_email, null);
+        EditText currentPasswordEditText = edit_email_view.findViewById(R.id.editTextCurrentUserPassword);
         EditText newEmailEditText = edit_email_view.findViewById(R.id.editTextUserEmail);
-        EditText confirmEmailEditText = edit_email_view.findViewById(R.id.confirmEmailEditText);
 
         dialog.setView(edit_email_view);
 
@@ -307,21 +304,25 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
+            String currentPassword = currentPasswordEditText.getText().toString();
             String newEmail = newEmailEditText.getText().toString();
-            String confirmEmail = confirmEmailEditText.getText().toString();
+            String currentEmail = settingsViewModel.getEmail();
 
-            if (settingsViewModel.emailsMatch(newEmail, confirmEmail)) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                user.updateEmail(newEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(SettingsActivity.this, "Почтовый адрес успешно изменен", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(e -> Toast.makeText(SettingsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
-            }
-            else {
-                Toast.makeText(this, "Почтовые адреса не совпадают", Toast.LENGTH_SHORT).show();
-            }
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
+
+            user.reauthenticate(credential).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    user.updateEmail(newEmail).addOnCompleteListener(task1 -> {
+                        if (task1.isSuccessful()) {
+                            Toast.makeText(SettingsActivity.this, "Почтовый адрес успешно изменен", Toast.LENGTH_SHORT).show();
+                            settingsViewModel.saveNewEmail(newEmail);
+                        }
+                        else
+                            Toast.makeText(SettingsActivity.this, "Произошла ошибка при изменении пароля", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
 
             dialogInterface.dismiss();
         });
