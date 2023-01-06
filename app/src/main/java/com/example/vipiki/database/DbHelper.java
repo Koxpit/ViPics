@@ -9,12 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.WorkDay;
@@ -36,6 +34,7 @@ import java.util.Objects;
 public class DbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "ViPikiDB";
+    public static final String APP_PREFERENCES = "app_settings";
 
     public static final String TABLE_USERS_AVATARS = "avatars";
     public static final String TABLE_WORKDAYS = "workdays";
@@ -182,39 +181,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 int sectorIdIndex = cursor.getColumnIndex(KEY_ID);
                 sector_id = cursor.getInt(sectorIdIndex);
             }
-            else {
-                Log.d("SECTOR_NOT_FOUND", "Сектор не найден в БД.");
-            }
 
             cursor.close();
-        }
-        else {
-            Log.d("SECTOR_NOT_FOUND", "Сектор не найден в настройках.");
-        }
-
-        return sector_id;
-    }
-
-    public int getSectorId(String sectorName, SQLiteDatabase db) {
-        int sector_id = -1;
-
-        if (sectorName != null) {
-            String[] columnsSectors = {KEY_ID};
-            String[] selectionSectorsArgs = {sectorName};
-            Cursor cursor = db.query(TABLE_SECTORS, columnsSectors, KEY_NAME + " = ?", selectionSectorsArgs, null, null, null);
-
-            if (cursor.moveToNext()) {
-                int sectorIdIndex = cursor.getColumnIndex(KEY_ID);
-                sector_id = cursor.getInt(sectorIdIndex);
-            }
-            else {
-                Log.d("SECTOR_NOT_FOUND", "Сектор не найден в БД.");
-            }
-
-            cursor.close();
-        }
-        else {
-            Log.d("SECTOR_NOT_FOUND", "Сектор не указан (null).");
         }
 
         return sector_id;
@@ -233,39 +201,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 int postIdIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
                 schedule_id = cursor.getInt(postIdIndex);
             }
-            else {
-                Log.d("SCHEDULE_NOT_FOUND", "График работы не найден в БД.");
-            }
 
             cursor.close();
-        }
-        else {
-            Log.d("SCHEDULE_NOT_FOUND", "График работы не найден в настройках.");
-        }
-
-        return schedule_id;
-    }
-
-    public int getScheduleId(String scheduleName, SQLiteDatabase db) {
-        int schedule_id = -1;
-
-        if (scheduleName != null) {
-            String[] columnsSchedules = {KEY_ID};
-            String[] selectionSchedulesArgs = {scheduleName};
-            Cursor cursor = db.query(TABLE_SCHEDULES, columnsSchedules, KEY_NAME + " = ?", selectionSchedulesArgs, null, null, null);
-
-            if (cursor.moveToNext()) {
-                int scheduleIdIndex = cursor.getColumnIndex(KEY_ID);
-                schedule_id = cursor.getInt(scheduleIdIndex);
-            }
-            else {
-                Log.d("SCHEDULE_NOT_FOUND", "График работы не найден в БД.");
-            }
-
-            cursor.close();
-        }
-        else {
-            Log.d("SCHEDULE_NOT_FOUND", "График работы не указан (null).");
         }
 
         return schedule_id;
@@ -284,14 +221,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 int postIdIndex = cursor.getColumnIndex(KEY_ID);
                 post_id = cursor.getInt(postIdIndex);
             }
-            else {
-                Log.d("POST_NOT_FOUND", "Должность не найдена в БД.");
-            }
 
             cursor.close();
-        }
-        else {
-            Log.d("POST_NOT_FOUND", "Должность не найдена в настройках.");
         }
 
         return post_id;
@@ -309,33 +240,11 @@ public class DbHelper extends SQLiteOpenHelper {
                 int postIdIndex = cursor.getColumnIndex(KEY_ID);
                 post_id = cursor.getInt(postIdIndex);
             }
-            else {
-                Log.d("POST_NOT_FOUND", "Должность не найдена в БД.");
-            }
 
             cursor.close();
         }
-        else {
-            Log.d("POST_NOT_FOUND", "Должность не указана (null).");
-        }
 
         return post_id;
-    }
-
-    public String getUserName(SharedPreferences settings) {
-        return settings.getString("name", null);
-    }
-
-    public String getUserSchedule(SharedPreferences settings) {
-        return settings.getString("schedule", null);
-    }
-
-    public String getUserPost(SharedPreferences settings) {
-        return settings.getString("post", null);
-    }
-
-    public String getUserSector(SharedPreferences settings) {
-        return settings.getString("sector", null);
     }
 
     public List<String> getWorkDays() {
@@ -366,31 +275,40 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     public Pics getNeedPics(SQLiteDatabase db, SharedPreferences settings) {
-        String post = getUserPost(settings);
-        int sector_id = getSectorId(settings, db);
-        int schedule_id = getScheduleId(settings, db);
         int needPicsSelection, needPicsAllocation;
 
-        if (Objects.equals(post, "Отборщик мезонина") || Objects.equals(post, "Размещенец мезонина")) {
-            int post_selector_mez = getPostId("Отборщик мезонина", db);
-            int post_allocator_mez = getPostId("Размещенец мезонина", db);
+        db.beginTransaction();
+        try {
+            String post = getUserPost(settings);
+            int sector_id = getSectorId(settings, db);
+            int schedule_id = getScheduleId(settings, db);
 
-            needPicsSelection = getMonthNorm(db, post_selector_mez, sector_id, schedule_id);
-            needPicsAllocation = getMonthNorm(db, post_allocator_mez, sector_id, schedule_id);
-        }
-        else if (Objects.equals(post, "Отборщик основы") || Objects.equals(post, "Размещенец основы")) {
-            int post_selector_os = getPostId("Отборщик основы", db);
-            int post_allocator_os = getPostId("Размещенец основы", db);
+            if (Objects.equals(post, "Отборщик мезонина") || Objects.equals(post, "Размещенец мезонина")) {
+                int post_selector_mez = getPostId("Отборщик мезонина", db);
+                int post_allocator_mez = getPostId("Размещенец мезонина", db);
 
-            needPicsSelection = getMonthNorm(db, post_selector_os, sector_id, schedule_id);
-            needPicsAllocation = getMonthNorm(db, post_allocator_os, sector_id, schedule_id);
-        }
-        else {
-            needPicsSelection = 5000;
-            needPicsAllocation = 50000;
+                needPicsSelection = getMonthNorm(db, post_selector_mez, sector_id, schedule_id);
+                needPicsAllocation = getMonthNorm(db, post_allocator_mez, sector_id, schedule_id);
+            } else if (Objects.equals(post, "Отборщик основы") || Objects.equals(post, "Размещенец основы")) {
+                int post_selector_os = getPostId("Отборщик основы", db);
+                int post_allocator_os = getPostId("Размещенец основы", db);
+
+                needPicsSelection = getMonthNorm(db, post_selector_os, sector_id, schedule_id);
+                needPicsAllocation = getMonthNorm(db, post_allocator_os, sector_id, schedule_id);
+            } else {
+                needPicsSelection = 5000;
+                needPicsAllocation = 50000;
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
 
         return new Pics(needPicsAllocation, needPicsSelection);
+    }
+
+    private String getUserPost(SharedPreferences settings) {
+        return settings.getString("post", null);
     }
 
     public void addWorkDay(SQLiteDatabase db, WorkDay workDay) {
@@ -637,22 +555,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return salary;
     }
 
-    public boolean workDayExist(SQLiteDatabase db, String UID, int day, int month, int year) {
-        boolean exist;
-        String[] columnsWorkDays = {KEY_ID};
-        String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day), UID};
-        Cursor cursor = db.query(TABLE_WORKDAYS, columnsWorkDays,
-                KEY_YEAR + " = ? AND "
-                + KEY_MONTH + " = ? AND "
-                + KEY_DAY + " = ? AND "
-                + KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
-
-        exist = cursor.moveToNext();
-        cursor.close();
-
-        return exist;
-    }
-
     public Pics getCurrentPics(SQLiteDatabase db) {
         int picsSelection = 0, picsAllocation = 0;
         String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -679,7 +581,7 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         int workMonths = 0;
         double totalSalary = 0, averageSalary;
-        String UID = settings.getString("UID", null);
+        String UID = settings.getString("UID", ErrorHandler.getUidNotFoundError());
 
         Cursor cursor;
         for (int i = 1; i <= 12; i++) {
@@ -713,28 +615,6 @@ public class DbHelper extends SQLiteOpenHelper {
                 new String[] {String.valueOf(year), String.valueOf(month), String.valueOf(day), UID});
     }
 
-    public Spinner getFilledPostsSpinner(Spinner spinnerPosts, Context context) {
-        SQLiteDatabase db = getWritableDatabase();
-        List<String> posts = new ArrayList<>();
-
-        Cursor cursor = db.query(TABLE_POSTS, new String[] {KEY_NAME}, null, null, null, null, null);
-        if (cursor.moveToNext()) {
-            do {
-                int columnIndex = cursor.getColumnIndex(KEY_NAME);
-                String value = cursor.getString(columnIndex);
-                posts.add(value);
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-
-        ArrayAdapter<String> adapterPosts = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, posts);
-        adapterPosts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPosts.setAdapter(adapterPosts);
-
-        db.close();
-        return spinnerPosts;
-    }
-
     public List<String> getPosts() {
         SQLiteDatabase db = getWritableDatabase();
         List<String> posts = new ArrayList<>();
@@ -751,28 +631,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
 
         return posts;
-    }
-
-    public Spinner getFilledSchedulesSpinner(Spinner spinnerSchedules, Context context) {
-        SQLiteDatabase db = getWritableDatabase();
-        List<String> schedules = new ArrayList<>();
-
-        Cursor cursor = db.query(TABLE_SCHEDULES, new String[] {KEY_NAME}, null, null, null, null, null);
-        if (cursor.moveToNext()) {
-            do {
-                int columnIndex = cursor.getColumnIndex(KEY_NAME);
-                String value = cursor.getString(columnIndex);
-                schedules.add(value);
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, schedules);
-        adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSchedules.setAdapter(adapterSchedules);
-
-        db.close();
-        return spinnerSchedules;
     }
 
     public List<String> getSchedules() {
@@ -793,28 +651,6 @@ public class DbHelper extends SQLiteOpenHelper {
         return schedules;
     }
 
-    public Spinner getFilledSectorsSpinner(Spinner spinnerSectors, Context context) {
-        SQLiteDatabase db = getWritableDatabase();
-        List<String> sectors = new ArrayList<>();
-
-        Cursor cursor = db.query(TABLE_SECTORS, new String[] {KEY_NAME}, null, null, null, null, null);
-        if (cursor.moveToNext()) {
-            do {
-                int columnIndex = cursor.getColumnIndex(KEY_NAME);
-                String value = cursor.getString(columnIndex);
-                sectors.add(value);
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
-
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, sectors);
-        adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSectors.setAdapter(adapterSchedules);
-
-        db.close();
-        return spinnerSectors;
-    }
-
     public List<String> getSectors() {
         SQLiteDatabase db = getWritableDatabase();
         List<String> sectors = new ArrayList<>();
@@ -831,26 +667,6 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
 
         return sectors;
-    }
-
-    public String getSectorsString(SQLiteDatabase db) {
-        Cursor cursor = db.query(TABLE_SECTORS, null, null, null, null, null, null);
-        StringBuilder text = new StringBuilder();
-
-        while (cursor.moveToNext()) {
-            do {
-                int idIndex = cursor.getColumnIndex(KEY_ID);
-                int nameIndex = cursor.getColumnIndex(KEY_NAME);
-                int id = cursor.getInt(idIndex);
-                String name = cursor.getString(nameIndex);
-
-                text.append(id).append(" - ").append(name).append("\n");
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return text.toString();
     }
 
     public int getMonthNorm(SQLiteDatabase db, int post_id, int sector_id, int schedule_id) {
@@ -888,9 +704,7 @@ public class DbHelper extends SQLiteOpenHelper {
             int monthNormIndex = cursor.getColumnIndex(KEY_MONTH_NORM);
             monthNorm = cursor.getInt(monthNormIndex);
         }
-        else {
-            Log.d("PRODUCTIVITY_NOT_FOUND", "Продуктивность не найдена в БД.");
-        }
+
         cursor.close();
 
         return monthNorm;
@@ -898,35 +712,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public int getYearNorm(SQLiteDatabase db, SharedPreferences settings) {
         return getMonthNorm(db, settings) * 12;
-    }
-
-    public String getTaxesString(SQLiteDatabase db) {
-        Cursor cursor = db.query(TABLE_TAXES, null, null, null, null, null, null);
-        StringBuilder text = new StringBuilder();
-
-        while (cursor.moveToNext()) {
-            do {
-                int scheduleIdIndex = cursor.getColumnIndex(KEY_SCHEDULE_ID);
-                int sectorIdIndex = cursor.getColumnIndex(KEY_SECTOR_ID);
-                int selectionOsTaxIndex = cursor.getColumnIndex(KEY_SELECTION_OS_TAX);
-                int allocationOsTaxIndex = cursor.getColumnIndex(KEY_ALLOCATION_OS_TAX);
-                int selectionMezTaxIndex = cursor.getColumnIndex(KEY_SELECTION_MEZ_TAX);
-                int allocationMezTaxIndex = cursor.getColumnIndex(KEY_ALLOCATION_MEZ_TAX);
-
-                int scheduleId = cursor.getInt(scheduleIdIndex);
-                int sectorId = cursor.getInt(sectorIdIndex);
-                double taxSelectOs = cursor.getDouble(selectionOsTaxIndex);
-                double taxAllocOs = cursor.getDouble(allocationOsTaxIndex);
-                double taxSelectMez = cursor.getDouble(selectionMezTaxIndex);
-                double taxAllocMez = cursor.getDouble(allocationMezTaxIndex);
-
-                text.append(scheduleId).append(", ").append(sectorId).append(", ").append(taxSelectOs).append(", ").append(taxAllocOs).append(", ").append(taxSelectMez).append(", ").append(taxAllocMez).append("\n");
-
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return text.toString();
     }
 
     public void synchronizeData(SQLiteDatabase db, SharedPreferences settings) {
@@ -993,7 +778,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
         users.child(UID).child("workDays").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e("firebase", "Error getting data", task.getException());
                 dbHelper.close();
             }
             else {
@@ -1032,10 +816,7 @@ public class DbHelper extends SQLiteOpenHelper {
                     db.setTransactionSuccessful();
                     db.close();
                     dbHelper.close();
-                } catch (NullPointerException e) {
-                    Log.d("NULL_EXCEPTION", e.getMessage());
-                }
-                finally {
+                } finally {
                     db.endTransaction();
                 }
             }

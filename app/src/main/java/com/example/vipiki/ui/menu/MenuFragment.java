@@ -41,7 +41,7 @@ public class MenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         menuViewModel =
-                new ViewModelProvider(this, new MenuViewModelFactory(getContext(), getContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(MenuViewModel.class);
+                new ViewModelProvider(this, new MenuViewModelFactory(getContext())).get(MenuViewModel.class);
 
         binding = FragmentMenuBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

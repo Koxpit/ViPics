@@ -27,8 +27,7 @@ public class StatisticActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
-        statisticViewModel = new ViewModelProvider(this, new StatisticViewModelFactory(this,
-                getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(StatisticViewModel.class);
+        statisticViewModel = new ViewModelProvider(this, new StatisticViewModelFactory(this)).get(StatisticViewModel.class);
 
         initComponents();
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.ui.statistic.statisticUseCases.CalculateStatisticUseCase;
 import com.example.vipiki.ui.statistic.statisticUseCases.GetUserSettingsUseCase;
 
@@ -14,9 +15,9 @@ public class StatisticViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
     private final SharedPreferences settings;
 
-    public StatisticViewModelFactory(Context context, SharedPreferences settings) {
+    public StatisticViewModelFactory(Context context) {
         this.context = context;
-        this.settings = settings;
+        this.settings = context.getSharedPreferences(DbHelper.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull

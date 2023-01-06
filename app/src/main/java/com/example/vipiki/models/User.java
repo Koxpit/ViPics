@@ -6,7 +6,6 @@ public class User {
     private String sector;
     private String schedule;
     private String email;
-    private String password;
 
     public User() {}
 

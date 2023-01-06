@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.ui.settings.settingsUseCases.GetAuthSettingsUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditProfileUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditTaxUseCase;
@@ -17,9 +18,9 @@ public class SettingsViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
     private final SharedPreferences settings;
 
-    public SettingsViewModelFactory(Context context, SharedPreferences settings) {
+    public SettingsViewModelFactory(Context context) {
         this.context = context;
-        this.settings = settings;
+        this.settings = context.getSharedPreferences(DbHelper.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull

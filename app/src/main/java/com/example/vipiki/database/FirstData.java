@@ -10,7 +10,7 @@ public class FirstData {
         this.db = db;
     }
 
-    public void initStartData() {
+    protected void initStartData() {
         db.beginTransaction();
         try {
             ContentValues cv = new ContentValues();
@@ -779,11 +779,29 @@ public class FirstData {
     }
 
     private void initNightSelectionOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 29);
+        cv.put(DbHelper.KEY_MONTH_NORM, 4640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightSelectionOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 29);
+        cv.put(DbHelper.KEY_MONTH_NORM, 4640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightSelectionOsProductivityD(SQLiteDatabase db) {
@@ -799,7 +817,16 @@ public class FirstData {
     }
 
     private void initNightSelectionOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 29);
+        cv.put(DbHelper.KEY_MONTH_NORM, 4640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationOsProductivity(SQLiteDatabase db) {
@@ -836,11 +863,29 @@ public class FirstData {
     }
 
     private void initNightAllocationOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 100);
+        cv.put(DbHelper.KEY_MONTH_NORM, 16000);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 100);
+        cv.put(DbHelper.KEY_MONTH_NORM, 16000);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationOsProductivityD(SQLiteDatabase db) {
@@ -856,7 +901,16 @@ public class FirstData {
     }
 
     private void initNightAllocationOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 100);
+        cv.put(DbHelper.KEY_MONTH_NORM, 16000);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightSelectionMezProductivity(SQLiteDatabase db) {
@@ -893,11 +947,29 @@ public class FirstData {
     }
 
     private void initNightSelectionMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8320);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightSelectionMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8320);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightSelectionMezProductivityD(SQLiteDatabase db) {
@@ -913,7 +985,16 @@ public class FirstData {
     }
 
     private void initNightSelectionMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8320);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationMezProductivity(SQLiteDatabase db) {
@@ -950,11 +1031,29 @@ public class FirstData {
     }
 
     private void initNightAllocationMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 55200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 55200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initNightAllocationMezProductivityD(SQLiteDatabase db) {
@@ -970,7 +1069,16 @@ public class FirstData {
     }
 
     private void initNightAllocationMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 2);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 55200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
 
@@ -1016,11 +1124,29 @@ public class FirstData {
     }
 
     private void initDaySelectionOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 36);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6048);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDaySelectionOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 36);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6048);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDaySelectionOsProductivityD(SQLiteDatabase db) {
@@ -1036,7 +1162,16 @@ public class FirstData {
     }
 
     private void initDaySelectionOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 36);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6048);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationOsProductivity(SQLiteDatabase db) {
@@ -1073,11 +1208,29 @@ public class FirstData {
     }
 
     private void initDayAllocationOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 18312);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 18312);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationOsProductivityD(SQLiteDatabase db) {
@@ -1093,7 +1246,16 @@ public class FirstData {
     }
 
     private void initDayAllocationOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 18312);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDaySelectionMezProductivity(SQLiteDatabase db) {
@@ -1130,11 +1292,29 @@ public class FirstData {
     }
 
     private void initDaySelectionMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8736);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDaySelectionMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8736);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDaySelectionMezProductivityD(SQLiteDatabase db) {
@@ -1150,7 +1330,16 @@ public class FirstData {
     }
 
     private void initDaySelectionMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 52);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8736);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationMezProductivity(SQLiteDatabase db) {
@@ -1187,11 +1376,29 @@ public class FirstData {
     }
 
     private void initDayAllocationMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 57960);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 57960);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayAllocationMezProductivityD(SQLiteDatabase db) {
@@ -1207,7 +1414,16 @@ public class FirstData {
     }
 
     private void initDayAllocationMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 3);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 21);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 8);
+        cv.put(DbHelper.KEY_HOUR_NORM, 345);
+        cv.put(DbHelper.KEY_MONTH_NORM, 57960);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftProductivity(SQLiteDatabase db) {
@@ -1251,11 +1467,29 @@ public class FirstData {
     }
 
     private void initDayShiftSelectionOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6240);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftSelectionOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6240);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftSelectionOsProductivityD(SQLiteDatabase db) {
@@ -1271,7 +1505,16 @@ public class FirstData {
     }
 
     private void initDayShiftSelectionOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6240);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationOsProductivity(SQLiteDatabase db) {
@@ -1308,11 +1551,29 @@ public class FirstData {
     }
 
     private void initDayShiftAllocationOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17440);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17440);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationOsProductivityD(SQLiteDatabase db) {
@@ -1328,7 +1589,16 @@ public class FirstData {
     }
 
     private void initDayShiftAllocationOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 1);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17440);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftSelectionMezProductivity(SQLiteDatabase db) {
@@ -1365,11 +1635,29 @@ public class FirstData {
     }
 
     private void initDayShiftSelectionMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 54);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftSelectionMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 54);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftSelectionMezProductivityD(SQLiteDatabase db) {
@@ -1385,7 +1673,16 @@ public class FirstData {
     }
 
     private void initDayShiftSelectionMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 4);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 54);
+        cv.put(DbHelper.KEY_MONTH_NORM, 8640);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationMezProductivity(SQLiteDatabase db) {
@@ -1422,11 +1719,29 @@ public class FirstData {
     }
 
     private void initDayShiftAllocationMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initDayShiftAllocationMezProductivityD(SQLiteDatabase db) {
@@ -1442,7 +1757,16 @@ public class FirstData {
     }
 
     private void initDayShiftAllocationMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 1);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 16);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 10);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59200);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
 
@@ -1488,11 +1812,29 @@ public class FirstData {
     }
 
     private void initGBRSelectionOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6318);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRSelectionOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6318);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRSelectionOsProductivityD(SQLiteDatabase db) {
@@ -1508,7 +1850,16 @@ public class FirstData {
     }
 
     private void initGBRSelectionOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 3);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 39);
+        cv.put(DbHelper.KEY_MONTH_NORM, 6318);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationOsProductivity(SQLiteDatabase db) {
@@ -1545,11 +1896,29 @@ public class FirstData {
     }
 
     private void initGBRAllocationOsProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationOsProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationOsProductivityD(SQLiteDatabase db) {
@@ -1565,7 +1934,16 @@ public class FirstData {
     }
 
     private void initGBRAllocationOsProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
 
@@ -1603,11 +1981,29 @@ public class FirstData {
     }
 
     private void initGBRSelectionMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRSelectionMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRSelectionMezProductivityD(SQLiteDatabase db) {
@@ -1623,7 +2019,16 @@ public class FirstData {
     }
 
     private void initGBRSelectionMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 109);
+        cv.put(DbHelper.KEY_MONTH_NORM, 17658);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationMezProductivity(SQLiteDatabase db) {
@@ -1660,11 +2065,29 @@ public class FirstData {
     }
 
     private void initGBRAllocationMezProductivityV(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 3);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59940);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationMezProductivityG(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 4);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59940);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 
     private void initGBRAllocationMezProductivityD(SQLiteDatabase db) {
@@ -1680,6 +2103,15 @@ public class FirstData {
     }
 
     private void initGBRAllocationMezProductivityE(SQLiteDatabase db) {
-
+        //test
+        ContentValues cv = new ContentValues();
+        cv.put(DbHelper.KEY_POST_ID, 2);
+        cv.put(DbHelper.KEY_SCHEDULE_ID, 4);
+        cv.put(DbHelper.KEY_SECTOR_ID, 6);
+        cv.put(DbHelper.KEY_WORK_DAYS_PER_MONTH, 18);
+        cv.put(DbHelper.KEY_WORK_HOURS_PER_DAY, 9);
+        cv.put(DbHelper.KEY_HOUR_NORM, 370);
+        cv.put(DbHelper.KEY_MONTH_NORM, 59940);
+        db.insert(DbHelper.TABLE_PRODUCTIVITY, null, cv);
     }
 }

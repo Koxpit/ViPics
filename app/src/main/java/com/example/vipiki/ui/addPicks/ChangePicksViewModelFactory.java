@@ -7,24 +7,24 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.vipiki.ui.addPicks.AddPicksViewModel;
-import com.example.vipiki.ui.addPicks.addPicksUseCases.AddWorkDayUseCase;
+import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.ui.addPicks.addPicksUseCases.ChangeWorkDaysUseCase;
 import com.example.vipiki.ui.addPicks.addPicksUseCases.DeleteWorkDayUseCase;
 
-public class AddPicksViewModelFactory implements ViewModelProvider.Factory {
+public class ChangePicksViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
     private final SharedPreferences settings;
 
-    public AddPicksViewModelFactory(Context context, SharedPreferences settings) {
+    public ChangePicksViewModelFactory(Context context) {
         this.context = context;
-        this.settings = settings;
+        this.settings = context.getSharedPreferences(DbHelper.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new AddPicksViewModel(
-                new AddWorkDayUseCase(context, settings),
+        return (T) new ChangePicksViewModel(
+                new ChangeWorkDaysUseCase(context, settings),
                 new DeleteWorkDayUseCase(context));
     }
 }

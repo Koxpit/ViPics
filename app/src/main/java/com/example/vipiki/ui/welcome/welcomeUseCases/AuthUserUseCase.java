@@ -18,14 +18,11 @@ public class AuthUserUseCase {
     public boolean isAlreadyAuthUser() {
         boolean isAlreadyAuth = false;
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String UID = user.getUid();
-            if (settings.contains(UID)) {
-                if (settings.getBoolean(UID, false)) {
+        if (!userIsEmpty()) {
+            String UID = getUID();
+            if (settings.contains(UID))
+                if (settings.getBoolean(UID, false))
                     isAlreadyAuth = true;
-                }
-            }
         }
 
         return isAlreadyAuth;
@@ -47,27 +44,9 @@ public class AuthUserUseCase {
         editor.apply();
     }
 
-    public void setLogoutSettings(String UID) {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(UID, false);
-        editor.apply();
-    }
-
     public boolean userIsEmpty() {
-        boolean userIsEmpty = false;
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user == null) {
-            userIsEmpty = true;
-        }
-
-        return userIsEmpty;
-    }
-
-    public boolean getAuthStatus() {
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        return settings.getBoolean(UID, false);
+        return user == null;
     }
 }

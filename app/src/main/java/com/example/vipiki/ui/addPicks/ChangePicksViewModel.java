@@ -6,20 +6,21 @@ import android.widget.ArrayAdapter;
 import androidx.lifecycle.ViewModel;
 
 import com.example.vipiki.models.Pics;
-import com.example.vipiki.ui.addPicks.addPicksUseCases.AddWorkDayUseCase;
+import com.example.vipiki.ui.addPicks.addPicksUseCases.ChangeWorkDaysUseCase;
 import com.example.vipiki.ui.addPicks.addPicksUseCases.DeleteWorkDayUseCase;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class AddPicksViewModel extends ViewModel {
-    private final AddWorkDayUseCase addWorkDayUseCase;
+public class ChangePicksViewModel extends ViewModel {
+    private final ChangeWorkDaysUseCase addWorkDayUseCase;
     private final DeleteWorkDayUseCase deleteWorkDayUseCase;
 
-    public AddPicksViewModel(AddWorkDayUseCase addWorkDayUseCase, DeleteWorkDayUseCase deleteWorkDayUseCase) {
+    public ChangePicksViewModel(ChangeWorkDaysUseCase addWorkDayUseCase, DeleteWorkDayUseCase deleteWorkDayUseCase) {
         this.addWorkDayUseCase = addWorkDayUseCase;
         this.deleteWorkDayUseCase = deleteWorkDayUseCase;
     }
@@ -32,16 +33,8 @@ public class AddPicksViewModel extends ViewModel {
         addWorkDayUseCase.addExtraDay(day, month, year, pay);
     }
 
-    public int getSectorId() {
-        return addWorkDayUseCase.findSectorId();
-    }
-
-    public int getScheduleId() {
-        return addWorkDayUseCase.findScheduleId();
-    }
-
     public boolean isCorrectDate(int day, int month, int year) {
-        boolean dateIsCorrect = false;
+        boolean dateIsCorrect;
         Locale ruLocal = new Locale("ru", "RU");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", ruLocal);
         Date currentDate = null, selectedDate = null;
@@ -70,5 +63,29 @@ public class AddPicksViewModel extends ViewModel {
 
     public void deleteWorkDay(int day, int month, int year) {
         deleteWorkDayUseCase.deleteWorkDay(day, month, year);
+    }
+
+    public String getDate(int year, int month, int day) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month-1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        return new SimpleDateFormat("yyyy-MM-dd", new Locale("RU", "ru")).format(new Date(calendar.getTimeInMillis()));
+    }
+
+    public String getMessageWorkDay(Bundle args) {
+        int selectionOs = args.getInt("selectionOs");
+        int allocationOs = args.getInt("allocationOs");
+        int selectionMez = args.getInt("selectionMez");
+        int allocationMez = args.getInt("allocationMez");
+        double pay = args.getDouble("pay");
+
+        return "Отбор основа: " + selectionOs + ";\n" + "Размещение основа: " + allocationOs + ";\n"
+                + "Отбор мезонин: " + selectionMez + ";\n" + "Размещение мезонин: " + allocationMez + ".\n" + "Минимальная оплата: "
+                + String.format(Locale.ENGLISH, "%(.2f", pay) + "руб.";
+    }
+
+    public String getMessageExtraDay(double pay) {
+        return "Доп смена.\nОплата: " + String.format(Locale.ENGLISH, "%(.2f", pay);
     }
 }

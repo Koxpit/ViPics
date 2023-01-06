@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.vipiki.database.DbHelper;
 
 public class DeleteWorkDayUseCase {
-    private Context context;
+    private final Context context;
 
     public DeleteWorkDayUseCase(Context context) {
         this.context = context;

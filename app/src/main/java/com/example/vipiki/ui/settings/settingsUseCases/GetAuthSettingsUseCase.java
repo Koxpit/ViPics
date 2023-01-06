@@ -1,7 +1,8 @@
 package com.example.vipiki.ui.settings.settingsUseCases;
 
-import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.vipiki.messages.errors.ErrorHandler;
 
 public class GetAuthSettingsUseCase {
     private final SharedPreferences settings;
@@ -11,10 +12,10 @@ public class GetAuthSettingsUseCase {
     }
 
     public String getEmail() {
-        return settings.getString("email", "example@mail.ru");
+        return settings.getString("email", ErrorHandler.getEmailNotFoundError());
     }
 
     public String getUID() {
-        return settings.getString("UID", "not found");
+        return settings.getString("UID", ErrorHandler.getUidNotFoundError());
     }
 }

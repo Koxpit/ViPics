@@ -3,11 +3,11 @@ package com.example.vipiki.ui.addPicks.addPicksUseCases;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.ui.main.MainActivity;
@@ -16,11 +16,11 @@ import com.example.vipiki.models.WorkDay;
 
 import java.util.List;
 
-public class AddWorkDayUseCase {
+public class ChangeWorkDaysUseCase {
     private final Context context;
     private final SharedPreferences settings;
 
-    public AddWorkDayUseCase(Context context, SharedPreferences settings) {
+    public ChangeWorkDaysUseCase(Context context, SharedPreferences settings) {
         this.context = context;
         this.settings = settings;
     }
@@ -64,24 +64,8 @@ public class AddWorkDayUseCase {
         context.startActivity(intentMain);
     }
 
-    public int findSectorId() {
-        DbHelper dbHelper = new DbHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String sectorName = settings.getString("sector", null);
-
-        return dbHelper.getSectorId(sectorName, db);
-    }
-
-    public int findScheduleId() {
-        DbHelper dbHelper = new DbHelper(context);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String scheduleName = settings.getString("schedule", null);
-
-        return dbHelper.getScheduleId(scheduleName, db);
-    }
-
     public String getUID() {
-        return settings.getString("UID", null);
+        return settings.getString("UID", ErrorHandler.getUidNotFoundError());
     }
 
     public Bundle getWorkDayBundle(int day, int month, int year) {
@@ -98,7 +82,7 @@ public class AddWorkDayUseCase {
     public ArrayAdapter<String> getAdapterWorkDays() {
         DbHelper dbHelper = new DbHelper(context);
         List<String> workDays = dbHelper.getWorkDays();
-        ArrayAdapter<String> adapterWorkDays = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, workDays);
+        ArrayAdapter<String> adapterWorkDays = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, workDays);
         adapterWorkDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dbHelper.close();
 

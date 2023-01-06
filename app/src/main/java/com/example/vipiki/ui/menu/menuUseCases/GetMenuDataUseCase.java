@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.messages.errors.ErrorHandler;
 
 public class GetMenuDataUseCase {
     private final Context context;
@@ -23,6 +24,6 @@ public class GetMenuDataUseCase {
     }
 
     public String getUserName() {
-        return settings.getString("name", "not found");
+        return settings.getString("name", ErrorHandler.getNameNotFoundError());
     }
 }

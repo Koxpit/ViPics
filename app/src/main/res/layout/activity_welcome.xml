@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/welcome_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.welcome.WelcomeActivity">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/avatar_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:alpha="0.90"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/welcome_background_foreground" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +33,7 @@
             android:layout_marginBottom="20dp"
             android:includeFontPadding="false"
             android:text="@string/command"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="35sp" />
 
         <TextView
@@ -36,19 +46,10 @@
             android:layout_marginEnd="10dp"
             android:includeFontPadding="false"
             android:text="@string/postulate_command"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20sp" />
 
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/auth_button"

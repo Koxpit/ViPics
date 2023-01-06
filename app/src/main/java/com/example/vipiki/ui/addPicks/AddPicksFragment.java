@@ -1,6 +1,5 @@
 package com.example.vipiki.ui.addPicks;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.databinding.FragmentAddPicksBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.vipiki.messages.errors.ErrorHandler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,13 +27,13 @@ import java.util.Locale;
 public class AddPicksFragment extends Fragment {
 
     private FragmentAddPicksBinding binding;
-    private AddPicksViewModel addPicksViewModel;
+    private ChangePicksViewModel addPicksViewModel;
     private boolean dateIsSelected;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addPicksViewModel =
-                new ViewModelProvider(this, new AddPicksViewModelFactory(getContext(), getContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(AddPicksViewModel.class);
+                new ViewModelProvider(this, new ChangePicksViewModelFactory(getContext())).get(ChangePicksViewModel.class);
 
         binding = FragmentAddPicksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -50,7 +49,7 @@ public class AddPicksFragment extends Fragment {
                 openWorkDayEditor(bundle);
             }
             else
-                Snackbar.make(binding.rootRelativeLayout, "Нельзя выбрать дату больше текущей.", Snackbar.LENGTH_SHORT).show();
+                ErrorHandler.sendIncorrectSelectedDateError(getContext());
         });
 
         return root;
@@ -80,7 +79,7 @@ public class AddPicksFragment extends Fragment {
                     }
                     else dateIsSelected = true;
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    ErrorHandler.sendIncorrectDateError(getContext());
                 }
             }
 
@@ -99,7 +98,6 @@ public class AddPicksFragment extends Fragment {
             EditPicsDialogFragment editPicsDialogFragment = new EditPicsDialogFragment();
             editPicsDialogFragment.setArguments(bundle);
             editPicsDialogFragment.show(manager, "editPicsDialogFragment");
-            Snackbar.make(binding.rootRelativeLayout, String.valueOf(bundle.getDouble("pay", 0)), Snackbar.LENGTH_SHORT).show();
         } else {
             AddPicksDialogFragment addPicksDialogFragment = new AddPicksDialogFragment();
             addPicksDialogFragment.setArguments(bundle);

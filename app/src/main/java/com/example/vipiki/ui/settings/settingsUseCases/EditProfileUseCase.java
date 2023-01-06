@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.widget.ArrayAdapter;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.UserSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +34,7 @@ public class EditProfileUseCase {
     }
 
     public String getUserName() {
-        return settings.getString("name", null);
+        return settings.getString("name", ErrorHandler.getNameNotFoundError());
     }
 
     public int getPostIndex() {
@@ -51,7 +52,7 @@ public class EditProfileUseCase {
     public ArrayAdapter<String> getAdapterPosts() {
         DbHelper dbHelper = new DbHelper(context);
         List<String> posts = dbHelper.getPosts();
-        ArrayAdapter<String> adapterPosts = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, posts);
+        ArrayAdapter<String> adapterPosts = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, posts);
         adapterPosts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dbHelper.close();
 
@@ -61,7 +62,7 @@ public class EditProfileUseCase {
     public ArrayAdapter<String> getAdapterSectors() {
         DbHelper dbHelper = new DbHelper(context);
         List<String> sectors = dbHelper.getSectors();
-        ArrayAdapter<String> adapterSectors = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sectors);
+        ArrayAdapter<String> adapterSectors = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, sectors);
         adapterSectors.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dbHelper.close();
 
@@ -71,7 +72,7 @@ public class EditProfileUseCase {
     public ArrayAdapter<String> getAdapterSchedules() {
         DbHelper dbHelper = new DbHelper(context);
         List<String> schedules = dbHelper.getSchedules();
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, schedules);
+        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, schedules);
         adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dbHelper.close();
 

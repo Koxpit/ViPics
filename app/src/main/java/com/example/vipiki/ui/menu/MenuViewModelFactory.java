@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.ui.menu.menuUseCases.ChangeAvatarUseCase;
 import com.example.vipiki.ui.menu.menuUseCases.GetMenuDataUseCase;
 import com.example.vipiki.ui.menu.menuUseCases.SignOutUseCase;
@@ -15,9 +16,9 @@ public class MenuViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
     private final SharedPreferences settings;
 
-    public MenuViewModelFactory(Context context, SharedPreferences settings) {
+    public MenuViewModelFactory(Context context) {
         this.context = context;
-        this.settings = settings;
+        this.settings = context.getSharedPreferences(DbHelper.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.Tax;
 
 public class CalculateStatisticUseCase {
@@ -93,11 +94,11 @@ public class CalculateStatisticUseCase {
     }
 
     private String getUID() {
-        return settings.getString("UID", "not found UID");
+        return settings.getString("UID", ErrorHandler.getUidNotFoundError());
     }
 
     private String getUserPost() {
-        return settings.getString("post", "post not found");
+        return settings.getString("post", ErrorHandler.getPostNotFoundError());
     }
 
     public double getYearSalary(Tax tax) {

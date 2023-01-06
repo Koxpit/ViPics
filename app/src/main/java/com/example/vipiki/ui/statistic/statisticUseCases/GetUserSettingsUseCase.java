@@ -2,6 +2,7 @@ package com.example.vipiki.ui.statistic.statisticUseCases;
 
 import android.content.SharedPreferences;
 
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.UserSettings;
 
 public class GetUserSettingsUseCase {
@@ -12,10 +13,10 @@ public class GetUserSettingsUseCase {
     }
 
     public UserSettings getProfileData() {
-        String schedule = settings.getString("schedule", null);
-        String sector = settings.getString("sector", null);
-        String post = settings.getString("post", null);
-        String name = settings.getString("name", null);
+        String schedule = settings.getString("schedule", ErrorHandler.getScheduleNotFoundError());
+        String sector = settings.getString("sector", ErrorHandler.getSectorNotFoundError());
+        String post = settings.getString("post", ErrorHandler.getPostNotFoundError());
+        String name = settings.getString("name", ErrorHandler.getNameNotFoundError());
 
         UserSettings userSettings = new UserSettings();
         userSettings.setSchedule(schedule);

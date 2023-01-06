@@ -1,6 +1,5 @@
 package com.example.vipiki.ui.home;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,12 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.databinding.FragmentHomeBinding;
-import com.example.vipiki.models.Pics;
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -25,19 +23,17 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
-    private int picsSelection = 0, picsAllocation = 0;
-    private int needPicsAllocation = 50000, needPicsSelection = 5000;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory(getContext(), getContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this, new HomeViewModelFactory(getContext())).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         try {
             initPieCharts();
         } catch (Exception e) {
-            Snackbar.make(binding.homeConstraintLayout, e.getMessage(), Snackbar.LENGTH_LONG).show();
+            ErrorHandler.sendInitChartsError(getContext());
         }
 
         return root;
@@ -48,21 +44,19 @@ public class HomeFragment extends Fragment {
         colors.add(Color.parseColor("#FF000000"));
         colors.add(Color.parseColor("#d80c00"));
 
-        setCurrentPics();
-        setNeedPics();
         initAllocationPieChart(colors);
         initSelectionPieChart(colors);
     }
 
     private void initAllocationPieChart(ArrayList<Integer> colors) {
-        float currentAllocationPercent = ((float) picsAllocation / needPicsAllocation) * 100.0f;
+        float currentAllocationPercent = homeViewModel.getCurrentAllocationPercent();
         PieChart pieChartAllocation = binding.pieChartAllocation;
         ArrayList<PieEntry> pieAllocationEntries = new ArrayList<>();
 
-        PieEntry pieAllcationNeededData = new PieEntry(needPicsAllocation - picsAllocation);
-        PieEntry pieAllcationCurrentData = new PieEntry(picsAllocation);
-        pieAllocationEntries.add(pieAllcationNeededData);
-        pieAllocationEntries.add(pieAllcationCurrentData);
+        PieEntry pieAllocationNeededData = new PieEntry(homeViewModel.getNeedPicsAllocation());
+        PieEntry pieAllocationCurrentData = new PieEntry(homeViewModel.getPicsAllocation());
+        pieAllocationEntries.add(pieAllocationNeededData);
+        pieAllocationEntries.add(pieAllocationCurrentData);
 
         PieDataSet pieAllocationDataSet = new PieDataSet(pieAllocationEntries, "Размещение");
         pieAllocationDataSet.setValueTextColor(Color.WHITE);
@@ -77,12 +71,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void initSelectionPieChart(ArrayList<Integer> colors) {
-        float currentSelectionPercent = ((float) picsSelection / needPicsSelection) * 100.0f;
+        float currentSelectionPercent = homeViewModel.getCurrentSelectionPercent();
         PieChart pieChartSelection = binding.pieChartSelection;
         ArrayList<PieEntry> pieSelectionEntries = new ArrayList<>();
 
-        PieEntry pieSelectionNeededData = new PieEntry(needPicsSelection - picsSelection);
-        PieEntry pieSelectionCurrentData = new PieEntry(picsSelection);
+        PieEntry pieSelectionNeededData = new PieEntry(homeViewModel.getNeedPicsSelection());
+        PieEntry pieSelectionCurrentData = new PieEntry(homeViewModel.getPicsSelection());
         pieSelectionEntries.add(pieSelectionNeededData);
         pieSelectionEntries.add(pieSelectionCurrentData);
 
@@ -96,18 +90,6 @@ public class HomeFragment extends Fragment {
         pieChartSelection.setCenterText("Отбор (" + String.format(new Locale("ru"), "%(.0f", currentSelectionPercent) + "%)");
         pieChartSelection.getDescription().setEnabled(false);
         pieChartSelection.getLegend().setEnabled(false);
-    }
-
-    private void setCurrentPics() {
-        Pics currentPics = homeViewModel.getCurrentPics();
-        picsSelection = currentPics.getSelection();
-        picsAllocation = currentPics.getAllocation();
-    }
-
-    private void setNeedPics() {
-        Pics needPics = homeViewModel.getNeedPics();
-        needPicsAllocation = needPics.getAllocation();
-        needPicsSelection = needPics.getSelection();
     }
 
     @Override

@@ -2,8 +2,6 @@ package com.example.vipiki.ui.settings.settingsUseCases;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.view.ViewGroup;
 
 import com.example.vipiki.database.DbHelper;
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.ui.welcome.welcomeUseCases.AuthUserUseCase;
 import com.example.vipiki.ui.welcome.welcomeUseCases.InitRegisterSpinnersUseCase;
 
@@ -14,9 +15,9 @@ public class WelcomeViewModelFactory implements ViewModelProvider.Factory {
     private final Context context;
     private final SharedPreferences settings;
 
-    public WelcomeViewModelFactory(Context context, SharedPreferences settings) {
+    public WelcomeViewModelFactory(Context context) {
         this.context = context;
-        this.settings = settings;
+        this.settings = context.getSharedPreferences(DbHelper.APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
     @NonNull

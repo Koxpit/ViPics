@@ -1,47 +1,29 @@
 package com.example.vipiki.ui.settings;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.vipiki.R;
-import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.messages.errors.ErrorHandler;
+import com.example.vipiki.messages.success.SuccessHandler;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.UserSettings;
-import com.example.vipiki.ui.menu.MenuViewModel;
-import com.example.vipiki.ui.menu.MenuViewModelFactory;
-import com.example.vipiki.ui.settings.SettingsViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.net.PasswordAuthentication;
 import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -53,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        settingsViewModel = new ViewModelProvider(this, new SettingsViewModelFactory(this, getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(SettingsViewModel.class);
+        settingsViewModel = new ViewModelProvider(this, new SettingsViewModelFactory(this)).get(SettingsViewModel.class);
 
         TextView editProfileTextView = findViewById(R.id.editProfileTextView);
         TextView editTaxesTextView = findViewById(R.id.editTaxesTextView);
@@ -87,9 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.setView(edit_profile_view);
 
-        dialog.setNegativeButton("Назад", (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
+        dialog.setNegativeButton("Назад", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Изменить", (dialogInterface, i) -> {
             UserSettings userSettings = new UserSettings();
@@ -172,8 +152,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void showEditTaxesWindow() {
-        double selectionOsTax = 0, allocationOsTax = 0;
-        double selectionMezTax = 0, allocationMezTax = 0;
+        double selectionOsTax, allocationOsTax;
+        double selectionMezTax, allocationMezTax;
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Изменение ставки");
 
@@ -198,9 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.setView(edit_taxes_view);
 
-        dialog.setNegativeButton("Назад", (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
+        dialog.setNegativeButton("Назад", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Изменить", (dialogInterface, i) -> {
             double selection_os_tax = Double.parseDouble(selectionOsTaxEditText.getText().toString());
@@ -223,12 +201,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void syncData() {
         settingsViewModel.syncData();
-        Toast.makeText(this, "Синхронизация успешно пройдена", Toast.LENGTH_SHORT).show();
+        SuccessHandler.sendSyncSuccessMessage(SettingsActivity.this);
     }
 
     private void recoverData() {
         settingsViewModel.recoverData();
-        Toast.makeText(this, "Восстановление завершено", Toast.LENGTH_SHORT).show();
+        SuccessHandler.sendRecoverSuccessMessage(SettingsActivity.this);
     }
 
     private void showChangePasswordWindow() {
@@ -243,9 +221,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.setView(edit_password_view);
 
-        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
+        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
             String oldPassword = oldPasswordEditText.getText().toString();
@@ -254,17 +230,17 @@ public class SettingsActivity extends AppCompatActivity {
             String email = settingsViewModel.getEmail();
 
             if (settingsViewModel.inputIncorrect(oldPassword, newPassword, confirmPassword)) {
-                Toast.makeText(SettingsActivity.this, "Заполнены не все поля", Toast.LENGTH_SHORT).show();
+                ErrorHandler.sendEmptyEntryError(SettingsActivity.this);
                 return;
             }
 
             if (settingsViewModel.passwordIncorrect(newPassword)) {
-                Toast.makeText(SettingsActivity.this, "Пароль должен содержать не менее 6 символов", Toast.LENGTH_SHORT).show();
+                ErrorHandler.sendIncorrectPasswordError(SettingsActivity.this);
                 return;
             }
 
             if (!settingsViewModel.passwordsMatch(newPassword, confirmPassword)) {
-                Toast.makeText(SettingsActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                ErrorHandler.sendPasswordsMatchError(SettingsActivity.this);
                 return;
             }
 
@@ -275,9 +251,9 @@ public class SettingsActivity extends AppCompatActivity {
                 if (reauthTask.isSuccessful()) {
                     user.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
                         if (editPasswordTask.isSuccessful())
-                            Toast.makeText(SettingsActivity.this, "Пароль успешно изменен", Toast.LENGTH_SHORT).show();
+                            SuccessHandler.sendPasswordSuccessMessage(SettingsActivity.this);
                         else
-                            Toast.makeText(SettingsActivity.this, "Ошибка. Повторите попытку позже", Toast.LENGTH_SHORT).show();
+                            ErrorHandler.sendUpdatePasswordError(SettingsActivity.this);
                     });
                 }
             });
@@ -299,9 +275,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.setView(edit_email_view);
 
-        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> {
-            dialogInterface.dismiss();
-        });
+        dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
             String currentPassword = currentPasswordEditText.getText().toString();
@@ -311,15 +285,15 @@ public class SettingsActivity extends AppCompatActivity {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
 
-            user.reauthenticate(credential).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    user.updateEmail(newEmail).addOnCompleteListener(task1 -> {
-                        if (task1.isSuccessful()) {
-                            Toast.makeText(SettingsActivity.this, "Почтовый адрес успешно изменен", Toast.LENGTH_SHORT).show();
+            user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+                if (reauthTask.isSuccessful()) {
+                    user.updateEmail(newEmail).addOnCompleteListener(editEmailTask -> {
+                        if (editEmailTask.isSuccessful()) {
+                            SuccessHandler.sendEmailSuccessMessage(SettingsActivity.this);
                             settingsViewModel.saveNewEmail(newEmail);
                         }
                         else
-                            Toast.makeText(SettingsActivity.this, "Произошла ошибка при изменении пароля", Toast.LENGTH_SHORT).show();
+                            ErrorHandler.sendUpdateEmailError(SettingsActivity.this);
                     });
                 }
             });

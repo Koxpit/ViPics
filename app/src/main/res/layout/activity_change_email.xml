@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardElevation="10dp">
@@ -26,9 +25,11 @@
             android:layout_below="@id/textViewCurrentPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="50"
             android:textSize="20sp"
             android:ems="10"
             android:hint="@string/hint_not_see_password"
+            android:autofillHints="password"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/archivo_black"
             android:inputType="textPassword" />
@@ -49,6 +50,7 @@
             android:layout_below="@id/textViewUserEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="50"
             android:textSize="20sp"
             android:ems="10"
             android:autofillHints="emailAddress"

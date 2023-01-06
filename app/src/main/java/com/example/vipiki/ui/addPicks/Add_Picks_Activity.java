@@ -2,14 +2,11 @@ package com.example.vipiki.ui.addPicks;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,13 +16,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.vipiki.R;
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.ui.main.MainActivity;
-import com.example.vipiki.ui.welcome.WelcomeActivity;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
 
 public class Add_Picks_Activity extends AppCompatActivity {
-    private AddPicksViewModel addPicksViewModel;
+    private ChangePicksViewModel addPicksViewModel;
 
     RelativeLayout rootRelativeLayout;
     Button add_button, back_button;
@@ -47,8 +42,7 @@ public class Add_Picks_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_picks);
 
-        addPicksViewModel = new ViewModelProvider(this, new AddPicksViewModelFactory(this,
-                getSharedPreferences("app_settings", Context.MODE_PRIVATE))).get(AddPicksViewModel.class);
+        addPicksViewModel = new ViewModelProvider(this, new ChangePicksViewModelFactory(this)).get(ChangePicksViewModel.class);
 
         getBundleValues();
         initComponents();
@@ -185,15 +179,6 @@ public class Add_Picks_Activity extends AppCompatActivity {
         });
 
         add_button.setOnClickListener(view -> {
-            if (addPicksViewModel.getSectorId() == -1) {
-                sendSectorNotFoundError();
-                return;
-            }
-            if (addPicksViewModel.getScheduleId() == -1) {
-                sendScheduleNotFoundError();
-                return;
-            }
-
             if (isExtraDay == 0) {
                 Pics pics = new Pics(allocationOs, selectionOs, allocationMez, selectionMez);
                 addPicksViewModel.addWorkDay(day, month, year, pics);
@@ -235,15 +220,5 @@ public class Add_Picks_Activity extends AppCompatActivity {
         }
 
         extraShiftPay_editText.setText(String.format(Locale.ENGLISH, "%(.2f", pay));
-    }
-
-    private void sendSectorNotFoundError() {
-        Snackbar.make(rootRelativeLayout, "Ошибка: сектор не найден.", Snackbar.LENGTH_SHORT).show();
-        Log.d("SECTOR_NOT_FOUND", "Сектор не найден в БД");
-    }
-
-    private void sendScheduleNotFoundError() {
-        Snackbar.make(rootRelativeLayout, "Ошибка: график работы не найден.", Snackbar.LENGTH_SHORT).show();
-        Log.d("SCHEDULE_NOT_FOUND", "График работы не найден в БД");
     }
 }

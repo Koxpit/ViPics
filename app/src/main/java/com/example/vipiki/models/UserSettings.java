@@ -12,17 +12,6 @@ public class UserSettings {
 
     public UserSettings() {}
 
-    public UserSettings(String UID, String name, String post, String schedule, String sector, int postIndex, int scheduleIndex, int sectorIndex) {
-        this.UID = UID;
-        this.name = name;
-        this.post = post;
-        this.schedule = schedule;
-        this.sector = sector;
-        this.postIndex = postIndex;
-        this.scheduleIndex = scheduleIndex;
-        this.sectorIndex = sectorIndex;
-    }
-
     public String getUID() {
         return UID;
     }
