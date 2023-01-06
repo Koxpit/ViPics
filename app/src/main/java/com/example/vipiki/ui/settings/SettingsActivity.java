@@ -72,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void showEditProfileWindow() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("Редактирование профиля");
+        dialog.setTitle("Редактирование профиля (UID)\n" + settingsViewModel.getUID());
         String name = settingsViewModel.getUserName();
 
         LayoutInflater inflater = LayoutInflater.from(this);

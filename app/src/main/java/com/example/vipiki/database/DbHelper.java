@@ -9,27 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.WorkDay;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -433,7 +422,72 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public Tax getTax(SQLiteDatabase db, SharedPreferences settings) {
+    public Tax getFullTax(SQLiteDatabase db, SharedPreferences settings) {
+        Tax tax = new Tax();
+        db.beginTransaction();
+        try {
+            String sector_id = String.valueOf(getSectorId(settings, db));
+            String schedule_id = String.valueOf(getScheduleId(settings, db));
+            String[] selectionArgs = {sector_id, schedule_id};
+            Cursor cursor = db.query(DbHelper.TABLE_TAXES, null, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
+
+            while (cursor.moveToNext()) {
+                int selectionOsTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS_TAX);
+                int allocationOsTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS_TAX);
+                int selectionMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ_TAX);
+                int allocationMezTaxIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ_TAX);
+
+                int bonusSelectionMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_80);
+                int bonusSelectionMez90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_90);
+                int bonusSelectionMez100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_100);
+                int bonusSelectionMez120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_MEZ_120);
+                int bonusAllocationMez80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_80);
+                int bonusAllocationMez90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_90);
+                int bonusAllocationMez100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_100);
+                int bonusAllocationMez120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_MEZ_120);
+
+                int bonusSelectionOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_80);
+                int bonusSelectionOs90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_90);
+                int bonusSelectionOs100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_100);
+                int bonusSelectionOs120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_SELECTION_OS_120);
+                int bonusAllocationOs80Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_80);
+                int bonusAllocationOs90Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_90);
+                int bonusAllocationOs100Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_100);
+                int bonusAllocationOs120Index = cursor.getColumnIndex(DbHelper.KEY_BONUS_ALLOCATION_OS_120);
+
+                tax.setTax_selection_os(cursor.getDouble(selectionOsTaxIndex));
+                tax.setTax_allocation_os(cursor.getDouble(allocationOsTaxIndex));
+                tax.setTax_selection_mez(cursor.getDouble(selectionMezTaxIndex));
+                tax.setTax_allocation_mez(cursor.getDouble(allocationMezTaxIndex));
+
+                tax.setBonus_allocation_mez_80(cursor.getDouble(bonusAllocationMez80Index));
+                tax.setBonus_allocation_mez_90(cursor.getDouble(bonusAllocationMez90Index));
+                tax.setBonus_allocation_mez_100(cursor.getDouble(bonusAllocationMez100Index));
+                tax.setBonus_allocation_mez_120(cursor.getDouble(bonusAllocationMez120Index));
+                tax.setBonus_selection_mez_80(cursor.getDouble(bonusSelectionMez80Index));
+                tax.setBonus_selection_mez_90(cursor.getDouble(bonusSelectionMez90Index));
+                tax.setBonus_selection_mez_100(cursor.getDouble(bonusSelectionMez100Index));
+                tax.setBonus_selection_mez_120(cursor.getDouble(bonusSelectionMez120Index));
+
+                tax.setBonus_allocation_os_80(cursor.getDouble(bonusAllocationOs80Index));
+                tax.setBonus_allocation_os_90(cursor.getDouble(bonusAllocationOs90Index));
+                tax.setBonus_allocation_os_100(cursor.getDouble(bonusAllocationOs100Index));
+                tax.setBonus_allocation_os_120(cursor.getDouble(bonusAllocationOs120Index));
+                tax.setBonus_selection_os_80(cursor.getDouble(bonusSelectionOs80Index));
+                tax.setBonus_selection_os_90(cursor.getDouble(bonusSelectionOs90Index));
+                tax.setBonus_selection_os_100(cursor.getDouble(bonusSelectionOs100Index));
+                tax.setBonus_selection_os_120(cursor.getDouble(bonusSelectionOs120Index));
+            }
+            cursor.close();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return tax;
+    }
+
+    public Tax getMinTax(SQLiteDatabase db, SharedPreferences settings) {
         Tax tax = null;
         db.beginTransaction();
         try {
@@ -502,7 +556,7 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor.close();
             db.setTransactionSuccessful();
         } finally {
-            db.endTransaction();;
+            db.endTransaction();
         }
     }
 
@@ -554,8 +608,37 @@ public class DbHelper extends SQLiteOpenHelper {
         return bundle;
     }
 
+    public double getMonthSalary(SQLiteDatabase db, String UID, Tax tax) {
+        Calendar calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH)+1;
+        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=? AND " + DbHelper.KEY_USER_UID + " = ?", new String[] {String.valueOf(month), UID}, null, null, null);
+
+        double salary = 0;
+        while (cursor.moveToNext()) {
+            int selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
+            int selectionMezIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ);
+            int allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
+            int allocationMezIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ);
+
+            int selectionOs = cursor.getInt(selectionOsIndex);
+            int selectionMez = cursor.getInt(selectionMezIndex);
+            int allocationOs = cursor.getInt(allocationOsIndex);
+            int allocationMez = cursor.getInt(allocationMezIndex);
+
+            double selectionOsPay = tax.getTax_selection_os() * selectionOs;
+            double selectionMezPay = tax.getTax_selection_mez() * selectionMez;
+            double allocationOsPay = tax.getTax_allocation_os() * allocationOs;
+            double allocationMezPay = tax.getTax_allocation_mez() * allocationMez;
+
+            salary += selectionOsPay + selectionMezPay + allocationOsPay + allocationMezPay;
+        }
+        cursor.close();
+
+        return salary;
+    }
+
     public boolean workDayExist(SQLiteDatabase db, String UID, int day, int month, int year) {
-        boolean exist = false;
+        boolean exist;
         String[] columnsWorkDays = {KEY_ID};
         String[] selectionSectorsArgs = {String.valueOf(year), String.valueOf(month), String.valueOf(day), UID};
         Cursor cursor = db.query(TABLE_WORKDAYS, columnsWorkDays,
@@ -565,6 +648,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
 
         exist = cursor.moveToNext();
+        cursor.close();
 
         return exist;
     }
@@ -594,7 +678,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public double getAverageMonthSalary(DbHelper dbHelper, SharedPreferences settings) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         int workMonths = 0;
-        double totalSalary = 0, averageSalary = 0;
+        double totalSalary = 0, averageSalary;
         String UID = settings.getString("UID", null);
 
         Cursor cursor;
@@ -643,7 +727,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        ArrayAdapter<String> adapterPosts = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, posts);
+        ArrayAdapter<String> adapterPosts = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, posts);
         adapterPosts.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPosts.setAdapter(adapterPosts);
 
@@ -683,7 +767,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, schedules);
+        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, schedules);
         adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSchedules.setAdapter(adapterSchedules);
 
@@ -723,7 +807,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, sectors);
+        ArrayAdapter<String> adapterSchedules = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, sectors);
         adapterSchedules.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSectors.setAdapter(adapterSchedules);
 
@@ -918,6 +1002,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 try {
                     for (DataSnapshot ds : task.getResult().getChildren()) {
                         WorkDay workDay = ds.getValue(WorkDay.class);
+                        if (workDay == null)
+                            return;
 
                         String[] selectionSectorsArgs = {String.valueOf(workDay.getYear()), String.valueOf(workDay.getMonth()), String.valueOf(workDay.getDay()), workDay.getUserUID()};
                         Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
@@ -941,11 +1027,15 @@ public class DbHelper extends SQLiteOpenHelper {
                         } else {
                             db.insert(DbHelper.TABLE_WORKDAYS, null, cv);
                         }
+                        cursor.close();
                     }
                     db.setTransactionSuccessful();
                     db.close();
                     dbHelper.close();
-                } finally {
+                } catch (NullPointerException e) {
+                    Log.d("NULL_EXCEPTION", e.getMessage());
+                }
+                finally {
                     db.endTransaction();
                 }
             }
@@ -975,6 +1065,8 @@ public class DbHelper extends SQLiteOpenHelper {
             db.update(TABLE_USERS_AVATARS, cv, DbHelper.KEY_USER_UID + " = ?", new String[] {UID});
         else
             db.insert(TABLE_USERS_AVATARS, null, cv);
+
+        cursor.close();
         db.close();
     }
 
@@ -992,6 +1084,7 @@ public class DbHelper extends SQLiteOpenHelper {
         if (userImageInBytes != null)
             userImage = BitmapFactory.decodeByteArray(userImageInBytes, 0, userImageInBytes.length);
 
+        cursor.close();
         db.close();
 
         return userImage;
@@ -1009,7 +1102,7 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void dropDB(SQLiteDatabase db) {
+    private void dropDB(SQLiteDatabase db) {
         db.beginTransaction();
         try {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKDAYS);

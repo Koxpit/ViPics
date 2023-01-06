@@ -28,7 +28,7 @@ public class AddWorkDayUseCase {
     public void addWorkDay(int day, int month, int year, Pics pics) {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Tax tax = dbHelper.getTax(db, settings);
+        Tax tax = dbHelper.getMinTax(db, settings);
         double pay = calculatePay(pics, tax);
         WorkDay workDay = new WorkDay(day, month, year, 0, pics.getSelectionOs(), pics.getAllocationOs(),
                 pics.getSelectionMez(), pics.getAllocationMez(), pay, getUID());

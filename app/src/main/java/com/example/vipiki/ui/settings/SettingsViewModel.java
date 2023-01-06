@@ -20,7 +20,7 @@ public class SettingsViewModel extends ViewModel {
     private final EditTaxUseCase editTaxUseCase;
     private final RecoverDataUseCase recoverDataUseCase;
     private final SyncDataUseCase syncDataUseCase;
-    private final GetAuthSettingsUseCase changePasswordUseCase;
+    private final GetAuthSettingsUseCase getAuthSettingsUseCase;
 
     public SettingsViewModel(EditProfileUseCase editProfileUseCase, EditTaxUseCase editTaxUseCase,
                              RecoverDataUseCase recoverDataUseCase, SyncDataUseCase syncDataUseCase,
@@ -29,7 +29,7 @@ public class SettingsViewModel extends ViewModel {
         this.editTaxUseCase = editTaxUseCase;
         this.recoverDataUseCase = recoverDataUseCase;
         this.syncDataUseCase = syncDataUseCase;
-        this.changePasswordUseCase = getAuthSettingsUseCase;
+        this.getAuthSettingsUseCase = getAuthSettingsUseCase;
     }
 
     public void editProfile(UserSettings userSettings) {
@@ -85,7 +85,7 @@ public class SettingsViewModel extends ViewModel {
     }
 
     public String getEmail() {
-        return changePasswordUseCase.getEmail();
+        return getAuthSettingsUseCase.getEmail();
     }
 
     public void saveNewEmail(String newEmail) {
@@ -98,6 +98,10 @@ public class SettingsViewModel extends ViewModel {
 
     public boolean passwordIncorrect(String password) {
         return password.length() < 6;
+    }
+
+    public String getUID() {
+        return getAuthSettingsUseCase.getUID();
     }
 
 

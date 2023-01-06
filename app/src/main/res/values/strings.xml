@@ -58,6 +58,7 @@
     <string name="bonus90">90%</string>
     <string name="bonus100">100%</string>
     <string name="bonus120">120%</string>
+    <string name="uid">UID</string>
     <string name="salaryByCurrentMonth">ЗП за текущий месяц</string>
     <string name="averageMonthSalary">Средняя зп за месяц</string>
     <string name="yearSalary">Зарплата за год</string>

@@ -27,7 +27,7 @@ public class EditTaxUseCase {
     public Tax getTax() {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Tax tax = dbHelper.getTax(db, settings);
+        Tax tax = dbHelper.getMinTax(db, settings);
         db.close();
         dbHelper.close();
 

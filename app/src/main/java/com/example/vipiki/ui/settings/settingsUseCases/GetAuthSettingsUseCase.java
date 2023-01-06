@@ -13,4 +13,8 @@ public class GetAuthSettingsUseCase {
     public String getEmail() {
         return settings.getString("email", "example@mail.ru");
     }
+
+    public String getUID() {
+        return settings.getString("UID", "not found");
+    }
 }
