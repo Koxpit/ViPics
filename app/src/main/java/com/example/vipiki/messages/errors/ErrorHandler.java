@@ -24,6 +24,8 @@ public class ErrorHandler {
     private static final String PASSWORDS_MATCH_ERROR = "Пароли не совпадают";
     private static final String PASSWORD_UPDATE_ERROR = "Произошла ошибка при изменении пароля";
     private static final String EMAIL_UPDATE_ERROR = "Произошла ошибка при изменении почты";
+    private static final String LOAD_IMAGE_ERROR = "Произошла ошибка при загрузке изображения";
+    private static final String UPLOAD_IMAGE_ERROR = "Произошла ошибка при сохранении изображения";
 
     private static final String INIT_CHARTS_ERROR = "Не удалось загрузить графики";
 
@@ -97,5 +99,13 @@ public class ErrorHandler {
 
     public static void sendIncorrectSelectedDateError(Context context) {
         Toast.makeText(context, INCORRECT_SELECTED_DATE_ERROR, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void sendLoadImageError(Context context) {
+        Toast.makeText(context, LOAD_IMAGE_ERROR, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void sendUploadImageError(Context context) {
+        Toast.makeText(context, UPLOAD_IMAGE_ERROR, Toast.LENGTH_SHORT).show();
     }
 }

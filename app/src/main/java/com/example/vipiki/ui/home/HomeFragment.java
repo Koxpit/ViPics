@@ -31,6 +31,8 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         try {
+            homeViewModel.setCurrentPics();
+            homeViewModel.setNeedPics();
             initPieCharts();
         } catch (Exception e) {
             ErrorHandler.sendInitChartsError(getContext());

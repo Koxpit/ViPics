@@ -238,7 +238,7 @@
     </RadioGroup>
 
     <TextView
-        android:id="@+id/salaryTextView"
+        android:id="@+id/salaryMonthTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -249,36 +249,60 @@
         android:text="@string/salaryByCurrentMonth" />
 
     <TextView
-        android:id="@+id/userSalaryTextView"
+        android:id="@+id/userMonthSalaryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@id/bonusRadioGroup"
-        android:layout_alignBottom="@+id/salaryTextView"
+        android:layout_alignBottom="@+id/salaryMonthTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
         android:text="@string/default_pay" />
 
     <TextView
-        android:id="@+id/yearSalaryTextView"
+        android:id="@+id/yearRealSalaryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="150dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/salaryTextView"
+        android:layout_below="@id/salaryMonthTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
-        android:text="@string/yearSalary" />
+        android:text="@string/yearRealSalary" />
 
     <TextView
-        android:id="@+id/userYearSalaryTextView"
+        android:id="@+id/userRealYearSalaryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:layout_below="@id/userSalaryTextView"
-        android:layout_alignBottom="@+id/yearSalaryTextView"
+        android:layout_below="@id/userMonthSalaryTextView"
+        android:layout_alignBottom="@+id/yearRealSalaryTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/default_pay" />
+
+    <TextView
+        android:id="@+id/yearNormSalaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="150dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/yearRealSalaryTextView"
+        android:fontFamily="@font/archivo_black"
+        android:textSize="20sp"
+        android:text="@string/yearNormSalary" />
+
+    <TextView
+        android:id="@+id/userNormYearSalaryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/userRealYearSalaryTextView"
+        android:layout_alignBottom="@+id/yearNormSalaryTextView"
         android:fontFamily="@font/archivo_black"
         android:textSize="20sp"
         android:text="@string/default_pay" />

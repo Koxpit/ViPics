@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.database.DbHelper;
+import com.example.vipiki.ui.settings.settingsUseCases.EditBonusesUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.GetAuthSettingsUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditProfileUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditTaxUseCase;
@@ -31,6 +32,7 @@ public class SettingsViewModelFactory implements ViewModelProvider.Factory {
                 new EditTaxUseCase(context, settings),
                 new RecoverDataUseCase(context, settings),
                 new SyncDataUseCase(context, settings),
-                new GetAuthSettingsUseCase(settings));
+                new GetAuthSettingsUseCase(settings),
+                new EditBonusesUseCase(context, settings));
     }
 }

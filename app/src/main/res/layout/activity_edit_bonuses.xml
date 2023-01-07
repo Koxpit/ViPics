@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:cardElevation="10dp">
@@ -13,7 +12,7 @@
         android:layout_margin="20dp">
 
         <TextView
-            android:id="@+id/selectionOsTaxTextView"
+            android:id="@+id/selectionOsBonusTextView"
             android:layout_width="wrap_content"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -24,8 +23,8 @@
             android:text="@string/selection_os" />
 
         <EditText
-            android:id="@+id/editTextSelectionOsTax"
-            android:layout_below="@id/selectionOsTaxTextView"
+            android:id="@+id/editTextSelectionOsBonus"
+            android:layout_below="@id/selectionOsBonusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLength="5"
@@ -37,8 +36,8 @@
             android:hint="@string/default_pay" />
 
         <TextView
-            android:id="@+id/allocationOsTaxTextView"
-            android:layout_below="@id/editTextSelectionOsTax"
+            android:id="@+id/allocationOsBonusTextView"
+            android:layout_below="@id/editTextSelectionOsBonus"
             android:layout_width="wrap_content"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -48,8 +47,8 @@
             android:text="@string/allocation_os" />
 
         <EditText
-            android:id="@+id/editTextAllocationOsTax"
-            android:layout_below="@id/allocationOsTaxTextView"
+            android:id="@+id/editTextAllocationOsBonus"
+            android:layout_below="@id/allocationOsBonusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLength="5"
@@ -61,8 +60,8 @@
             android:hint="@string/default_pay" />
 
         <TextView
-            android:id="@+id/selectionMezTaxTextView"
-            android:layout_below="@id/editTextAllocationOsTax"
+            android:id="@+id/selectionMezBonusTextView"
+            android:layout_below="@id/editTextAllocationOsBonus"
             android:layout_width="wrap_content"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -72,8 +71,8 @@
             android:text="@string/selection_mez" />
 
         <EditText
-            android:id="@+id/editTextSelectionMezTax"
-            android:layout_below="@id/selectionMezTaxTextView"
+            android:id="@+id/editTextSelectionMezBonus"
+            android:layout_below="@id/selectionMezBonusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLength="5"
@@ -85,10 +84,11 @@
             android:hint="@string/default_pay" />
 
         <TextView
-            android:id="@+id/allocationMezTaxTextView"
-            android:layout_below="@+id/editTextSelectionMezTax"
+            android:id="@+id/allocationMezBonusTextView"
+            android:layout_below="@+id/editTextSelectionMezBonus"
             android:layout_width="wrap_content"
             android:textColor="@color/black"
+            android:maxLength="5"
             android:textSize="20sp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/archivo_black"
@@ -96,17 +96,48 @@
             android:text="@string/allocation_mez" />
 
         <EditText
-            android:id="@+id/editTextAllocationMezTax"
-            android:layout_below="@id/allocationMezTaxTextView"
+            android:id="@+id/editTextAllocationMezBonus"
+            android:layout_below="@id/allocationMezBonusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLength="5"
             android:textSize="20sp"
             android:ems="10"
             android:fontFamily="@font/archivo_black"
             android:layout_marginBottom="20dp"
             android:inputType="numberDecimal"
             android:hint="@string/default_pay" />
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextAllocationMezBonus"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/bonusRadioGroup">
+            <RadioButton
+                android:id="@+id/bonus120_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/bonus120"/>
+            <RadioButton
+                android:id="@+id/bonus100_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/bonus100"/>
+            <RadioButton
+                android:id="@+id/bonus90_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/bonus90"/>
+            <RadioButton
+                android:id="@+id/bonus80_radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bonus80"/>
+        </RadioGroup>
 
     </RelativeLayout>
 

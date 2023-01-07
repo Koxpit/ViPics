@@ -101,31 +101,47 @@ public class CalculateStatisticUseCase {
         return settings.getString("post", ErrorHandler.getPostNotFoundError());
     }
 
-    public double getYearSalary(Tax tax) {
+    public double getRealYearSalary(Tax tax) {
+        DbHelper dbHelper = new DbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String UID = getUID();
+        double realYearSalary = dbHelper.getRealYearSalary(db, UID, tax);
+        db.close();
+        dbHelper.close();
+
+        return realYearSalary;
+    }
+
+    public double getNormYearSalary(Tax tax) {
         DbHelper dbHelper = new DbHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String post = getUserPost();
         int yearNorm = dbHelper.getYearNorm(db, settings);
-
-        double postTax = 0;
-        switch (post) {
-            case "Отборщик мезонина":
-                postTax = tax.getTax_selection_mez();
-                break;
-            case "Отборщик основы":
-                postTax = tax.getTax_selection_os();
-                break;
-            case "Размещенец мезонина":
-                postTax = tax.getTax_allocation_mez();
-                break;
-            case "Размещенец основы":
-                postTax = tax.getTax_allocation_os();
-                break;
-        }
+        double postTax = getPostTax(post, tax);
 
         db.close();
         dbHelper.close();
 
         return yearNorm * postTax;
+    }
+
+    private double getPostTax(String post, Tax taxes) {
+        double postTax = 0;
+        switch (post) {
+            case "Отборщик мезонина":
+                postTax = taxes.getTax_selection_mez();
+                break;
+            case "Отборщик основы":
+                postTax = taxes.getTax_selection_os();
+                break;
+            case "Размещенец мезонина":
+                postTax = taxes.getTax_allocation_mez();
+                break;
+            case "Размещенец основы":
+                postTax = taxes.getTax_allocation_os();
+                break;
+        }
+
+        return postTax;
     }
 }

@@ -52,6 +52,7 @@
     <string name="auth">Вход</string>
     <string name="confirm_auth">Авторизоваться</string>
     <string name="editProfile">Редактировать профиль</string>
+    <string name="editBonuses">Изменить премию</string>
     <string name="editTaxes">Изменить ставку</string>
     <string name="bonus">Премия</string>
     <string name="bonus80">80%</string>
@@ -61,7 +62,8 @@
     <string name="uid">UID</string>
     <string name="salaryByCurrentMonth">ЗП за текущий месяц</string>
     <string name="averageMonthSalary">Средняя зп за месяц</string>
-    <string name="yearSalary">Зарплата за год</string>
+    <string name="yearNormSalary">Годовая ЗП по норме</string>
+    <string name="yearRealSalary">Ожидаемая ЗП за год</string>
     <string name="update">Обновить</string>
     <string name="userProfile">Профиль</string>
     <string name="addPicks">Выберите дату, чтобы добавить смену</string>

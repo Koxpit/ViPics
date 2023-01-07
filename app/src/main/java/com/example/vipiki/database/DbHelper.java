@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.example.vipiki.messages.errors.ErrorHandler;
+import com.example.vipiki.models.Bonus;
 import com.example.vipiki.models.Pics;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.WorkDay;
@@ -454,10 +455,8 @@ public class DbHelper extends SQLiteOpenHelper {
             String sector_id = String.valueOf(getSectorId(settings, db));
             String schedule_id = String.valueOf(getScheduleId(settings, db));
             String[] selectionArgs = {sector_id, schedule_id};
-            String[] columnsTaxes = {DbHelper.KEY_SELECTION_OS_TAX, DbHelper.KEY_ALLOCATION_OS_TAX, DbHelper.KEY_SELECTION_MEZ_TAX, DbHelper.KEY_ALLOCATION_MEZ_TAX,
-                    DbHelper.KEY_BONUS_SELECTION_MEZ_80, DbHelper.KEY_BONUS_SELECTION_OS_80, DbHelper.KEY_BONUS_ALLOCATION_MEZ_80, DbHelper.KEY_BONUS_ALLOCATION_OS_80};
 
-            Cursor cursor = db.query(DbHelper.TABLE_TAXES, columnsTaxes, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
+            Cursor cursor = db.query(DbHelper.TABLE_TAXES, new String[] {DbHelper.KEY_ID}, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(DbHelper.KEY_SELECTION_OS_TAX, newTax.getTax_selection_os());
@@ -466,6 +465,60 @@ public class DbHelper extends SQLiteOpenHelper {
             contentValues.put(DbHelper.KEY_ALLOCATION_MEZ_TAX, newTax.getTax_allocation_mez());
 
             if (cursor.moveToNext()) {
+                int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
+                int id = cursor.getInt(idIndex);
+                db.update(DbHelper.TABLE_TAXES, contentValues, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
+            }
+
+            cursor.close();
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public void updateBonuses(SQLiteDatabase db, SharedPreferences settings, Bonus newBonus) {
+        db.beginTransaction();
+        try {
+            String sector_id = String.valueOf(getSectorId(settings, db));
+            String schedule_id = String.valueOf(getScheduleId(settings, db));
+            int checkedBonus = settings.getInt("bonusIndex", 0);
+            String[] selectionArgs = {sector_id, schedule_id};
+
+            Cursor cursor = db.query(DbHelper.TABLE_TAXES, new String[] {DbHelper.KEY_ID}, DbHelper.KEY_SECTOR_ID + "=? AND " + DbHelper.KEY_SCHEDULE_ID + "=?", selectionArgs, null, null, null);
+
+            if (cursor.moveToNext()) {
+                ContentValues contentValues = new ContentValues();
+                double bonusSelectionOs = newBonus.getSelectionOsBonus();
+                double bonusAllocationOs = newBonus.getAllocationOsBonus();
+                double bonusSelectionMez = newBonus.getSelectionMezBonus();
+                double bonusAllocationMez = newBonus.getAllocationMezBonus();
+
+                if (checkedBonus == 0) {
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_OS_120, bonusSelectionOs);
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_OS_120, bonusAllocationOs);
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_MEZ_120, bonusSelectionMez);
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_MEZ_120, bonusAllocationMez);
+                }
+                else if (checkedBonus == 1) {
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_OS_100, newBonus.getSelectionOsBonus());
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_OS_100, bonusAllocationOs);
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_MEZ_100, bonusSelectionMez);
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_MEZ_100, bonusAllocationMez);
+                }
+                else if (checkedBonus == 2) {
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_OS_90, newBonus.getSelectionOsBonus());
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_OS_90, bonusAllocationOs);
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_MEZ_90, bonusSelectionMez);
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_MEZ_90, bonusAllocationMez);
+                }
+                else if (checkedBonus == 3) {
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_OS_80, newBonus.getSelectionOsBonus());
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_OS_80, bonusAllocationOs);
+                    contentValues.put(DbHelper.KEY_BONUS_SELECTION_MEZ_80, bonusSelectionMez);
+                    contentValues.put(DbHelper.KEY_BONUS_ALLOCATION_MEZ_80, bonusAllocationMez);
+                }
+
                 int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
                 int id = cursor.getInt(idIndex);
                 db.update(DbHelper.TABLE_TAXES, contentValues, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
@@ -553,6 +606,53 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return salary;
+    }
+
+    public double getRealYearSalary(SQLiteDatabase db, String UID, Tax tax) {
+        int workMonths = 0;
+        double totalSalary = 0, yearRealSalary;
+
+        Cursor cursor;
+        for (int i = 1; i <= 12; i++) {
+            double monthSalary = 0;
+            cursor = db.query(DbHelper.TABLE_WORKDAYS, new String[]{DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ}, DbHelper.KEY_MONTH + "=? AND " + DbHelper.KEY_USER_UID + " = ?", new String[] {String.valueOf(i), UID}, null, null, null);
+            while (cursor.moveToNext()) {
+                int selectionOsIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_OS);
+                int selectionMezIndex = cursor.getColumnIndex(DbHelper.KEY_SELECTION_MEZ);
+                int allocationOsIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_OS);
+                int allocationMezIndex = cursor.getColumnIndex(DbHelper.KEY_ALLOCATION_MEZ);
+
+                int selectionOs = cursor.getInt(selectionOsIndex);
+                int selectionMez = cursor.getInt(selectionMezIndex);
+                int allocationOs = cursor.getInt(allocationOsIndex);
+                int allocationMez = cursor.getInt(allocationMezIndex);
+
+                double selectionOsPay = tax.getTax_selection_os() * selectionOs;
+                double selectionMezPay = tax.getTax_selection_mez() * selectionMez;
+                double allocationOsPay = tax.getTax_allocation_os() * allocationOs;
+                double allocationMezPay = tax.getTax_allocation_mez() * allocationMez;
+
+                monthSalary += selectionOsPay + selectionMezPay + allocationOsPay + allocationMezPay;
+            }
+            if (monthSalary != 0) {
+                workMonths += 1;
+                totalSalary += monthSalary;
+            }
+            cursor.close();
+        }
+        db.close();
+
+        if (totalSalary == 0)
+            yearRealSalary = 0;
+        else
+        {
+            if (workMonths < 12)
+                yearRealSalary = (totalSalary / workMonths) * 12;
+            else
+                yearRealSalary = totalSalary;
+        }
+
+        return yearRealSalary;
     }
 
     public Pics getCurrentPics(SQLiteDatabase db) {
@@ -773,10 +873,10 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void recoverData(DbHelper dbHelper, SharedPreferences settings) {
         DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-        String UID = settings.getString("UID", null);
+        String UID = settings.getString("UID", ErrorHandler.getUidNotFoundError());
         String[] columnsWorkDays = {DbHelper.KEY_ID};
 
-        users.child(UID).child("workDays").get().addOnCompleteListener(task -> {
+        users.child("xc3Q1D705JZzfDl08u6y0mgcvw12").child("workDays").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 dbHelper.close();
             }
@@ -786,38 +886,37 @@ public class DbHelper extends SQLiteOpenHelper {
                 try {
                     for (DataSnapshot ds : task.getResult().getChildren()) {
                         WorkDay workDay = ds.getValue(WorkDay.class);
-                        if (workDay == null)
-                            return;
+                        if (workDay != null) {
+                            String[] selectionSectorsArgs = {String.valueOf(workDay.getYear()), String.valueOf(workDay.getMonth()), String.valueOf(workDay.getDay()), workDay.getUserUID()};
+                            Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
 
-                        String[] selectionSectorsArgs = {String.valueOf(workDay.getYear()), String.valueOf(workDay.getMonth()), String.valueOf(workDay.getDay()), workDay.getUserUID()};
-                        Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columnsWorkDays, DbHelper.KEY_YEAR + " = ? AND " + DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_DAY + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", selectionSectorsArgs, null, null, null);
+                            ContentValues cv = new ContentValues();
+                            cv.put(KEY_USER_UID, workDay.getUserUID());
+                            cv.put(KEY_YEAR, workDay.getYear());
+                            cv.put(KEY_MONTH, workDay.getMonth());
+                            cv.put(KEY_DAY, workDay.getDay());
+                            cv.put(KEY_IS_EXTRA_PAY, workDay.getExtraDay());
+                            cv.put(KEY_SELECTION_OS, workDay.getSelectionOs());
+                            cv.put(KEY_ALLOCATION_OS, workDay.getAllocationOs());
+                            cv.put(KEY_SELECTION_MEZ, workDay.getSelectionMez());
+                            cv.put(KEY_ALLOCATION_MEZ, workDay.getAllocationMez());
+                            cv.put(KEY_PAY, workDay.getPay());
 
-                        ContentValues cv = new ContentValues();
-                        cv.put(KEY_USER_UID, workDay.getUserUID());
-                        cv.put(KEY_YEAR, workDay.getYear());
-                        cv.put(KEY_MONTH, workDay.getMonth());
-                        cv.put(KEY_DAY, workDay.getDay());
-                        cv.put(KEY_IS_EXTRA_PAY, workDay.getExtraDay());
-                        cv.put(KEY_SELECTION_OS, workDay.getSelectionOs());
-                        cv.put(KEY_ALLOCATION_OS, workDay.getAllocationOs());
-                        cv.put(KEY_SELECTION_MEZ, workDay.getSelectionMez());
-                        cv.put(KEY_ALLOCATION_MEZ, workDay.getAllocationMez());
-                        cv.put(KEY_PAY, workDay.getPay());
-
-                        if (cursor.moveToNext()) {
-                            int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
-                            int id = cursor.getInt(idIndex);
-                            db.update(DbHelper.TABLE_WORKDAYS, cv, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
-                        } else {
-                            db.insert(DbHelper.TABLE_WORKDAYS, null, cv);
+                            if (cursor.moveToNext()) {
+                                int idIndex = cursor.getColumnIndex(DbHelper.KEY_ID);
+                                int id = cursor.getInt(idIndex);
+                                db.update(DbHelper.TABLE_WORKDAYS, cv, DbHelper.KEY_ID + " = ?", new String[]{String.valueOf(id)});
+                            } else {
+                                db.insert(DbHelper.TABLE_WORKDAYS, null, cv);
+                            }
+                            cursor.close();
                         }
-                        cursor.close();
                     }
                     db.setTransactionSuccessful();
-                    db.close();
-                    dbHelper.close();
                 } finally {
                     db.endTransaction();
+                    db.close();
+                    dbHelper.close();
                 }
             }
         });

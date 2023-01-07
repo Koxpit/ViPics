@@ -5,8 +5,10 @@ import android.widget.ArrayAdapter;
 
 import androidx.lifecycle.ViewModel;
 
+import com.example.vipiki.models.Bonus;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.UserSettings;
+import com.example.vipiki.ui.settings.settingsUseCases.EditBonusesUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.GetAuthSettingsUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditProfileUseCase;
 import com.example.vipiki.ui.settings.settingsUseCases.EditTaxUseCase;
@@ -21,15 +23,17 @@ public class SettingsViewModel extends ViewModel {
     private final RecoverDataUseCase recoverDataUseCase;
     private final SyncDataUseCase syncDataUseCase;
     private final GetAuthSettingsUseCase getAuthSettingsUseCase;
+    private final EditBonusesUseCase editBonusesUseCase;
 
     public SettingsViewModel(EditProfileUseCase editProfileUseCase, EditTaxUseCase editTaxUseCase,
                              RecoverDataUseCase recoverDataUseCase, SyncDataUseCase syncDataUseCase,
-                             GetAuthSettingsUseCase getAuthSettingsUseCase) {
+                             GetAuthSettingsUseCase getAuthSettingsUseCase, EditBonusesUseCase editBonusesUseCase) {
         this.editProfileUseCase = editProfileUseCase;
         this.editTaxUseCase = editTaxUseCase;
         this.recoverDataUseCase = recoverDataUseCase;
         this.syncDataUseCase = syncDataUseCase;
         this.getAuthSettingsUseCase = getAuthSettingsUseCase;
+        this.editBonusesUseCase = editBonusesUseCase;
     }
 
     public void editProfile(UserSettings userSettings) {
@@ -70,6 +74,18 @@ public class SettingsViewModel extends ViewModel {
 
     public Tax getTax() {
         return editTaxUseCase.getTax();
+    }
+
+    public void updateBonuses(Bonus newBonus) { editBonusesUseCase.updateBonuses(newBonus); }
+
+    public Bonus getBonus() { return editBonusesUseCase.getBonuses(); }
+
+    public void setBonusIndex(int bonusIndex) {
+        editBonusesUseCase.setBonusIndex(bonusIndex);
+    }
+
+    public int getCheckedBonusIndex() {
+        return editBonusesUseCase.getCheckedBonusIndex();
     }
 
     public void recoverData() {

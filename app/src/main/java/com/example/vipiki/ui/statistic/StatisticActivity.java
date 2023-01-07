@@ -18,7 +18,7 @@ import java.util.Locale;
 public class StatisticActivity extends AppCompatActivity {
     private StatisticViewModel statisticViewModel;
     private TextView userNameTextView, userPostTextView, userScheduleTextView, userSectorTextView;
-    private TextView userSalaryTextView, userYearSalaryTextView;
+    private TextView userMonthSalaryTextView, userRealYearSalaryTextView, userNormYearSalaryTextView;
     private TextView taxAllocationOsTextView, taxSelectionOsTextView;
     private TextView taxAllocationMezTextView, taxSelectionMezTextView;
     private RadioGroup radioGroupBonuses;
@@ -47,8 +47,9 @@ public class StatisticActivity extends AppCompatActivity {
         userPostTextView = findViewById(R.id.userPostTextView);
         userScheduleTextView = findViewById(R.id.userScheduleTextView);
         userSectorTextView = findViewById(R.id.userSectorTextView);
-        userSalaryTextView = findViewById(R.id.userSalaryTextView);
-        userYearSalaryTextView = findViewById(R.id.userYearSalaryTextView);
+        userMonthSalaryTextView = findViewById(R.id.userMonthSalaryTextView);
+        userRealYearSalaryTextView = findViewById(R.id.userRealYearSalaryTextView);
+        userNormYearSalaryTextView = findViewById(R.id.userNormYearSalaryTextView);
         taxAllocationOsTextView = findViewById(R.id.taxAllocationOsTextView);
         taxSelectionOsTextView = findViewById(R.id.taxSelectionOsTextView);
         taxAllocationMezTextView = findViewById(R.id.taxAllocationMezTextView);
@@ -64,7 +65,7 @@ public class StatisticActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-            RadioButton checkedRadioButton = (RadioButton) radioGroupBonuses
+            RadioButton checkedRadioButton = radioGroupBonuses
                     .findViewById(checkedId);
             int checkedIndex = radioGroupBonuses.indexOfChild(checkedRadioButton);
             statisticViewModel.setBonusIndex(checkedIndex);
@@ -79,7 +80,8 @@ public class StatisticActivity extends AppCompatActivity {
         taxSelectionMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax.getTax_selection_mez()));
         taxAllocationMezTextView.setText(String.format(Locale.ENGLISH, "%(.2f", tax.getTax_allocation_mez()));
 
-        userSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", statisticViewModel.getMonthSalary(tax)));
-        userYearSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", statisticViewModel.getYearSalary(tax)));
+        userMonthSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", statisticViewModel.getMonthSalary(tax)));
+        userRealYearSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", statisticViewModel.getRealYearSalary(tax)));
+        userNormYearSalaryTextView.setText(String.format(Locale.ENGLISH, "%(.2f", statisticViewModel.getNormYearSalary(tax)));
     }
 }

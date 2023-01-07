@@ -10,12 +10,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.vipiki.R;
 import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.messages.success.SuccessHandler;
+import com.example.vipiki.models.Bonus;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.UserSettings;
 
@@ -38,6 +42,7 @@ public class SettingsActivity extends AppCompatActivity {
         settingsViewModel = new ViewModelProvider(this, new SettingsViewModelFactory(this)).get(SettingsViewModel.class);
 
         TextView editProfileTextView = findViewById(R.id.editProfileTextView);
+        TextView editBonusesTextView = findViewById(R.id.editBonusesTextView);
         TextView editTaxesTextView = findViewById(R.id.editTaxesTextView);
         TextView syncDataTextView = findViewById(R.id.syncDataTextView);
         TextView recoverDataTextView = findViewById(R.id.recoverDataTextView);
@@ -45,6 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
         TextView changeEmailTextView = findViewById(R.id.changeEmailTextView);
 
         editProfileTextView.setOnClickListener(view -> showEditProfileWindow());
+        editBonusesTextView.setOnClickListener(view -> showEditBonusesWindow());
         editTaxesTextView.setOnClickListener(view -> showEditTaxesWindow());
         syncDataTextView.setOnClickListener(v -> syncData());
         recoverDataTextView.setOnClickListener(v -> recoverData());
@@ -82,6 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
             userSettings.setSectorIndex(spinnerSectors.getSelectedItemPosition());
             settingsViewModel.editProfile(userSettings);
 
+            SuccessHandler.sendProfileChangedSuccessMessage(SettingsActivity.this);
             dialogInterface.dismiss();
         });
 
@@ -193,6 +200,71 @@ public class SettingsActivity extends AppCompatActivity {
             newTax.setTax_allocation_mez(allocation_mez_tax);
             settingsViewModel.updateTax(newTax);
 
+            SuccessHandler.sendTaxChangedSuccessMessage(SettingsActivity.this);
+            dialogInterface.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void showEditBonusesWindow() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Изменение премии");
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View edit_bonuses_view = inflater.inflate(R.layout.activity_edit_bonuses, null);
+
+        EditText selectionOsBonusEditText = edit_bonuses_view.findViewById(R.id.editTextSelectionOsBonus);
+        EditText allocationOsBonusEditText = edit_bonuses_view.findViewById(R.id.editTextAllocationOsBonus);
+        EditText selectionMezBonusEditText = edit_bonuses_view.findViewById(R.id.editTextSelectionMezBonus);
+        EditText allocationMezBonusEditText = edit_bonuses_view.findViewById(R.id.editTextAllocationMezBonus);
+        RadioGroup radioGroupBonuses = edit_bonuses_view.findViewById(R.id.bonusRadioGroup);
+        RadioButton savedCheckedRadioButton = (RadioButton) radioGroupBonuses
+                .getChildAt(settingsViewModel.getCheckedBonusIndex());
+        savedCheckedRadioButton.setChecked(true);
+
+        RadioGroup.OnCheckedChangeListener radioGroupOnCheckedChangeListener = (group, checkedId) -> {
+            RadioButton checkedRadioButton = radioGroupBonuses
+                    .findViewById(checkedId);
+            int checkedIndex = radioGroupBonuses.indexOfChild(checkedRadioButton);
+            settingsViewModel.setBonusIndex(checkedIndex);
+
+            Bonus currentBonus = settingsViewModel.getBonus();
+            double selectionOsBonus = currentBonus.getSelectionOsBonus();
+            double allocationOsBonus = currentBonus.getAllocationOsBonus();
+            double selectionMezBonus = currentBonus.getSelectionMezBonus();
+            double allocationMezBonus = currentBonus.getAllocationMezBonus();
+            selectionOsBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", selectionOsBonus));
+            allocationOsBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", allocationOsBonus));
+            selectionMezBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", selectionMezBonus));
+            allocationMezBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", allocationMezBonus));
+        };
+        radioGroupBonuses.setOnCheckedChangeListener(radioGroupOnCheckedChangeListener);
+
+        Bonus currentBonus = settingsViewModel.getBonus();
+        selectionOsBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", currentBonus.getSelectionOsBonus()));
+        allocationOsBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", currentBonus.getAllocationOsBonus()));
+        selectionMezBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", currentBonus.getSelectionMezBonus()));
+        allocationMezBonusEditText.setText(String.format(Locale.ENGLISH, "%(.2f", currentBonus.getAllocationMezBonus()));
+
+        dialog.setView(edit_bonuses_view);
+
+        dialog.setNegativeButton("Назад", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        dialog.setPositiveButton("Изменить", (dialogInterface, i) -> {
+            double selection_os_bonus = Double.parseDouble(selectionOsBonusEditText.getText().toString());
+            double allocation_os_bonus = Double.parseDouble(allocationOsBonusEditText.getText().toString());
+            double selection_mez_bonus = Double.parseDouble(selectionMezBonusEditText.getText().toString());
+            double allocation_mez_bonus = Double.parseDouble(allocationMezBonusEditText.getText().toString());
+
+            Bonus newBonus = new Bonus();
+            newBonus.setSelectionOsBonus(selection_os_bonus);
+            newBonus.setAllocationOsBonus(allocation_os_bonus);
+            newBonus.setSelectionMezBonus(selection_mez_bonus);
+            newBonus.setAllocationMezBonus(allocation_mez_bonus);
+            settingsViewModel.updateBonuses(newBonus);
+
+            SuccessHandler.sendBonusChangedSuccessMessage(SettingsActivity.this);
             dialogInterface.dismiss();
         });
 
@@ -205,8 +277,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void recoverData() {
-        settingsViewModel.recoverData();
-        SuccessHandler.sendRecoverSuccessMessage(SettingsActivity.this);
+        try {
+            settingsViewModel.recoverData();
+            SuccessHandler.sendRecoverSuccessMessage(SettingsActivity.this);
+        }
+        catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showChangePasswordWindow() {

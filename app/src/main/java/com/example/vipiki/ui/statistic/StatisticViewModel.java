@@ -37,8 +37,12 @@ public class StatisticViewModel extends ViewModel {
         return calculateStatisticUseCase.getMonthSalary(currentTax);
     }
 
-    public double getYearSalary(Tax currentTax) {
-        return calculateStatisticUseCase.getYearSalary(currentTax);
+    public double getRealYearSalary(Tax currentTax) {
+        return calculateStatisticUseCase.getRealYearSalary(currentTax);
+    }
+
+    public double getNormYearSalary(Tax currentTax) {
+        return calculateStatisticUseCase.getNormYearSalary(currentTax);
     }
 
     @Override

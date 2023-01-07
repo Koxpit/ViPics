@@ -16,17 +16,15 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel(GetCurrentPicsUseCase getCurrentPicsUseCase, GetNeedPicsUseCase getNeedPicsUseCase) {
         this.getCurrentPicsUseCase = getCurrentPicsUseCase;
         this.getNeedPicsUseCase = getNeedPicsUseCase;
-        setCurrentPics();
-        setNeedPics();
     }
 
-    private void setCurrentPics() {
+    public void setCurrentPics() {
         Pics currentPics = getCurrentPicsUseCase.getPics();
         picsSelection = currentPics.getSelection();
         picsAllocation = currentPics.getAllocation();
     }
 
-    private void setNeedPics() {
+    public void setNeedPics() {
         Pics needPics = getNeedPicsUseCase.getPics();
         needPicsAllocation = needPics.getAllocation();
         needPicsSelection = needPics.getSelection();
