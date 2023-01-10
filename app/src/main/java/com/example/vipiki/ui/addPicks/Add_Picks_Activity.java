@@ -22,16 +22,13 @@ import java.util.Locale;
 public class Add_Picks_Activity extends AppCompatActivity {
     private ChangePicksViewModel addPicksViewModel;
 
-    RelativeLayout rootRelativeLayout;
-    Button add_button, back_button;
-    EditText selection_os_editText;
-    EditText allocation_os_editText;
-    EditText selection_mez_editText;
-    EditText allocation_mez_editText;
-    EditText extraShiftPay_editText;
-    CheckBox isExtraShift_checkBox;
+    private Button add_button, back_button;
+    private EditText selection_os_editText, allocation_os_editText;
+    private EditText selection_mez_editText, allocation_mez_editText;
+    private EditText extraShiftPay_editText;
+    private CheckBox isExtraShift_checkBox;
 
-    int day, month, year;
+    private int day, month, year;
     private int isExtraDay = 0;
     private double pay = 0;
     private int selectionOs = 0, allocationOs = 0;
@@ -64,7 +61,6 @@ public class Add_Picks_Activity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        rootRelativeLayout = findViewById(R.id.rootRelativeLayout);
         add_button = findViewById(R.id.save_button);
         back_button = findViewById(R.id.back_button);
         selection_os_editText = findViewById(R.id.selectionOS_editText);

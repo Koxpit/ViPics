@@ -165,7 +165,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
         FirstData firstData = new FirstData(db);
         firstData.initStartData();
-        db.close();
     }
 
 
@@ -876,7 +875,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String UID = settings.getString("UID", ErrorHandler.getUidNotFoundError());
         String[] columnsWorkDays = {DbHelper.KEY_ID};
 
-        users.child("xc3Q1D705JZzfDl08u6y0mgcvw12").child("workDays").get().addOnCompleteListener(task -> {
+        users.child(UID).child("workDays").get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 dbHelper.close();
             }
@@ -982,7 +981,7 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private void dropDB(SQLiteDatabase db) {
+    public void dropDB(SQLiteDatabase db) {
         db.beginTransaction();
         try {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKDAYS);
