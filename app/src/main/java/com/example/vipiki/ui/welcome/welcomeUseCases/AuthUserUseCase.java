@@ -2,6 +2,7 @@ package com.example.vipiki.ui.welcome.welcomeUseCases;
 
 import android.content.SharedPreferences;
 
+import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +28,14 @@ public class AuthUserUseCase {
     }
 
     public String getUID() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String UID;
+        if (currentUser != null)
+            UID = currentUser.getUid();
+        else
+            UID = ErrorHandler.getUidNotFoundError();
+
+        return UID;
     }
 
     public void setUserSettings(User user, String UID, boolean status) {

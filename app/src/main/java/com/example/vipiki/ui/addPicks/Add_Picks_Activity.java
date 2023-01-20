@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.vipiki.R;

@@ -8,6 +8,7 @@ import com.example.vipiki.database.DbHelper;
 import com.example.vipiki.messages.errors.ErrorHandler;
 import com.example.vipiki.models.UserSettings;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -80,12 +81,15 @@ public class EditProfileUseCase {
     }
 
     private void updateFirebaseUser(UserSettings userSettings) {
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference firebaseDb = FirebaseDatabase.getInstance().getReference();
-        firebaseDb.child("users").child(UID).child("name").setValue(userSettings.getName());
-        firebaseDb.child("users").child(UID).child("post").setValue(userSettings.getPost());
-        firebaseDb.child("users").child(UID).child("schedule").setValue(userSettings.getSchedule());
-        firebaseDb.child("users").child(UID).child("sector").setValue(userSettings.getSector());
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String UID = currentUser.getUid();
+            DatabaseReference firebaseDb = FirebaseDatabase.getInstance().getReference();
+            firebaseDb.child("users").child(UID).child("name").setValue(userSettings.getName());
+            firebaseDb.child("users").child(UID).child("post").setValue(userSettings.getPost());
+            firebaseDb.child("users").child(UID).child("schedule").setValue(userSettings.getSchedule());
+            firebaseDb.child("users").child(UID).child("sector").setValue(userSettings.getSector());
+        }
     }
 
     private void updateSettingsUser(UserSettings userSettings) {

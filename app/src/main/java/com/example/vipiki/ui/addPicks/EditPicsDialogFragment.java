@@ -17,7 +17,7 @@ public class EditPicsDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        changePicksViewModel = new ViewModelProvider(this, new ChangePicksViewModelFactory(getActivity())).get(ChangePicksViewModel.class);
+        changePicksViewModel = new ViewModelProvider(this, new ChangePicksViewModelFactory(requireActivity())).get(ChangePicksViewModel.class);
         String title = "Нет информации", message = "Нет информации";
 
         Bundle args = getArguments();

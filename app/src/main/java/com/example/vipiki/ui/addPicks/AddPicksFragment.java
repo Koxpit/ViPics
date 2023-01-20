@@ -33,7 +33,7 @@ public class AddPicksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         addPicksViewModel =
-                new ViewModelProvider(this, new ChangePicksViewModelFactory(getContext())).get(ChangePicksViewModel.class);
+                new ViewModelProvider(this, new ChangePicksViewModelFactory(requireContext())).get(ChangePicksViewModel.class);
 
         binding = FragmentAddPicksBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -64,15 +64,18 @@ public class AddPicksFragment extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 try {
                     if (dateIsSelected) {
+                        int day = 0, month = 0, year = 0;
                         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd", new Locale("RU", "ru"));
                         Date theDate = dateFormatter.parse((String) adapterView.getItemAtPosition(position));
-                        Calendar calendar = new GregorianCalendar();
-                        calendar.setTime(theDate);
-                        binding.calendarView.setDate(calendar.getTimeInMillis());
+                        if (theDate != null) {
+                            Calendar calendar = new GregorianCalendar();
+                            calendar.setTime(theDate);
+                            binding.calendarView.setDate(calendar.getTimeInMillis());
 
-                        int day = calendar.get(Calendar.DAY_OF_MONTH);
-                        int month = calendar.get(Calendar.MONTH) + 1;
-                        int year = calendar.get(Calendar.YEAR);
+                            day = calendar.get(Calendar.DAY_OF_MONTH);
+                            month = calendar.get(Calendar.MONTH) + 1;
+                            year = calendar.get(Calendar.YEAR);
+                        }
 
                         Bundle bundle = addPicksViewModel.getWorkDayBundle(day, month, year);
                         openWorkDayEditor(bundle);

@@ -37,7 +37,7 @@ public class MenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         menuViewModel =
-                new ViewModelProvider(this, new MenuViewModelFactory(getContext())).get(MenuViewModel.class);
+                new ViewModelProvider(this, new MenuViewModelFactory(requireContext())).get(MenuViewModel.class);
 
         binding = FragmentMenuBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -75,28 +75,26 @@ public class MenuFragment extends Fragment {
     }
 
     private void setGalleryLauncher() {
-        launchGalleryActivity
-                = registerForActivityResult(
-                new ActivityResultContracts
-                        .StartActivityForResult(),
+        launchGalleryActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode()
-                            == Activity.RESULT_OK) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
                         Intent data = result.getData();
-                        if (data != null
-                                && data.getData() != null) {
+                        if (data != null && data.getData() != null) {
                             Uri selectedImageUri = data.getData();
                             Bitmap selectedImageBitmap;
                             try {
-                                selectedImageBitmap
-                                        = MediaStore.Images.Media.getBitmap(
-                                        getContext().getContentResolver(),
-                                        selectedImageUri);
+                                if (getContext() != null) {
+                                    selectedImageBitmap
+                                            = MediaStore.Images.Media.getBitmap(
+                                            getContext().getContentResolver(),
+                                            selectedImageUri);
 
-                                userImageView.setImageBitmap(
-                                        selectedImageBitmap);
+                                    userImageView.setImageBitmap(
+                                            selectedImageBitmap);
 
-                                menuViewModel.saveImage(selectedImageBitmap);
+                                    menuViewModel.saveImage(selectedImageBitmap);
+                                }
                             }
                             catch (IOException e) {
                                 ErrorHandler.sendUploadImageError(getContext());

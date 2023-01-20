@@ -1,7 +1,6 @@
 package com.example.vipiki.ui.welcome;
 
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import androidx.lifecycle.ViewModel;

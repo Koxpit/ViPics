@@ -34,21 +34,20 @@ public class ChangePicksViewModel extends ViewModel {
     }
 
     public boolean isCorrectDate(int day, int month, int year) {
-        boolean dateIsCorrect;
+        boolean dateIsCorrect = false;
         Locale ruLocal = new Locale("ru", "RU");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", ruLocal);
-        Date currentDate = null, selectedDate = null;
 
         try {
             month += 1;
             Calendar calendar = Calendar.getInstance();
-            currentDate = simpleDateFormat.parse(simpleDateFormat.format(calendar.getTime()));
-            selectedDate = simpleDateFormat.parse(year + "-" + month + "-" + day);
+            Date currentDate = simpleDateFormat.parse(simpleDateFormat.format(calendar.getTime()));
+            Date selectedDate = simpleDateFormat.parse(year + "-" + month + "-" + day);
+
+            dateIsCorrect = !(selectedDate != null && selectedDate.after(currentDate));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        dateIsCorrect = !selectedDate.after(currentDate);
 
         return dateIsCorrect;
     }

@@ -301,10 +301,14 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             String oldPassword = oldPasswordEditText.getText().toString();
             String newPassword = newPasswordEditText.getText().toString();
             String confirmPassword = confirmPasswordEditText.getText().toString();
             String email = settingsViewModel.getEmail();
+
+            if (currentUser == null)
+                return;
 
             if (settingsViewModel.inputIncorrect(oldPassword, newPassword, confirmPassword)) {
                 ErrorHandler.sendEmptyEntryError(SettingsActivity.this);
@@ -321,12 +325,10 @@ public class SettingsActivity extends AppCompatActivity {
                 return;
             }
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
-
-            user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+            currentUser.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
                 if (reauthTask.isSuccessful()) {
-                    user.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
+                    currentUser.updatePassword(newPassword).addOnCompleteListener(editPasswordTask -> {
                         if (editPasswordTask.isSuccessful())
                             SuccessHandler.sendPasswordSuccessMessage(SettingsActivity.this);
                         else
@@ -355,16 +357,18 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.setNegativeButton("Отмена", (dialogInterface, i) -> dialogInterface.dismiss());
 
         dialog.setPositiveButton("Сохранить", (dialogInterface, i) -> {
+            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
             String currentPassword = currentPasswordEditText.getText().toString();
             String newEmail = newEmailEditText.getText().toString();
             String currentEmail = settingsViewModel.getEmail();
 
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
+            if (currentUser == null)
+                return;
 
-            user.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
+            AuthCredential credential = EmailAuthProvider.getCredential(currentEmail, currentPassword);
+            currentUser.reauthenticate(credential).addOnCompleteListener(reauthTask -> {
                 if (reauthTask.isSuccessful()) {
-                    user.updateEmail(newEmail).addOnCompleteListener(editEmailTask -> {
+                    currentUser.updateEmail(newEmail).addOnCompleteListener(editEmailTask -> {
                         if (editEmailTask.isSuccessful()) {
                             SuccessHandler.sendEmailSuccessMessage(SettingsActivity.this);
                             settingsViewModel.saveNewEmail(newEmail);

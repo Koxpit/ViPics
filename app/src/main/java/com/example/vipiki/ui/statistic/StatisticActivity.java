@@ -3,7 +3,6 @@ package com.example.vipiki.ui.statistic;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;

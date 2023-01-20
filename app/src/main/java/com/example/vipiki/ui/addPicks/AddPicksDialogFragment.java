@@ -14,8 +14,9 @@ public class AddPicksDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ChangePicksViewModel changePicksViewModel =
-                new ViewModelProvider(this, new ChangePicksViewModelFactory(getActivity())).get(ChangePicksViewModel.class);
+        ChangePicksViewModel changePicksViewModel
+                = new ViewModelProvider(this, new ChangePicksViewModelFactory(requireActivity())).get(ChangePicksViewModel.class);
+
         Bundle args = getArguments();
         int year = 0, month = 0, day = 0;
 

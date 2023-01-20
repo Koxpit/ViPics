@@ -18,6 +18,7 @@ import com.example.vipiki.models.Pics;
 import com.example.vipiki.models.Tax;
 import com.example.vipiki.models.WorkDay;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -250,7 +251,16 @@ public class DbHelper extends SQLiteOpenHelper {
     public List<String> getWorkDays() {
         SQLiteDatabase db = getWritableDatabase();
         List<String> workDays = new ArrayList<>();
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        String UID;
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null)
+            UID = currentUser.getUid();
+        else {
+            workDays.add("Нет рабочих смен");
+            return workDays;
+        }
+
         Cursor cursor = db.query(TABLE_WORKDAYS, new String[] {KEY_YEAR, KEY_MONTH, KEY_DAY}, KEY_USER_UID + " = ?", new String[] {UID}, null, null, KEY_YEAR + " DESC, " + KEY_MONTH + " DESC, " + KEY_DAY + " DESC");
         if (cursor.moveToNext()) {
             do {
@@ -308,7 +318,7 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private String getUserPost(SharedPreferences settings) {
-        return settings.getString("post", null);
+        return settings.getString("post", ErrorHandler.getPostNotFoundError());
     }
 
     public void addWorkDay(SQLiteDatabase db, WorkDay workDay) {
@@ -656,7 +666,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public Pics getCurrentPics(SQLiteDatabase db) {
         int picsSelection = 0, picsAllocation = 0;
-        String UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String UID;
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null)
+            UID = currentUser.getUid();
+        else {
+            return new Pics(picsAllocation, picsSelection);
+        }
 
         String[] columns = { DbHelper.KEY_SELECTION_OS, DbHelper.KEY_ALLOCATION_OS, DbHelper.KEY_SELECTION_MEZ, DbHelper.KEY_ALLOCATION_MEZ };
         Cursor cursor = db.query(DbHelper.TABLE_WORKDAYS, columns, DbHelper.KEY_MONTH + " = ? AND " + DbHelper.KEY_USER_UID + " = ?", new String[] {String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1), UID}, null, null, null);
@@ -815,7 +831,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void synchronizeData(SQLiteDatabase db, SharedPreferences settings) {
         DatabaseReference users = FirebaseDatabase.getInstance().getReference("users");
-        String UID = settings.getString("UID", null);
+        String UID = settings.getString("UID", ErrorHandler.getUidNotFoundError());
         Calendar calendar = Calendar.getInstance();
         HashMap<String, WorkDay> workDays = new HashMap<>();
         Cursor cursor = db.query(TABLE_WORKDAYS, null, KEY_USER_UID + " = ?", new String[] {UID}, null, null, KEY_YEAR + " DESC, " + KEY_MONTH + " DESC, " + KEY_DAY + " DESC");
